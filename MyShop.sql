@@ -64,14 +64,14 @@ create table rating(
 
 create table bought(
 
-	user int,
+	orders int,
 	product int
 
 );
 
 
 
-alter table bought add foreign key (user) references users(id);
+alter table bought add foreign key (orders) references orders(id);
 alter table bought add foreign key (product) references products(id);
 
 alter table products add foreign key (category) references categories(id);
