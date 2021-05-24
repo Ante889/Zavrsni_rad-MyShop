@@ -13,7 +13,8 @@ create table products (
 	price decimal(18.2) not null,
 	category int not null,
 	quantity int not null,
-	content text not null
+	content text not NULL,
+	pdf varchar(50) NOT NULL 
 
 );
 
@@ -66,6 +67,8 @@ create table bought(
 
 	orders int,
 	product int
+	quantity int,
+	price decimal(18,2)
 
 );
 
