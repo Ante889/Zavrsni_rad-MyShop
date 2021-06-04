@@ -51,7 +51,8 @@ create table comments(
 	user int,
 	product int,
 	comment text,
-	comment_date date
+	comment_date date,
+	approved bit
 
 );
 
