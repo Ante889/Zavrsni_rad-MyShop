@@ -14,7 +14,6 @@ class App
             $class = 'Index';
         }else{
             $class = ucfirst($Route[1]);
-            unset($Route[0], $Route[1]);
         }
         $class .= 'Controller.php';
 
@@ -24,8 +23,8 @@ class App
             $method = 'index';
         }else{
             $method = $Route[2];
-            unset($Route[2]);
         }
+        $Route = array_slice($Route, 2);
 
         //INSTANCE
 
