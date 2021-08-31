@@ -16,7 +16,7 @@ class App
             $class = ucfirst($Route[1]);
             unset($Route[0], $Route[1]);
         }
-        $class .= 'Controller.php';
+        $class .= 'Controller';
 
         //METHOD
 
