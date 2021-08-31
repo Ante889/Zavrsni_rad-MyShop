@@ -24,7 +24,7 @@ class App
         }else{
             $method = $Route[2];
         }
-        $Route = array_slice($Route, 2);
+        $Route = array_slice($Route, 3);
 
         //INSTANCE
 
@@ -32,9 +32,15 @@ class App
             $instance = New $class();
             $instance -> $method($Route);
         }else{
-            echo 'ne postoji ruta '. $class . '->' . $method;
+            echo 'Ne postoji ruta '. $class . '->' . $method;
         }
 
+    }
+
+    public static function config(string $key) 
+    {
+        $config = include APP_PATH . 'config.php';
+        return $config[$key];
     }
 
 }
