@@ -2,7 +2,6 @@ DROP database IF EXISTS myshop;
 create database myshop;
 use myshop;
 
-#Products, users, orders,buyers,categories, comments, rating
 
 create table products (
 
@@ -10,11 +9,13 @@ create table products (
 	title varchar(50) not null,
 	author varchar(50) not null,
 	image varchar(50) not null,
+	special_image varchar(50) NOT NULL,
 	price decimal(18.2) not null,
 	category int not null,
 	quantity int not null,
 	content text not NULL,
-	pdf varchar(50) NOT NULL 
+	pdf varchar(50) NOT NULL, 
+	creation_time varchar(50) NOT null
 
 );
 
@@ -23,9 +24,12 @@ create table users (
 	id int primary key auto_increment not null,
 	name varchar(50) not null,
 	lastname varchar(50) not null,
-	password varchar (50) not null,
-	role varchar(50) not null  DEFAULT 'Users',
-	email varchar(50) 
+	password varchar (255) not null,
+	role varchar(50) not null,
+	email varchar(50),
+	register_time date NOT NULL,
+	confirmed bit default false, 
+	reset_password_key varchar(255)
 	
 );
 
