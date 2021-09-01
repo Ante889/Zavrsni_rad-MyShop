@@ -30,4 +30,3 @@ spl_autoload_register(function($class){
 });
 
 App::start();
-DB::getInstance();
