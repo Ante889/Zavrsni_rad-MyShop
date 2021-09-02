@@ -9,5 +9,14 @@ class IndexController extends Controller
         $this -> view -> render('index');
     }
 
+    public function error(array $parameters=[])
+    {
+        $class = str_replace('Controller','',$parameters[0]);
+        $this -> view -> render('error',[
+            'class' => $class,
+            'method'=> $parameters[1]
+        ]);
+    }
+
 
 }

@@ -32,7 +32,8 @@ class App
             $instance = New $class();
             $instance -> $method($Route);
         }else{
-            echo 'Ne postoji ruta '. $class . '->' . $method;
+            $instance = New IndexController;
+            $instance -> error([$class,$method]);
         }
 
     }
