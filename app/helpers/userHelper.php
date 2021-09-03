@@ -1,5 +1,13 @@
 <?php
 
+function isLogin(string $string, string $true){
+
+    if(isset($_SESSION['email'])){
+        header('Location:'. App::config('url') . $true);
+    }
+
+}
+
 function nameError(string $string){
     if(empty($string)){
         return 'Field cannot be empty';

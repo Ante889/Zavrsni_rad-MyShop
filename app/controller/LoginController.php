@@ -5,15 +5,17 @@ class LoginController extends Controller
 
     public function index(array $parraymeters=[]){
 
+        isLogin('email','index');
+
         $SuccessMsg='';
         $errors= [
             'email' => '',
             'password' => ''
         ];
 
-        isset($_POST['email'])? $email = $_POST['email'] : $email= "";
-        isset($_POST['password'])? $password = $_POST['password'] : $password= "";
-        isset($_POST['checkbox'])? $checkbox = $_POST['checkbox'] : $checkbox= "";
+        isset($_POST['email'])? $email = trim($_POST['email']) : $email= "";
+        isset($_POST['password'])? $password = trim($_POST['password']) : $password= "";
+        isset($_POST['checkbox'])? $checkbox = trim($_POST['checkbox']) : $checkbox= "";
         
         if(isset($_POST['submit'])){
 
@@ -37,6 +39,8 @@ class LoginController extends Controller
     }
     
     public function register(array $parraymeters=[]){
+
+        isLogin('email','index');
     
         $SuccessMsg='';
         $errors= [
@@ -51,7 +55,6 @@ class LoginController extends Controller
         isset($_POST['email']) ?$email = strtolower(trim($_POST['email'])) : $email = '';
         isset($_POST['password']) ? $password = trim($_POST['password']) : $password = '';
         isset($_POST['confirmPassword']) ? $confirmPassword = trim($_POST['confirmPassword']) : $confirmPassword = '';
-
     
         if(isset($_POST['submit'])){
             
@@ -85,8 +88,15 @@ class LoginController extends Controller
               'confirmPassword' => $confirmPassword, 
             ]
         ]);
-    
+    }
+    public function logout(array $parraymeters=[])
+    {
+
+        unset($_SESSION['email']);
+        unset($_SESSION['role']);
+        header('Location:'. App::config('url'). 'login');
+        $this -> view -> render('login');
+
     }
 
 }
-
