@@ -27,7 +27,7 @@ create table users (
 	password varchar (255) not null,
 	role varchar(50) not null,
 	email varchar(50),
-	register_time date NOT NULL,
+	register_time varchar(50) NOT NULL,
 	confirmed bit default false, 
 	reset_password_key varchar(255)
 	
