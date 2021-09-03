@@ -17,30 +17,13 @@ class LoginController extends Controller
         
         if(isset($_POST['submit'])){
 
-            isset(Login::checkPassword(['email' => $email])[0]) ? $resultPassword = Login::checkPassword(['email' => $email])[0]->password : $resultPassword = '';
-
-            //Email & password
-
-            if(empty($email)){
-                $errors['email'] = 'Field cannot be empty';
-            }else if(count(Login::checkEmail(['email' => $email])) == 0){
-                $errors['email'] = 'Email does not exist';
-            }else if(empty($password)){
-                $errors['password'] = 'Field cannot be empty';
-            }else if (!password_verify($password,$resultPassword)){
-                $errors['password'] = 'Wrong password';
-            }
-
-            //Login
-
+            $errors = loginErrors($email,$password,$errors);
             if(empty($errors['email']) && empty($errors['password'])){
             
                 $_SESSION['email'] = $email;
                 $_SESSION['role'] = Login::getRole(['email' => $email])[0]->role;
                 header('Location:'. App::config('url').'index');
-
             }
-
         }
 
         $this -> view -> render('Login',[
@@ -72,51 +55,10 @@ class LoginController extends Controller
     
         if(isset($_POST['submit'])){
             
-            //name
-            if(empty($name)){
-                $errors['name'] = 'Field cannot be empty';
-            }else if(strlen($name) < 2 ){
-                $errors['name'] = 'name must contain at least 2 characters';
-            }else if(preg_match('~[0-9]+~',$name)){
-                $errors['name'] = 'Only letters are allowed';
-            }
-    
-            //lastname
-    
-            if(empty($lastname)){
-                $errors['lastname'] = 'Field cannot be empty';
-            }else if(strlen($lastname) < 2 ){
-                $errors['lastname'] = 'Lastname must contain at least 2 characters';
-            }else if(preg_match('~[0-9]+~',$lastname)){
-                $errors['lastname'] = 'Only letters are allowed';
-            }
-    
-            //email
-            if(count(Login::checkEmail(['email'=>$email])) > 0){
-                $errors['email'] = 'Email exists';
-            }else if(empty($email)){
-                $errors['email'] = 'Field cannot be empty';
-            }
-    
-            //password
-            if(empty($password) || empty($confirmPassword)){
-                $errors['password'] = 'Field cannot be empty';
-            }else if($password != $confirmPassword){
-                $errors['password'] = 'Passwords not same';
-            }else if(strlen($password) < 6){
-                $errors['password'] = 'Minimum 6 symbols';
-            }else if(!preg_match('~[0-9]+~',$password)){
-                $errors['password'] = 'One symbol must be a number';
-            }
-            $passes=false;
-            for ($i=0; $i < strlen($password) ; $i++) { 
-                if(ctype_upper(substr($password, $i,1))){
-                    $passes=true;
-                }
-            }
-            if($passes == false ){
-                $errors['password'] = 'One symbol must be a capital letter';
-            }
+            $errors['name'] = nameError($name);
+            $errors['lastname'] = nameError($lastname);
+            $errors['email'] = emailError($email);            
+            $errors['password'] = passwordError($password,$confirmPassword);
     
             //Create user
     
