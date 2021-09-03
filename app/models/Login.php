@@ -1,7 +1,7 @@
 <?php
 
 
-class Register
+class Login
 {
 
     public static function createUser($parameters=[])
@@ -18,6 +18,24 @@ class Register
     {
         $connection = DB::getInstance();
         $sql = "SELECT email FROM users WHERE email = :email";
+        $result = $connection->prepare($sql); 
+        $result ->execute($parametar); 
+        return $result -> fetchAll();
+    }
+
+    public static function checkPassword($parametar)
+    {
+        $connection = DB::getInstance();
+        $sql = "SELECT password FROM users WHERE email = :email";
+        $result = $connection->prepare($sql); 
+        $result ->execute($parametar); 
+        return $result -> fetchAll();
+    }
+
+    public static function getRole($parametar)
+    {
+        $connection = DB::getInstance();
+        $sql = "SELECT role FROM users WHERE email = :email";
         $result = $connection->prepare($sql); 
         $result ->execute($parametar); 
         return $result -> fetchAll();
