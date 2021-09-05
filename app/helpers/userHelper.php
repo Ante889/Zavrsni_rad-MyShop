@@ -69,7 +69,7 @@ function loginErrors(string $email,string $password, array $errors){
 
 function setRemembermeToken($email){
 
-    $token = bin2hex(random_bytes(16));
+    $token = bin2hex(random_bytes(52));
     setcookie('CookieT/', $token, time() + 3600 * 30);
     Login:: SetRemembermeToken([
         'rememberme_token' => $token,
@@ -83,4 +83,32 @@ function LoginWithCookie(){
     if(isset($_COOKIE['CookieT/'])){
         return Login::GetRemembermeToken(['rememberme_token' => $_COOKIE['CookieT/']]);
     }    
+}
+
+function forgotPassword($email)
+{
+
+    if(count(Login::checkEmail(['email' => $email])) > 0){
+        $token=bin2hex(random_bytes(52));
+        Login::Setreset_password_token([
+            'email' => $email, 
+            'reset_password_token' => $token
+        ]);
+
+        //Test //// za sad ide u spam
+
+        $to      = $email;
+        $subject = 'Reset password';
+        $message = 'reset password on link'. App::config('url') . 'Login/resetPassword/'. $token;
+        $headers = 'From: webmaster@example.com' . "\r\n" .
+            'Reply-To: webmaster@example.com' . "\r\n" .
+            'X-Mailer: PHP/' . phpversion();
+
+        mail($to, $subject, $message, $headers);
+        return 'Password updated. Login now';
+
+    }else{
+        return "Email does not exists";
+    }
+
 }

@@ -8,8 +8,8 @@ class Login
     {
         
         $connection = DB::getInstance();
-        $sql = "INSERT INTO `users`(`name`, `lastname`, `password`,'role', `email`, `register_time`)
-        VALUES (:name,:lastname,:password,,:role,:email,:register_time)";
+        $sql = "INSERT INTO `users`(`name`, `lastname`, `password`,`role`, `email`, `register_time`)
+        VALUES (:name,:lastname,:password,:role,:email,:register_time)";
         $connection->prepare($sql) -> execute($parameters);
 
     }
@@ -56,6 +56,21 @@ class Login
         $result = $connection->prepare($sql); 
         $result ->execute($parameter); 
         return $result -> fetchAll();
+    }
+
+    public static function Setreset_password_token($parameters)
+    {
+        $connection = DB::getInstance();
+        $sql = "update `users` set reset_password_token =:reset_password_token
+        where email = :email";
+        $connection->prepare($sql) -> execute($parameters);
+    }
+
+    public static function UpdatePassword($parameters)
+    {
+        $connection = DB::getInstance();
+        $sql = "update `users` set password = :password,reset_password_token =:reset_password_token2 where reset_password_token =:reset_password_token";
+        $connection->prepare($sql) -> execute($parameters);
     }
 
 }

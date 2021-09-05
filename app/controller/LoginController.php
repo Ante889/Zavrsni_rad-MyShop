@@ -3,7 +3,7 @@
 class LoginController extends Controller
 {
 
-    public function index(array $parraymeters=[]){
+    public function index(array $parameters=[]){
 
         isLogin('email','index');
         $SuccessMsg='';
@@ -19,6 +19,7 @@ class LoginController extends Controller
         if(isset(LoginWithCookie()[0]->email)){
             $_SESSION['email'] = LoginWithCookie()[0]->email;
             $_SESSION['role'] = LoginWithCookie()[0]->role;
+            setRemembermeToken(LoginWithCookie()[0]->email);
             header('Location:'. App::config('url').'index');
         }
    
@@ -47,7 +48,7 @@ class LoginController extends Controller
    
     }
     
-    public function register(array $parraymeters=[]){
+    public function register(array $parameters=[]){
 
         isLogin('email','index');
     
@@ -99,7 +100,7 @@ class LoginController extends Controller
             ]
         ]);
     }
-    public function logout(array $parraymeters=[])
+    public function logout(array $parameters=[])
     {
         $token = bin2hex(random_bytes(16));
         Login:: SetRemembermeToken([
@@ -112,6 +113,57 @@ class LoginController extends Controller
         header('Location:'. App::config('url'). 'login');
         $this -> view -> render('login');
 
+    }
+
+
+    public function forgotPassword(array $parameters=[])
+    {
+
+        $Msg='';
+
+        if(isset($_POST['submit']))
+        {
+            isset($_POST['email']) ?$email = strtolower(trim($_POST['email'])) : $email = '';
+            $Msg= forgotPassword($email);
+        }
+        
+        $this -> view -> render('forgotPassword',[
+
+            'Msg' => $Msg
+
+        ]);
+    }
+
+    public function resetPassword(array $parameters=[])
+    {
+
+        $SuccessMsg='';
+        $errors='';
+
+        if(isset($parameters[0])){
+            if(isset($_POST['submit'])){
+            isset($_POST['password']) ? $password = trim($_POST['password']) : $password = '';
+            isset($_POST['confirmPassword']) ? $confirmPassword = trim($_POST['confirmPassword']) : $confirmPassword = '';
+            $errors = passwordError($password, $confirmPassword);
+            if(empty($errors)){
+                Login::UpdatePassword([
+                    'reset_password_token' => trim($parameters[0]),
+                    'password' => password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]),
+                    'reset_password_token2' => ''
+                ]);
+                $SuccessMsg='Password updated. Login now';
+            }
+        }
+        }else{
+            header('Location:'. App::config('url').'index');
+        }
+        $this -> view -> render('resetPassword',[
+
+            'SuccessMsg' => $SuccessMsg,
+            'Errors' => $errors,
+            'token' => $parameters[0]
+
+        ]);
     }
 
 }
