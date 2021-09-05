@@ -8,8 +8,8 @@ class Login
     {
         
         $connection = DB::getInstance();
-        $sql = "INSERT INTO `users`(`name`, `lastname`, `password`, `email`, `register_time`)
-        VALUES (:name,:lastname,:password,:email,:register_time)";
+        $sql = "INSERT INTO `users`(`name`, `lastname`, `password`,'role', `email`, `register_time`)
+        VALUES (:name,:lastname,:password,,:role,:email,:register_time)";
         $connection->prepare($sql) -> execute($parameters);
 
     }
@@ -23,21 +23,38 @@ class Login
         return $result -> fetchAll();
     }
 
-    public static function checkPassword($parametar)
+    public static function checkPassword($parameter)
     {
         $connection = DB::getInstance();
         $sql = "SELECT password FROM users WHERE email = :email";
         $result = $connection->prepare($sql); 
-        $result ->execute($parametar); 
+        $result ->execute($parameter); 
         return $result -> fetchAll();
     }
 
-    public static function getRole($parametar)
+    public static function getRole($parameter)
     {
         $connection = DB::getInstance();
         $sql = "SELECT role FROM users WHERE email = :email";
         $result = $connection->prepare($sql); 
-        $result ->execute($parametar); 
+        $result ->execute($parameter); 
+        return $result -> fetchAll();
+    }
+
+    public static function SetRemembermeToken($parameters)
+    {
+        $connection = DB::getInstance();
+        $sql = "update `users` set rememberme_token =:rememberme_token
+        where email = :email";
+        $connection->prepare($sql) -> execute($parameters);
+    }
+
+    public static function GetRemembermeToken($parameter)
+    {
+        $connection = DB::getInstance();
+        $sql = "SELECT email,role FROM users WHERE rememberme_token = :rememberme_token";
+        $result = $connection->prepare($sql); 
+        $result ->execute($parameter); 
         return $result -> fetchAll();
     }
 

@@ -66,3 +66,21 @@ function loginErrors(string $email,string $password, array $errors){
 
     return $errors;
 }
+
+function setRemembermeToken($email){
+
+    $token = bin2hex(random_bytes(16));
+    setcookie('CookieT/', $token, time() + 3600 * 30);
+    Login:: SetRemembermeToken([
+        'rememberme_token' => $token,
+        'email' => $email
+    ]);
+
+}
+
+function LoginWithCookie(){
+
+    if(isset($_COOKIE['CookieT/'])){
+        return Login::GetRemembermeToken(['rememberme_token' => $_COOKIE['CookieT/']]);
+    }    
+}

@@ -5,12 +5,12 @@
   <h2 class="text-center">LOGIN</h2><hr>
     <div class="mb-3">
       <label for="email" class="form-label">Email</label>
-      <input type="email" name="email" class="form-control" id="email" value = "<?= $returnField['email'] ?>" placeholder="email@example.com">
+      <input type="email" name="email" class="form-control" id="email" value = "<?= isset($_COOKIE['Cookie1/30'])? $_COOKIE['Cookie1/30']: $returnField['email'] ?>" placeholder="email@example.com">
       <h5 style="color:red"><?= $errors['email']?></h5>
     </div>
     <div class="mb-3">
       <label for="password" class="form-label">Password</label>
-      <input type="password" name="password" class="form-control" value = "<?= $returnField['password'] ?>" id="password" placeholder="Password">
+      <input type="password" name="password" class="form-control" value = "<?= isset($_COOKIE['Cookie2/30'])? $_COOKIE['Cookie2/30']: $returnField['password'] ?>" id="password" placeholder="Password">
       <h5 style="color:red"><?= $errors['password']?></h5>
     </div>
     <div class="mb-3">

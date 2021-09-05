@@ -28,8 +28,9 @@ create table users (
 	role varchar(50) not null,
 	email varchar(50),
 	register_time varchar(50) NOT NULL,
-	confirmed bit default false, 
-	reset_password_key varchar(255)
+	confirm_email_token varchar(255),
+	reset_password_token varchar(255),
+	rememberme_token varchar(255)
 	
 );
 

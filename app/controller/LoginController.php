@@ -6,22 +6,31 @@ class LoginController extends Controller
     public function index(array $parraymeters=[]){
 
         isLogin('email','index');
-
         $SuccessMsg='';
         $errors= [
             'email' => '',
             'password' => ''
         ];
-
         isset($_POST['email'])? $email = trim($_POST['email']) : $email= "";
         isset($_POST['password'])? $password = trim($_POST['password']) : $password= "";
         isset($_POST['checkbox'])? $checkbox = trim($_POST['checkbox']) : $checkbox= "";
-        
-        if(isset($_POST['submit'])){
+
+
+        if(isset(LoginWithCookie()[0]->email)){
+            $_SESSION['email'] = LoginWithCookie()[0]->email;
+            $_SESSION['role'] = LoginWithCookie()[0]->role;
+            header('Location:'. App::config('url').'index');
+        }
+   
+
+        if(isset($_POST['submit']) || LoginWithCookie()){
 
             $errors = loginErrors($email,$password,$errors);
-            if(empty($errors['email']) && empty($errors['password'])){
             
+            if(empty($errors['email']) && empty($errors['password'])){
+                if($checkbox == 1){
+                    setRemembermeToken($email);
+                }
                 $_SESSION['email'] = $email;
                 $_SESSION['role'] = Login::getRole(['email' => $email])[0]->role;
                 header('Location:'. App::config('url').'index');
@@ -71,7 +80,8 @@ class LoginController extends Controller
                     'lastname' => $lastname,
                     'password' => password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]),
                     'email' => strtolower($email),
-                    'register_time' => time()
+                    'register_time' => time(),
+                    'role' => 'user'
                 ]);
                 $SuccessMsg= $name. ' your account has been successfully created';
             }
@@ -91,6 +101,11 @@ class LoginController extends Controller
     }
     public function logout(array $parraymeters=[])
     {
+        $token = bin2hex(random_bytes(16));
+        Login:: SetRemembermeToken([
+            'rememberme_token' => $token,
+            'email' => $_SESSION['email']
+        ]);
 
         unset($_SESSION['email']);
         unset($_SESSION['role']);
