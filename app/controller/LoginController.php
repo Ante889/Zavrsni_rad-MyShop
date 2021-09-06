@@ -76,7 +76,7 @@ class LoginController extends Controller
             //Create user
     
             if(empty($errors['name']) && empty($errors['lastname']) && empty($errors['email']) && empty($errors['password'])){
-                Login::createUser([
+                Login::create('users',[
                     'name' => $name,
                     'lastname' => $lastname,
                     'password' => password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]),

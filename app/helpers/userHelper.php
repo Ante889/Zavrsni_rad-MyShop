@@ -71,7 +71,7 @@ function setRemembermeToken($email){
 
     $token = bin2hex(random_bytes(52));
     setcookie('CookieT/', $token, time() + 3600 * 30);
-    Login:: SetRemembermeToken([
+    Login:: update('users',[
         'rememberme_token' => $token,
         'email' => $email
     ]);

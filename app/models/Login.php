@@ -1,18 +1,8 @@
 <?php
 
 
-class Login
+class Login extends globalModel
 {
-
-    public static function createUser($parameters=[])
-    {
-        
-        $connection = DB::getInstance();
-        $sql = "INSERT INTO `users`(`name`, `lastname`, `password`,`role`, `email`, `register_time`)
-        VALUES (:name,:lastname,:password,:role,:email,:register_time)";
-        $connection->prepare($sql) -> execute($parameters);
-
-    }
 
     public static function checkEmail($parametar)
     {
