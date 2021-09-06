@@ -7,7 +7,7 @@ class IndexController extends Controller
     public function index(array $parameters=[])
     {
         $this -> view -> render('index');
-        echo $_SESSION['User'] -> name;
+       Login::delete('users', 'id', '130');
     }
     
 

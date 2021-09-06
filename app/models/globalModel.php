@@ -52,4 +52,13 @@ class globalModel
 
    } 
 
+   public static function delete ($tableName,$where,$whereParm)
+   {
+
+        $connection = DB::getInstance();
+        $result =$connection -> prepare("DELETE FROM ". $tableName ." WHERE ". $where . "=". $whereParm);
+        $result -> execute();
+
+   }
+
 }

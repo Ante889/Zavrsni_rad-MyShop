@@ -106,8 +106,7 @@ class LoginController extends Controller
             'rememberme_token' => $token,
             'where' => $_SESSION['User']->email
         ]);
-        unset($_SESSION['email']);
-        unset($_SESSION['role']);
+        unset($_SESSION['User']);
         $this->index();
 
     }
