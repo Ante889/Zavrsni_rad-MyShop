@@ -7,17 +7,7 @@ class IndexController extends Controller
     public function index(array $parameters=[])
     {
         $this -> view -> render('index');
-
-        Login::update('users',[
-            'name' => 'name2',
-            'lastname' => 'lastname',
-            'password' => 'password',
-            'email' => 'email',
-            'register_time' => time(),
-            'role' => 'user',
-            'id' => 5
-        ]
-    );
+        echo $_SESSION['User'] -> name;
     }
     
 

@@ -12,19 +12,16 @@ class globalModel
             $keys =$key .','. $keys;
             $values=':'.$key.','.$values;
         }
-        $keys = rtrim($keys, ',');
-        $values = rtrim($values, ',');
-
         $connection = DB::getInstance();
-        $sql = "INSERT INTO " . $tableName ." (" . $keys .") 
-        VALUES (".$values.")";
+        $sql = "INSERT INTO " . $tableName ." (" . rtrim($keys, ',') .") 
+        VALUES (".rtrim($values, ',').")";
         $connection->prepare($sql) -> execute($parameters);
     }
-
-    public static function update ($tableName,$parameters= [])
+    // Dodaj ime table-a, where parametar npr(id ili email) i zadnji parametar u array-u je where 
+    
+    public static function update ($tableName,$where,$parameters= [])
     {
-
-        $keys ='';$wheres='';
+        $keys ='';
         $count = 0;
         foreach($parameters as $key => $value)
         {   $count ++;
@@ -33,10 +30,26 @@ class globalModel
             }
         }
         $connection = DB::getInstance();
-        $sql = "UPDATE ". $tableName . " set ".$keys." WHERE id =:id";
+        $sql = "UPDATE ". $tableName . " set ".rtrim($keys, ' ,')." WHERE ".$where."=:where";
         $connection->prepare($sql) -> execute($parameters);
         
 
     }
+
+    //Ime tablice, što želiš povući , gdje, gdje parametar
+   public static function select ($tableName, $what=[],$whereName, $where=[])
+   {
+        $whatString='';
+        foreach($what as $key)
+        {
+            $whatString = $whatString.$key .",";
+        }
+        $connection = DB::getInstance();
+        $sql = "SELECT " . rtrim($whatString, ' ,') . " FROM ". $tableName ." WHERE ".$whereName." = :where";
+        $result = $connection -> prepare($sql);
+        $result -> execute($where);
+        return $result -> fetchALL();
+
+   } 
 
 }

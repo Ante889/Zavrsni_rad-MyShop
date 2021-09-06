@@ -5,7 +5,6 @@ class LoginController extends Controller
 
     public function index(array $parameters=[]){
 
-        isLogin('email','index');
         $SuccessMsg='';
         $errors= [
             'email' => '',
@@ -16,25 +15,27 @@ class LoginController extends Controller
         isset($_POST['checkbox'])? $checkbox = trim($_POST['checkbox']) : $checkbox= "";
 
 
-        if(isset(LoginWithCookie()[0]->email)){
-            $_SESSION['email'] = LoginWithCookie()[0]->email;
-            $_SESSION['role'] = LoginWithCookie()[0]->role;
-            setRemembermeToken(LoginWithCookie()[0]->email);
-            header('Location:'. App::config('url').'index');
+        if(isset(userhelper::LoginWithCookie()[0])){
+            $_SESSION['User'] = userhelper::LoginWithCookie()[0];
+            userhelper::setRemembermeToken($_SESSION['User']->email);
+            $IndexController = new IndexController;
+            $IndexController-> index();
+            return;
         }
    
 
-        if(isset($_POST['submit']) || LoginWithCookie()){
+        if(isset($_POST['submit']) || userhelper::LoginWithCookie()){
 
-            $errors = loginErrors($email,$password,$errors);
+            $errors = userhelper::loginErrors($email,$password,$errors);
             
             if(empty($errors['email']) && empty($errors['password'])){
                 if($checkbox == 1){
-                    setRemembermeToken($email);
+                    userhelper::setRemembermeToken($email);
                 }
-                $_SESSION['email'] = $email;
-                $_SESSION['role'] = Login::getRole(['email' => $email])[0]->role;
-                header('Location:'. App::config('url').'index');
+                $_SESSION['User'] = Login::select('users',['id','name','lastname','role','email','register_time'],'email',['where' => $email])[0];
+                $IndexController = new IndexController;
+                $IndexController-> index();
+                return;
             }
         }
 
@@ -49,8 +50,6 @@ class LoginController extends Controller
     }
     
     public function register(array $parameters=[]){
-
-        isLogin('email','index');
     
         $SuccessMsg='';
         $errors= [
@@ -68,10 +67,10 @@ class LoginController extends Controller
     
         if(isset($_POST['submit'])){
             
-            $errors['name'] = nameError($name);
-            $errors['lastname'] = nameError($lastname);
-            $errors['email'] = emailError($email);            
-            $errors['password'] = passwordError($password,$confirmPassword);
+            $errors['name'] = userhelper::nameError($name);
+            $errors['lastname'] = userhelper::nameError($lastname);
+            $errors['email'] = userhelper::emailError($email);            
+            $errors['password'] = userhelper::passwordError($password,$confirmPassword);
     
             //Create user
     
@@ -103,15 +102,13 @@ class LoginController extends Controller
     public function logout(array $parameters=[])
     {
         $token = bin2hex(random_bytes(16));
-        Login:: SetRemembermeToken([
+        Login:: update('users','email',[
             'rememberme_token' => $token,
-            'email' => $_SESSION['email']
+            'where' => $_SESSION['User']->email
         ]);
-
         unset($_SESSION['email']);
         unset($_SESSION['role']);
-        header('Location:'. App::config('url'). 'login');
-        $this -> view -> render('login');
+        $this->index();
 
     }
 
@@ -120,17 +117,14 @@ class LoginController extends Controller
     {
 
         $Msg='';
-
         if(isset($_POST['submit']))
         {
             isset($_POST['email']) ?$email = strtolower(trim($_POST['email'])) : $email = '';
-            $Msg= forgotPassword($email);
+            $Msg= userhelper::forgotPassword($email);
         }
-        
         $this -> view -> render('forgotPassword',[
 
             'Msg' => $Msg
-
         ]);
     }
 
@@ -144,18 +138,20 @@ class LoginController extends Controller
             if(isset($_POST['submit'])){
             isset($_POST['password']) ? $password = trim($_POST['password']) : $password = '';
             isset($_POST['confirmPassword']) ? $confirmPassword = trim($_POST['confirmPassword']) : $confirmPassword = '';
-            $errors = passwordError($password, $confirmPassword);
+            $errors = userhelper::passwordError($password, $confirmPassword);
             if(empty($errors)){
-                Login::UpdatePassword([
-                    'reset_password_token' => trim($parameters[0]),
+                Login::update('users','reset_password_token',[
                     'password' => password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]),
-                    'reset_password_token2' => ''
+                    'reset_password_token' => '',
+                    'where' => trim($parameters[0]),
                 ]);
                 $SuccessMsg='Password updated. Login now';
             }
         }
         }else{
-            header('Location:'. App::config('url').'index');
+                $IndexController = new IndexController;
+                $IndexController-> index();
+                return;
         }
         $this -> view -> render('resetPassword',[
 

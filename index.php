@@ -5,14 +5,13 @@ session_start();
 
 define('PATH', __DIR__ . DIRECTORY_SEPARATOR);
 define('APP_PATH', __DIR__. DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR);
-include APP_PATH. 'helpers/userHelper.php';
-
 
 $path= implode(PATH_SEPARATOR,
 [
     APP_PATH . 'models',
     APP_PATH . 'controller',
-    APP_PATH . 'core'
+    APP_PATH . 'core',
+    APP_PATH . 'helpers'
 ]);
 
 set_include_path($path);
