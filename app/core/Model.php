@@ -4,8 +4,9 @@
 class globalModel
 {
 
-    public static function create($tableName,$parameters= [])
+    public static function create(string $tableName, array $parameters= [])
     {
+        
         $keys ='';$values='';
         foreach($parameters as $key => $value)
         {
@@ -16,10 +17,11 @@ class globalModel
         $sql = "INSERT INTO " . $tableName ." (" . rtrim($keys, ',') .") 
         VALUES (".rtrim($values, ',').")";
         $connection->prepare($sql) -> execute($parameters);
+
     }
-    // Dodaj ime table-a, where parametar npr(id ili email) i zadnji parametar u array-u je where 
-    
-    public static function update ($tableName,$where,$parameters= [])
+
+    public static function update (string $tableName, string $where,array $parameters= [])
+
     {
         $keys ='';
         $count = 0;
@@ -32,33 +34,30 @@ class globalModel
         $connection = DB::getInstance();
         $sql = "UPDATE ". $tableName . " set ".rtrim($keys, ' ,')." WHERE ".$where."=:where";
         $connection->prepare($sql) -> execute($parameters);
-        
-
     }
+    
+   public static function select (string $tableName,array $select=[],string $whereName,array $where=[])
 
-    //Ime tablice, što želiš povući , gdje, gdje parametar
-   public static function select ($tableName, $what=[],$whereName, $where=[])
    {
-        $whatString='';
-        foreach($what as $key)
+
+        $selectString='';
+        foreach($select as $key)
         {
-            $whatString = $whatString.$key .",";
+            $selectString = $selectString.$key .",";
         }
         $connection = DB::getInstance();
-        $sql = "SELECT " . rtrim($whatString, ' ,') . " FROM ". $tableName ." WHERE ".$whereName." = :where";
+        $sql = "SELECT " . rtrim($selectString, ' ,') . " FROM ". $tableName ." WHERE ".$whereName." = :where";
         $result = $connection -> prepare($sql);
         $result -> execute($where);
         return $result -> fetchALL();
-
    } 
 
-   public static function delete ($tableName,$where,$whereParm)
+   public static function delete (string $tableName, string $where, array $whereParm = [])
+
    {
-
         $connection = DB::getInstance();
-        $result =$connection -> prepare("DELETE FROM ". $tableName ." WHERE ". $where . "=". $whereParm);
+        $result =$connection -> prepare("DELETE FROM ". $tableName ." WHERE ". $where . "=:where");
         $result -> execute();
-
    }
 
 }
