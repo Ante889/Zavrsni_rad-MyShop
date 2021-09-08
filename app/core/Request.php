@@ -15,4 +15,16 @@ class Request
 
     }
 
+    public static function isLogin()
+    {
+        return isset($_SESSION['User']);
+    }
+
+    public static function isAdmin()
+    {
+        if(isset($_SESSION['User']->role)){
+            return $_SESSION['User']->role === 'admin';
+        }
+    }
+
 }

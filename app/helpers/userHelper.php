@@ -15,8 +15,8 @@ class userhelper{
     }
 
     public static function emailError(string $email){
-        $Selectresult = static::shortSelect('Users','email',$email);
-        if(!empty($Selectresult)){
+        $UsersClass = static::shortSelect('Users','email',$email);
+        if(!empty($UsersClass)){
             return 'Email exists';
         }else if(empty($email)){
             return 'Field cannot be empty';
@@ -48,11 +48,11 @@ class userhelper{
     }
 
     public static function loginErrors(string $email,string $password, array $errors){
-        $Selectresult = static::shortSelect('Users','email',$email);
-        isset($Selectresult-> password) ? $checkPassword = $Selectresult-> password : $checkPassword = '';
+        $UsersClass = static::shortSelect('Users','email',$email);
+        isset($UsersClass-> password) ? $checkPassword = $UsersClass-> password : $checkPassword = '';
         if(empty($email)){
             $errors['email'] = 'Field cannot be empty';
-        }else if(empty($Selectresult -> email)){
+        }else if(empty($UsersClass -> email)){
             $errors['email'] = 'Email does not exist';
         }else if(empty($password)){
             $errors['password'] = 'Field cannot be empty';
@@ -67,22 +67,22 @@ class userhelper{
 
         $token = bin2hex(random_bytes(52));
         setcookie('CookieT/', $token, time() + 3600 * 30);
-        $RememberUser=new Users;
-        $RememberUser -> rememberme_token = $token;
-        $RememberUser -> where = $email;
-        $RememberUser -> Update('email');
+        $UsersClass=new Users;
+        $UsersClass -> rememberme_token = $token;
+        $UsersClass -> where = $email;
+        $UsersClass -> Update('email');
 
     }
 
     public static function LoginWithCookie(){
 
         if(isset($_COOKIE['CookieT/'])){
-            $result = static::shortSelect('Users','rememberme_token',$_COOKIE['CookieT/']);
-            unset($result -> password);
-            unset($result -> confirm_email_token);
-            unset($result -> reset_password_token);
-            unset($result -> rememberme_token);
-            return $result;
+            $UsersClass = static::shortSelect('Users','rememberme_token',$_COOKIE['CookieT/']);
+            unset($UsersClass -> password);
+            unset($UsersClass -> confirm_email_token);
+            unset($UsersClass -> reset_password_token);
+            unset($UsersClass -> rememberme_token);
+            return $UsersClass;
         }    
     }
 
@@ -91,10 +91,10 @@ class userhelper{
         $Selectresult = static::shortSelect('Users','email',$email);
         if(count($Selectresult) > 0){
             $token=bin2hex(random_bytes(52));
-            $forgotPassword = new Users;
-            $forgotPassword -> reset_password_token = $token;
-            $forgotPassword -> where = $email;
-            $forgotPassword -> update('email');
+            $UsersClass = new Users;
+            $UsersClass -> reset_password_token = $token;
+            $UsersClass -> where = $email;
+            $UsersClass -> update('email');
 
             //Test //// za sad ide u spam
 
@@ -120,6 +120,15 @@ class userhelper{
         $instance -> where = $whereParam;
         if(!empty($instance -> select($where))){
             return $instance -> select($where)[0];
+        }
+    }
+
+    public static function RedirectIfLogin()
+    {
+        if(Request::isLogin()){
+            $Index = new IndexController;
+            $Index -> index();
+            exit;
         }
     }
 }

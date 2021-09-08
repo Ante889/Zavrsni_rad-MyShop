@@ -3,12 +3,17 @@
 class LoginController extends Controller
 {
 
-    public function index(array $parameters=[]){
+
+    private $path = 'login'. DIRECTORY_SEPARATOR ;
+
+    public function index(){
+        userhelper::RedirectIfLogin();
 
         $SuccessMsg='';
         $errors= [
             'email' => '',
-            'password' => ''
+            'password' => '',
+            'alert' => ''
         ];
         isset($_POST['email'])? $email = trim($_POST['email']) : $email= "";
         isset($_POST['password'])? $password = trim($_POST['password']) : $password= "";
@@ -32,9 +37,9 @@ class LoginController extends Controller
                 if($checkbox == 1){
                     userhelper::setRemembermeToken($email);
                 }
-                $createUser = New Users; 
-                $createUser -> where = $email;
-                $result = $createUser -> select('email')[0];
+                $UsersClass = New Users; 
+                $UsersClass -> where = $email;
+                $result = $UsersClass -> select('email')[0];
                 unset($result -> password);
                 unset($result -> confirm_email_token);
                 unset($result -> reset_password_token);
@@ -46,7 +51,7 @@ class LoginController extends Controller
             }
         }
 
-        $this -> view -> render('login/login',[
+        $this -> view -> render($this->path . '/login',[
             'errors' => $errors,
             'returnField' => [
                 'email' => $email, 
@@ -56,8 +61,9 @@ class LoginController extends Controller
    
     }
     
-    public function register(array $parameters=[]){
-    
+    public function register(){
+
+        userhelper::RedirectIfLogin();
         $SuccessMsg='';
         $errors= [
             'name' => '',
@@ -65,7 +71,6 @@ class LoginController extends Controller
             'email' => '',
             'password' => ''
         ];
-
         isset($_POST['name']) ? $name = trim($_POST['name']) : $name = '';
         isset($_POST['lastname']) ? $lastname = trim($_POST['lastname']) : $lastname = '';
         isset($_POST['email']) ?$email = strtolower(trim($_POST['email'])) : $email = '';
@@ -82,19 +87,19 @@ class LoginController extends Controller
             //Create user
     
             if(empty($errors['name']) && empty($errors['lastname']) && empty($errors['email']) && empty($errors['password'])){
-                $User = new Users;
-                $User -> name = $name;
-                $User -> lastname = $lastname;
-                $User -> password =  password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
-                $User -> email = strtolower($email);
-                $User -> register_time = time();
-                $User -> role = 'user';
-                $User -> Create();
+                $UsersClass = new Users;
+                $UsersClass -> name = $name;
+                $UsersClass -> lastname = $lastname;
+                $UsersClass -> password =  password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
+                $UsersClass -> email = strtolower($email);
+                $UsersClass -> register_time = time();
+                $UsersClass -> role = 'user';
+                $UsersClass -> Create();
                 $SuccessMsg= $name. ' your account has been successfully created';
             }
         }
     
-        $this -> view -> render('login/register',[
+        $this -> view -> render($this->path .'/register',[
             'errors' => $errors,
             'succesMsg' => $SuccessMsg,
             'returnField' => [
@@ -103,30 +108,37 @@ class LoginController extends Controller
               'email' => $email, 
               'password' => $password, 
               'confirmPassword' => $confirmPassword, 
+              'alert' => ''
             ]
         ]);
     }
-    public function logout(array $parameters=[])
+    public function logout()
     {
-        $token = bin2hex(random_bytes(16));
-        $UserLogout = new Users;
-        $UserLogout -> rememberme_token= $token;
-        $UserLogout -> where = $_SESSION['User']->id;
-        $UserLogout -> update('id');
-        unset($_SESSION['User']);
-        $this->index();
-
+        if(!Request::isLogin())
+        {
+            $Index = new IndexController;
+            $Index -> index();
+        }else{
+            $token = bin2hex(random_bytes(16));
+            $UsersClass = new Users;
+            $UsersClass -> rememberme_token= $token;
+            $UsersClass -> where = $_SESSION['User']->id;
+            $UsersClass -> update('id');
+            unset($_SESSION['User']);
+            session_destroy();
+            $this->index();
+        }
     }
-    public function forgotPassword(array $parameters=[])
+    public function forgotPassword()
     {
-
+        userhelper::RedirectIfLogin();
         $Msg='';
         if(isset($_POST['submit']))
         {
             isset($_POST['email']) ?$email = strtolower(trim($_POST['email'])) : $email = '';
             $Msg= userhelper::forgotPassword($email);
         }
-        $this -> view -> render('login/forgotPassword',[
+        $this -> view -> render($this->path .'/forgotPassword',[
 
             'Msg' => $Msg
         ]);
@@ -134,7 +146,7 @@ class LoginController extends Controller
 
     public function resetPassword(array $parameters=[])
     {
-
+        userhelper::RedirectIfLogin();
         $SuccessMsg='';
         $errors='';
 
@@ -145,11 +157,11 @@ class LoginController extends Controller
             $errors = userhelper::passwordError($password, $confirmPassword);
             if(empty($errors)){
 
-                $resetPassword = new Users;
-                $resetPassword -> password = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
-                $resetPassword -> reset_password_token = 'empty';
-                $resetPassword -> where = trim($parameters[0]);
-                if($resetPassword -> update('reset_password_token')){
+                $UsersClass = new Users;
+                $UsersClass -> password = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
+                $UsersClass -> reset_password_token = 'empty';
+                $UsersClass -> where = trim($parameters[0]);
+                if($UsersClass -> update('reset_password_token')){
                     $SuccessMsg='Password updated. Login now';
                 }else{
                     $errors= "Token dose not exists";
@@ -158,8 +170,6 @@ class LoginController extends Controller
                     return;
                     
                 }
-                
-                
             }
         }
         }else{
@@ -167,7 +177,7 @@ class LoginController extends Controller
                 $IndexController-> index();
                 return;
         }
-        $this -> view -> render('login/resetPassword',[
+        $this -> view -> render($this->path .'/resetPassword',[
 
             'SuccessMsg' => $SuccessMsg,
             'Errors' => $errors,
@@ -175,5 +185,4 @@ class LoginController extends Controller
 
         ]);
     }
-
 }
