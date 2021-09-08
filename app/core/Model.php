@@ -1,12 +1,27 @@
 <?php 
 
 
-class globalModel
+class Model
+
 {
 
-    public static function create(string $tableName, array $parameters= [])
+    public function getParameters(){
+
+        $parameters = [];
+        foreach (static::$db_parameters as $key) {
+                if(property_exists($this, $key) && !empty($this->$key)){
+                $parameters[$key] = $this -> $key;
+            }
+        }
+        return $parameters;
+
+    }
+
+
+    public function create()
     {
-        
+        unset($this -> where);
+        $parameters = $this -> getParameters();
         $keys ='';$values='';
         foreach($parameters as $key => $value)
         {
@@ -14,15 +29,16 @@ class globalModel
             $values=':'.$key.','.$values;
         }
         $connection = DB::getInstance();
-        $sql = "INSERT INTO " . $tableName ." (" . rtrim($keys, ',') .") 
+        $sql = "INSERT INTO " . static::$db_table ." (" . rtrim($keys, ',') .") 
         VALUES (".rtrim($values, ',').")";
         $connection->prepare($sql) -> execute($parameters);
 
     }
 
-    public static function update (string $tableName, string $where,array $parameters= [])
+    public function update (string $where)
 
     {
+        $parameters = $this -> getParameters();
         $keys ='';
         $count = 0;
         foreach($parameters as $key => $value)
@@ -32,32 +48,26 @@ class globalModel
             }
         }
         $connection = DB::getInstance();
-        $sql = "UPDATE ". $tableName . " set ".rtrim($keys, ' ,')." WHERE ".$where."=:where";
+        $sql = "UPDATE ".static::$db_table. " set ".rtrim($keys, ' ,')." WHERE ".$where."=:where";
         $connection->prepare($sql) -> execute($parameters);
     }
     
-   public static function select (string $tableName,array $select=[],string $whereName,array $where=[])
-
+   public function select (string $whereName)
    {
-
-        $selectString='';
-        foreach($select as $key)
-        {
-            $selectString = $selectString.$key .",";
-        }
+        $where = ['where' => $this -> where];
         $connection = DB::getInstance();
-        $sql = "SELECT " . rtrim($selectString, ' ,') . " FROM ". $tableName ." WHERE ".$whereName." = :where";
+        $sql = "SELECT * FROM " .static::$db_table. " WHERE ".$whereName." = :where";
         $result = $connection -> prepare($sql);
         $result -> execute($where);
         return $result -> fetchALL();
    } 
 
-   public static function delete (string $tableName, string $where, array $whereParm = [])
-
+   public function delete (string $where)
    {
+        $where = ['where' => $this -> where];
         $connection = DB::getInstance();
-        $result =$connection -> prepare("DELETE FROM ". $tableName ." WHERE ". $where . "=:where");
-        $result -> execute();
+        $result =$connection -> prepare("DELETE FROM ".static::$db_table." WHERE ". $where . "=:where");
+        $result -> execute($where);
    }
 
 }

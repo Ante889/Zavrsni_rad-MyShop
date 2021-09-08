@@ -15,7 +15,8 @@ class userhelper{
     }
 
     public static function emailError(string $email){
-        if(count(Login::select('users',['email'],'email',['where' => $email])) > 0){
+        $Selectresult = static::shortSelect('Users','email',$email);
+        if(!empty($Selectresult)){
             return 'Email exists';
         }else if(empty($email)){
             return 'Field cannot be empty';
@@ -47,12 +48,11 @@ class userhelper{
     }
 
     public static function loginErrors(string $email,string $password, array $errors){
-
-        $checkPassword = Login::select('users',['password'],'email',['where' => $email]);
-        isset($checkPassword) ? $checkPassword = $checkPassword[0]->password : $checkPassword = '';
+        $Selectresult = static::shortSelect('Users','email',$email);
+        isset($Selectresult-> password) ? $checkPassword = $Selectresult-> password : $checkPassword = '';
         if(empty($email)){
             $errors['email'] = 'Field cannot be empty';
-        }else if(count(Login::select('users',['email'],'email',['where' => $email])) == 0){
+        }else if(empty($Selectresult -> email)){
             $errors['email'] = 'Email does not exist';
         }else if(empty($password)){
             $errors['password'] = 'Field cannot be empty';
@@ -67,34 +67,39 @@ class userhelper{
 
         $token = bin2hex(random_bytes(52));
         setcookie('CookieT/', $token, time() + 3600 * 30);
-        Login:: update('users','email',[
-            'rememberme_token' => $token,
-            'where' => $email
-        ]);
+        $RememberUser=new Users;
+        $RememberUser -> rememberme_token = $token;
+        $RememberUser -> where = $email;
+        $RememberUser -> Update('email');
 
     }
 
     public static function LoginWithCookie(){
 
         if(isset($_COOKIE['CookieT/'])){
-            return Login::select('users',['id','name','lastname','role','email','register_time'],'rememberme_token',['where' => $_COOKIE['CookieT/']]);
+            $result = static::shortSelect('Users','rememberme_token',$_COOKIE['CookieT/']);
+            unset($result -> password);
+            unset($result -> confirm_email_token);
+            unset($result -> reset_password_token);
+            unset($result -> rememberme_token);
+            return $result;
         }    
     }
 
     public static function forgotPassword($email)
     {
-
-        if(count(Login::select('users',['email'],'email',['where' => $email])) > 0){
+        $Selectresult = static::shortSelect('Users','email',$email);
+        if(count($Selectresult) > 0){
             $token=bin2hex(random_bytes(52));
-            Login::update('users','email',[
-                'reset_password_token' => $token,
-                'where' => $email
-            ]);
+            $forgotPassword = new Users;
+            $forgotPassword -> reset_password_token = $token;
+            $forgotPassword -> where = $email;
+            $forgotPassword -> update('email');
 
             //Test //// za sad ide u spam
 
             $to      = $email;
-            $subject = 'Reset password';
+            $subject = 'Reset password'; 
             $message = 'reset password on link'. App::config('url') . 'Login/resetPassword/'. $token;
             $headers = 'From: webmaster@example.com' . "\r\n" .
                 'Reply-To: webmaster@example.com' . "\r\n" .
@@ -107,5 +112,14 @@ class userhelper{
             return "Email does not exists";
         }
 
+    }
+
+    public static function shortSelect($class,$where,$whereParam)
+    {
+        $instance = new $class;
+        $instance -> where = $whereParam;
+        if(!empty($instance -> select($where))){
+            return $instance -> select($where)[0];
+        }
     }
 }

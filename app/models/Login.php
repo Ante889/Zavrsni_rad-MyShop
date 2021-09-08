@@ -1,7 +1,7 @@
 <?php
 
 
-class Login extends globalModel
+class Login extends Model
 {
 
 
