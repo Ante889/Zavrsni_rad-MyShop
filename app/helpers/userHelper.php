@@ -89,8 +89,12 @@ class userhelper{
     public static function forgotPassword($email)
     {
         $Selectresult = static::shortSelect('Users','email',$email);
-        if(count($Selectresult) > 0){
-            $token=bin2hex(random_bytes(52));
+        if(!empty($Selectresult)){
+            $token=bin2hex(random_bytes(10)). '.' 
+            . bin2hex(random_bytes(10)). '.'
+            . bin2hex(random_bytes(10)). '.'
+            . bin2hex(random_bytes(10)). '.'
+            . bin2hex(random_bytes(10)).',';
             $UsersClass = new Users;
             $UsersClass -> reset_password_token = $token;
             $UsersClass -> where = $email;
@@ -100,13 +104,13 @@ class userhelper{
 
             $to      = $email;
             $subject = 'Reset password'; 
-            $message = 'reset password on link'. App::config('url') . 'Login/resetPassword/'. $token;
-            $headers = 'From: webmaster@example.com' . "\r\n" .
-                'Reply-To: webmaster@example.com' . "\r\n" .
+            $message = 'reset password on link '. App::config('url') . 'Login/resetPassword/'. $token;
+            $headers = 'From: Ante-online.com' . "\r\n" .
+                'Reply-To: ante-online' . "\r\n" .
                 'X-Mailer: PHP/' . phpversion();
 
             mail($to, $subject, $message, $headers);
-            return 'Password updated. Login now';
+            return 'Please check email';
 
         }else{
             return "Email does not exists";

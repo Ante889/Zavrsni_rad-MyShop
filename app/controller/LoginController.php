@@ -118,16 +118,17 @@ class LoginController extends Controller
         {
             $Index = new IndexController;
             $Index -> index();
-        }else{
-            $token = bin2hex(random_bytes(16));
-            $UsersClass = new Users;
-            $UsersClass -> rememberme_token= $token;
-            $UsersClass -> where = $_SESSION['User']->id;
-            $UsersClass -> update('id');
-            unset($_SESSION['User']);
-            session_destroy();
-            $this->index();
+            return;
         }
+        $token = bin2hex(random_bytes(16));
+        $UsersClass = new Users;
+        $UsersClass -> rememberme_token= $token;
+        $UsersClass -> where = $_SESSION['User']->id;
+        $UsersClass -> update('id');
+        unset($_SESSION['User']);
+        session_destroy();
+        $this->index();
+
     }
     public function forgotPassword()
     {
@@ -149,8 +150,8 @@ class LoginController extends Controller
         userhelper::RedirectIfLogin();
         $SuccessMsg='';
         $errors='';
-
-        if(isset($parameters[0])){
+        $protection = explode(".",$parameters[0]);
+        if(isset($parameters[0]) && strlen($parameters[0]) == 105 && count($protection) ==5){
             if(isset($_POST['submit'])){
             isset($_POST['password']) ? $password = trim($_POST['password']) : $password = '';
             isset($_POST['confirmPassword']) ? $confirmPassword = trim($_POST['confirmPassword']) : $confirmPassword = '';
@@ -161,15 +162,10 @@ class LoginController extends Controller
                 $UsersClass -> password = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
                 $UsersClass -> reset_password_token = 'empty';
                 $UsersClass -> where = trim($parameters[0]);
-                if($UsersClass -> update('reset_password_token')){
-                    $SuccessMsg='Password updated. Login now';
-                }else{
-                    $errors= "Token dose not exists";
-                    $IndexController = new IndexController;
-                    $IndexController-> error();
-                    return;
-                    
-                }
+                $UsersClass -> update('reset_password_token');
+                $SuccessMsg='Password updated. Login now';
+            }else{
+                $errors= "Token dose not exists";
             }
         }
         }else{
