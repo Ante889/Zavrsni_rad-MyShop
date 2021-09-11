@@ -80,4 +80,53 @@ class Model
         $result -> execute($where);
    }
 
+   public static function innerSelect(array $select, string $from, array $tabels, array $where)
+   {
+
+        $innerJoin = [
+            'categories-products' => 'inner join products on products.id = categories.id',
+            'products-bought' => 'inner join bought on products.id = bought.product',
+            'products-comments' => 'inner join comments on products.id = comments.product',
+            'products-rating' => 'inner join rating on products.id = rating.product',
+            'rating-users' => 'inner join users on rating.user = users.id',
+            'comments-users'=> 'inner join users on comments.user = users.id',
+            'bought-orders'=> 'inner join orders on bought.orders = orders.id',
+            'users-orders'=> 'inner join orders on orders.user = users.id',
+        ];
+        $selectResult='';
+        $innerResult='';
+        $whereKey='';
+        $whereParm='';
+        foreach($select as $key => $value)
+        {
+            $selectResult = $selectResult . $key.'.'. $value.',';
+        }
+
+        foreach($tabels as $key)
+        {
+            foreach($innerJoin as $innerKey => $innerValue)
+            {
+                if($innerKey === $key){
+                    $innerResult = $innerResult .' '. $innerValue.' ' ;
+                }
+            }
+        }
+
+        foreach($where as $key => $value)
+        {
+            $whereKey = $key;
+            $whereParm=$value;
+        }
+
+
+        $connection = DB::getInstance();
+        $sql = "SELECT ". rtrim($selectResult, ' ,').
+        " FROM ". $from . " " .  $innerResult . 
+        " WHERE " . $whereKey . '= ?';
+        $result = $connection-> prepare($sql);
+        $result -> bindParam(1,$whereParm);
+        $result -> execute();
+        return $result -> fetchALL();
+   }
+
 }
