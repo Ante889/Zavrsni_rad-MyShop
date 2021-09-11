@@ -62,6 +62,16 @@ class Model
         return $result -> fetchALL();
    } 
 
+   public function selectAll()
+   {
+        $connection = DB::getInstance();
+        $sql = "SELECT * FROM " .static::$db_table;
+        $result = $connection -> prepare($sql);
+        $result -> execute();
+        return $result -> fetchALL();
+
+   }
+
    public function delete (string $where)
    {
         $where = ['where' => $this -> where];

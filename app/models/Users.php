@@ -16,5 +16,5 @@ class Users extends Model
     public $confirm_email_token;
     public $reset_password_token;
     public $rememberme_token;
-    public $where;//Stavljaš samo kad radiš update;
+    public $where;//Stavljaš samo kad radiš update/select;
 }

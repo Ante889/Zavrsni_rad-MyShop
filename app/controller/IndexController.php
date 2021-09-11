@@ -6,7 +6,22 @@ class IndexController extends Controller
 
     public function index(array $parameters=[])
     {
-        $this -> view -> render('index');
+
+        $categoriesClass = new Categories;
+        $categories = $categoriesClass -> selectAll();
+        $ProductsClass = new Users;
+        if(isset($parameters[0]))
+        {
+            $Products = userhelper::shortSelect('Products', 'category', $parameters[0]);
+
+        }else{
+            $Products = $ProductsClass-> selectAll();
+        }
+
+        $this -> view -> render('index',[
+            'categories' => $categories,
+            'products' => $Products
+        ]);
     }
     
 
