@@ -27,4 +27,9 @@ class Request
         }
     }
 
+    public static function redirect($name)
+    {
+        header("Location:" . $name);
+    }
+
 }

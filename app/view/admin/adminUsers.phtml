@@ -1,0 +1,29 @@
+<?php include_once 'adminTemplate.phtml'?>
+    <div class="col-md-9">   
+        <table class="table">
+            <thead>
+                <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Lastname</th>
+                <th scope="col">Role</th>
+                <th scope="col">Email</th>
+                <th scope="col">register_time</th>
+                <th scope="col">Update user</th>  
+                <th scope="col">Delete user</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if(isset($categories)): ?>
+                <?php foreach ($categories as $key): ?>
+                <tr>
+                <td><?php echo $key-> name ?></td>
+                <td><a class="btn btn-primary" href="">Update</a></td>
+                <td><a class="btn btn-danger" href="<?= App::config('url');?>Admin/deleteCategories/<?= $key->id ?>">Delete</a></td>
+                </tr>
+                <?php endforeach; ?>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+    </div>
+</div>

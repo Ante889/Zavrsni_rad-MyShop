@@ -74,10 +74,10 @@ class Model
 
    public function delete (string $where)
    {
-        $where = ['where' => $this -> where];
+        $whereparam = ['where' => $this -> where];
         $connection = DB::getInstance();
         $result =$connection -> prepare("DELETE FROM ".static::$db_table." WHERE ". $where . "=:where");
-        $result -> execute($where);
+        $result -> execute($whereparam);
    }
 
    public static function innerSelect(array $select, string $from, array $tabels, array $where)
