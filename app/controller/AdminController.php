@@ -158,7 +158,8 @@ class AdminController extends AuthorizationController
     {
         $SuccessMsg='';     
         $UsersClass = new Users;
-        $Fields = $UsersClass-> selectAll()[0];
+        $UsersClass -> where= $parameters[0];
+        $Fields = $UsersClass-> select('id')[0];
     
         if(isset($_POST['submit'])){
 
@@ -168,18 +169,18 @@ class AdminController extends AuthorizationController
         isset($_POST['email']) ?$email = strtolower(trim($_POST['email'])) : $email = '';
         isset($_POST['password']) ? $password = trim($_POST['password']) : $password = '';
     
-            //Create user
-    
-                $UsersClass -> name = $name;
-                $UsersClass -> lastname = $lastname;
-                $UsersClass -> password =  password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
-                $UsersClass -> email = strtolower($email);
-                $UsersClass -> register_time = time();
-                $UsersClass -> role = $role;
-                $UsersClass -> where = $parameters[0];
-                $UsersClass -> update('id');
-                $SuccessMsg= 'Account has been successfully created';
-                Request::redirect(App::config('url'). 'admin/updateUsers');
+        //Create user
+
+        $UsersClass -> name = $name;
+        $UsersClass -> lastname = $lastname;
+        $UsersClass -> password =  password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
+        $UsersClass -> email = strtolower($email);
+        $UsersClass -> register_time = time();
+        $UsersClass -> role = $role;
+        $UsersClass -> where = $parameters[0];
+        $UsersClass -> update('id');
+        $SuccessMsg= 'Account has been successfully created';
+        Request::redirect(App::config('url'). 'admin/updateUsers/'. $parameters[0]);
         }
         $this -> view -> render($this->path.'adminUsersUpdate',[
             'succesMsg' => $SuccessMsg,
