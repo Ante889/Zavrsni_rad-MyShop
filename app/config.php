@@ -2,7 +2,7 @@
 
 return [
 
-    'siteTitle' => 'Shop',
+    'siteTitle' => 'Book shop',
     'url' => 'http://zavrsnirad.xyz/',
     'database' => [
         'server' => 'localhost',
