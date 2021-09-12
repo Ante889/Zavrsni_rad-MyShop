@@ -1,5 +1,7 @@
 <?php include_once 'adminTemplate.phtml'?>
-    <div class="col-md-9">   
+<div class="col-md-9">   
+<a class="btn btn-primary btn-lg btn-block" href="<?php App::config('url'); ?>createUsers ">Create new user</a>
+<br>
         <table class="table">
             <thead>
                 <tr>
@@ -7,18 +9,24 @@
                 <th scope="col">Lastname</th>
                 <th scope="col">Role</th>
                 <th scope="col">Email</th>
-                <th scope="col">register_time</th>
-                <th scope="col">Update user</th>  
-                <th scope="col">Delete user</th>
+                <th scope="col">Set user</th>  
+                <th scope="col">Set admin</th>
+                <th scope="col">Update</th>  
+                <th scope="col">Delete</th>
                 </tr>
             </thead>
             <tbody>
-                <?php if(isset($categories)): ?>
-                <?php foreach ($categories as $key): ?>
+                <?php if(isset($users)): ?>
+                <?php foreach ($users as $key): ?>
                 <tr>
                 <td><?php echo $key-> name ?></td>
-                <td><a class="btn btn-primary" href="">Update</a></td>
-                <td><a class="btn btn-danger" href="<?= App::config('url');?>Admin/deleteCategories/<?= $key->id ?>">Delete</a></td>
+                <td><?php echo $key-> lastname ?></td>
+                <td><?php echo $key-> role ?></td>
+                <td><?php echo $key-> email ?></td>
+                <td><a class="btn btn-danger" href="<?= App::config('url');?>Admin/setUser/<?= $key->id ?>">User</a></td>
+                <td><a class="btn btn-primary" href="<?= App::config('url');?>Admin/setAdmin/<?= $key->id ?>">Admin</a></td>
+                <td><a class="btn btn-primary" href="<?= App::config('url');?>Admin/updateUsers/<?= $key->id ?>">Update</a></td>
+                <td><a class="btn btn-danger" href="<?= App::config('url');?>Admin/deleteUsers/<?= $key->id ?>">Delete</a></td>
                 </tr>
                 <?php endforeach; ?>
                 <?php endif; ?>
