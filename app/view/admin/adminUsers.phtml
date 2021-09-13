@@ -32,6 +32,17 @@
                 <?php endif; ?>
             </tbody>
         </table>
+        <form action="<?= App::config('url'); ?>Admin/createCategories" method="post">
+            <div class="form-group">
+                <input type="text" name="name" class="form-control" placeholder="Type category name">
+                <br>
+                <?php if(isset($error)): ?>
+                    <h5 style = "color:red"><?= $error ?></h5>
+                <?php endif ?>
+                <input type="submit" name="submit" class="btn btn-primary" value="Search">
+                <br><br>
+            </div>
+        </form>
     </div>
     </div>
 </div>
