@@ -1,9 +1,8 @@
 <?php 
 
 
-class AdminController extends AuthorizationController
+class AdminUsersController extends Controller
 {
-
     private $path = 'admin'. DIRECTORY_SEPARATOR ;
 
     public function __construct()
@@ -15,89 +14,11 @@ class AdminController extends AuthorizationController
             $indexController -> index();
             exit;
         }
-        
     }
 
     public function index()
     {
-        $this -> view -> render($this->path.'adminTemplate');
-    }
-
-    ////////////////////////////
-    /////////Categories/////////
-    ////////////////////////////
-
-    public function categories()
-    {
-        $categoriesClass = New Categories;
-        $categories = $categoriesClass -> selectAll();
-        $this -> view -> render($this->path.'adminCategories',[
-            'categories' => $categories
-        ]);
-    }
-
-    public function createCategories()
-    {
-        $categoriesClass = New Categories;
-        $error="";
-        if(isset($_POST['submit']))
-        {
-            $error = userhelper::nameError(trim($_POST['name']));
-            if(empty($error))
-            {
-                $categoriesClass -> name = trim($_POST['name']);
-                $categoriesClass -> create();
-                Request::redirect(App::config('url'). 'admin/categories');
-            }
-        }
-        $categories = $categoriesClass -> selectAll();
-        $this -> view -> render($this->path.'adminCategories',[
-            'error' => $error,
-            'categories' => $categories
-        ]);
-    }
-
-    public function updateCategories()
-    {
-        $categoriesClass = New Categories;
-        $error="";
-        if(isset($_POST['submitUpdate'])&& $_POST['selectCategories'] != "")
-        {
-            $error = userhelper::nameError(trim($_POST['nameUpdate']));
-            if(empty($error))
-            {
-                $categoriesClass -> name = trim($_POST['nameUpdate']);
-                $categoriesClass -> where = trim($_POST['selectCategories']);
-                $categoriesClass -> update('id');
-                Request::redirect(App::config('url'). 'admin/categories');
-            }
-        }
-        $categories = $categoriesClass -> selectAll();
-        $this -> view -> render($this->path.'adminCategories',[
-            'errorUpdate' => $error,
-            'categories' => $categories
-        ]);
-    }
-
-    public function deleteCategories(array $parameters=[])
-    {
-        $categoriesClass = New Categories;
-        $categoriesClass -> where = $parameters[0];
-        $categoriesClass -> delete('id');
-        Request::redirect(App::config('url'). 'admin/categories');
-    }
-
-    ////////////////////////////
-    ///////End Categories///////
-    ////////////////////////////
-
-    ////////////////////////////
-    ///////////Users////////////
-    ////////////////////////////
-
-    public function users()
-    {
-        $usersClass = New users;
+        $usersClass = New Users;
         $users = $usersClass -> selectAll();
         $this -> view -> render($this->path.'adminUsers',[
             'users' => $users
@@ -168,8 +89,6 @@ class AdminController extends AuthorizationController
         isset($_POST['lastname']) ? $lastname = trim($_POST['lastname']) : $lastname = '';
         isset($_POST['email']) ?$email = strtolower(trim($_POST['email'])) : $email = '';
         isset($_POST['password']) ? $password = trim($_POST['password']) : $password = '';
-    
-        //Create user
 
         $UsersClass -> name = $name;
         $UsersClass -> lastname = $lastname;
@@ -180,7 +99,7 @@ class AdminController extends AuthorizationController
         $UsersClass -> where = $parameters[0];
         $UsersClass -> update('id');
         $SuccessMsg= 'Account has been successfully created';
-        Request::redirect(App::config('url'). 'admin/updateUsers/'. $parameters[0]);
+        Request::redirect(App::config('url'). 'AdminUsers/updateUsers/'. $parameters[0]);
         }
         $this -> view -> render($this->path.'adminUsersUpdate',[
             'succesMsg' => $SuccessMsg,
@@ -202,28 +121,24 @@ class AdminController extends AuthorizationController
         $usersClass = New users;
         $usersClass -> where = $parameters[0];
         $usersClass -> delete('id');
-        Request::redirect(App::config('url'). 'admin/users');
+        Request::redirect(App::config('url'). 'AdminUsers');
     }
 
     public function setUser(array $parameters=[])
     {
-        $usersClass = New users;
+        $usersClass = New Users;
         $usersClass -> role = 'user';
         $usersClass -> where = $parameters[0];
         $usersClass -> Update('id');
-        Request::redirect(App::config('url'). 'admin/users');
+        Request::redirect(App::config('url'). 'AdminUsers');
     }
 
     public function setAdmin(array $parameters=[])
     {
-        $usersClass = New users;
+        $usersClass = New Users;
         $usersClass -> role = 'admin';
         $usersClass -> where = $parameters[0];
         $usersClass -> Update('id');
-        Request::redirect(App::config('url'). 'admin/users');
+        Request::redirect(App::config('url'). 'AdminUsers');
     }
-
-    ////////////////////////////
-    //////////EndUsers///////////
-    ////////////////////////////
 }

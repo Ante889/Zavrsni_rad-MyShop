@@ -1,7 +1,7 @@
 <?php
 
 
-class AuthorizationController extends controller
+class AuthorizationController extends Controller
 {
 
     public function __construct()

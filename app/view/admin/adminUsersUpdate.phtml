@@ -1,8 +1,8 @@
 <?php include_once 'adminTemplate.phtml'?>
 <div class="col-md-9"> 
-<a class="btn btn-danger" href="<?= App::config('url');?>Admin/users">Back</a>
+<a class="btn btn-danger" href="<?= App::config('url');?>AdminUsers">Back</a>
 <br><br>
-        <form action="<?= App::config('url'); ?>Admin/updateUsers/<?= $returnField['id']?>" method="post">
+        <form action="<?= App::config('url'); ?>AdminUsers/updateUsers/<?= $returnField['id']?>" method="post">
             <div class="form-group">
                 <h4>Update user</h4>
                 <hr>
