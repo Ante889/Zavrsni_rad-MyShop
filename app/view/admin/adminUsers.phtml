@@ -23,24 +23,30 @@
                 <td><?php echo $key-> lastname ?></td>
                 <td><?php echo $key-> role ?></td>
                 <td><?php echo $key-> email ?></td>
-                <td><a class="btn btn-danger" href="<?= App::config('url');?>AdminUsers/setUser/<?= $key->id ?>">User</a></td>
-                <td><a class="btn btn-primary" href="<?= App::config('url');?>AdminUsers/setAdmin/<?= $key->id ?>">Admin</a></td>
-                <td><a class="btn btn-primary" href="<?= App::config('url');?>AdminUsers/updateUsers/<?= $key->id ?>">Update</a></td>
-                <td><a class="btn btn-danger" href="<?= App::config('url');?>AdminUsers/deleteUsers/<?= $key->id ?>">Delete</a></td>
+                <td><a style="color:red" href="<?= App::config('url');?>AdminUsers/setUser/<?= $key->id ?>"><i title="set user" class="fas fa-2x fa-user-lock"></i></a></td>
+                <td><a style="color:green" href="<?= App::config('url');?>AdminUsers/setAdmin/<?= $key->id ?>"><i title="Set admin" class="fas fa-2x fa-user-edit"></i></a></td>
+                <td><a href="<?= App::config('url');?>AdminUsers/updateUsers/<?= $key->id ?>"><i title="update" class="fas fa-2x fa-pencil-alt"></i></a></td>
+                <td><a style="color:red" href="<?= App::config('url');?>AdminUsers/deleteUsers/<?= $key->id ?>"><i title="detele" class="fas fa-2x fa-trash-alt"></i></a></td>
                 </tr>
                 <?php endforeach; ?>
                 <?php endif; ?>
             </tbody>
         </table>
-        <form action="<?= App::config('url'); ?>AdminUsers/createCategories" method="post">
-            <div class="form-group">
-                <input type="text" name="name" class="form-control" placeholder="Type category name">
-                <br>
-                <?php if(isset($error)): ?>
-                    <h5 style = "color:red"><?= $error ?></h5>
-                <?php endif ?>
-                <input type="submit" name="submit" class="btn btn-primary" value="Search">
-                <br><br>
+        <hr>
+        <form action="<?= App::config('url'); ?>AdminUsers" method="post">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm">
+                        <input type="text" name="email" class="form-control" placeholder="Search users by email">
+                    <br>
+                    <?php if(isset($error)): ?>
+                        <h5 style = "color:red"><?= $error ?></h5>
+                    <?php endif ?>
+                    </div>
+                    <div class="col-sm">
+                        <input type="submit" name="submit" class="btn btn-primary" value="Search">  
+                    </div>
+                </div>
             </div>
         </form>
     </div>

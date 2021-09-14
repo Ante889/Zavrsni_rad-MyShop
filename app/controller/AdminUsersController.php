@@ -19,7 +19,13 @@ class AdminUsersController extends Controller
     public function index()
     {
         $usersClass = New Users;
-        $users = $usersClass -> selectAll();
+        if(isset($_POST['submit']) && !empty($_POST['email']))
+        {
+            $users= $usersClass -> selectAllLike("%".trim($_POST['email'])."%",'email');
+        }else
+        {
+            $users = $usersClass -> selectAll();
+        }  
         $this -> view -> render($this->path.'adminUsers',[
             'users' => $users
         ]);

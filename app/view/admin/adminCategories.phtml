@@ -47,7 +47,7 @@
                 <?php foreach ($categories as $key): ?>
                 <tr>
                 <td><?php echo $key-> name ?></td>
-                <td><a class="btn btn-danger" href="<?= App::config('url');?>AdminCategories/deleteCategories/<?= $key->id ?>">Delete</a></td>
+                <td><a style="color:red"  href="<?= App::config('url');?>AdminCategories/deleteCategories/<?= $key->id ?>"><i title="delete" class="fas fa-2x fa-trash-alt"></i></a></td>
                 </tr>
                 <?php endforeach; ?>
                 <?php endif; ?>

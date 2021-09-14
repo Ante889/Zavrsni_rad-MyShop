@@ -72,6 +72,17 @@ class Model
 
    }
 
+   public function selectAllLike(string $Like, string $where)
+   {
+       $connection = DB::getInstance();
+       $sql = "SELECT * FROM " .static::$db_table." WHERE ".$where." LIKE ?";
+       echo $sql;
+       $result = $connection -> prepare($sql);
+       $result -> bindParam(1,$Like);
+       $result -> execute();
+       return $result -> fetchALL();
+   }
+
    public function delete (string $where)
    {
         $whereparam = ['where' => $this -> where];
