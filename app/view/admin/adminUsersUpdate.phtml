@@ -2,7 +2,7 @@
 <div class="col-md-9"> 
 <a class="btn btn-danger" href="<?= App::config('url');?>AdminUsers">Back</a>
 <br><br>
-        <form action="<?= App::config('url'); ?>AdminUsers/updateUsers/<?= $returnField['id']?>" method="post">
+        <form action="<?= App::config('url'); ?>AdminUsers/updateUsers" method="post">
             <div class="form-group">
                 <h4>Update user</h4>
                 <hr>
@@ -31,7 +31,6 @@
                     <input type="password" name="password" class="form-control" id="password" value = "<?= $returnField['password'] ?>">
                 </div>
                 <input type="submit" name="submit" class="btn btn-primary" value="Update">
-                <h5 style="color:green"><?= $succesMsg?></h5>
                 <br><br>
             </div>
         </form>

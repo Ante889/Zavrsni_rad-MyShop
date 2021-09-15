@@ -32,4 +32,9 @@ class Request
         header("Location:" . $name);
     }
 
+    public static function issetTrim(string $string)
+    {
+        return isset($_POST[$string]) ? trim($_POST[$string]) : '';
+    }
+
 }

@@ -8,7 +8,7 @@ create table products (
 	id int primary key auto_increment not null,
 	title varchar(50) not null,
 	author varchar(50) not null,
-	image varchar(50) not null,
+	image varchar(255) not null,
 	special_image varchar(50) NOT NULL,
 	price decimal(18.2) not null,
 	category int not null,

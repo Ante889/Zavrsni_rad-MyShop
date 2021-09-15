@@ -7,6 +7,7 @@ session_start();
 
 define('PATH', __DIR__ . DIRECTORY_SEPARATOR);
 define('APP_PATH', __DIR__. DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR);
+define('IMAGE_PATH', __DIR__. DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR);
 
 $path= implode(PATH_SEPARATOR,
 [

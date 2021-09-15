@@ -7,7 +7,7 @@ class userhelper{
         if(empty($string)){
             return 'Field cannot be empty';
         }else if(strlen($string) < 2 ){
-            return 'name must contain at least 2 characters';
+            return 'Field must contain at least 2 characters';
         }else if(preg_match('~[0-9]+~',$string)){
             return  'Only letters are allowed';
         }

@@ -2,8 +2,6 @@
 
 class LoginController extends Controller
 {
-
-
     private $path = 'login'. DIRECTORY_SEPARATOR ;
 
     public function index(){
@@ -15,11 +13,10 @@ class LoginController extends Controller
             'password' => '',
             'alert' => ''
         ];
-        isset($_POST['email'])? $email = trim($_POST['email']) : $email= "";
-        isset($_POST['password'])? $password = trim($_POST['password']) : $password= "";
-        isset($_POST['checkbox'])? $checkbox = trim($_POST['checkbox']) : $checkbox= "";
-
-
+        $email = strtolower(Request::issetTrim('email'));
+        $password = Request::issetTrim('password');
+        $checkbox = Request::issetTrim('checkbox');
+    
         if(!empty(userhelper::LoginWithCookie())){
             $_SESSION['User'] = userhelper::LoginWithCookie();
             userhelper::setRemembermeToken($_SESSION['User']->email);
@@ -71,11 +68,11 @@ class LoginController extends Controller
             'email' => '',
             'password' => ''
         ];
-        isset($_POST['name']) ? $name = trim($_POST['name']) : $name = '';
-        isset($_POST['lastname']) ? $lastname = trim($_POST['lastname']) : $lastname = '';
-        isset($_POST['email']) ?$email = strtolower(trim($_POST['email'])) : $email = '';
-        isset($_POST['password']) ? $password = trim($_POST['password']) : $password = '';
-        isset($_POST['confirmPassword']) ? $confirmPassword = trim($_POST['confirmPassword']) : $confirmPassword = '';
+        $name = Request::issetTrim('name');
+        $lastname = Request::issetTrim('lastname');
+        $email = strtolower(Request::issetTrim('email'));
+        $password = Request::issetTrim('password');
+        $confirmPassword = Request::issetTrim('confirmPassword');
     
         if(isset($_POST['submit'])){
             
@@ -153,8 +150,8 @@ class LoginController extends Controller
         $protection = explode(".",$parameters[0]);
         if(isset($parameters[0]) && strlen($parameters[0]) == 105 && count($protection) ==5){
             if(isset($_POST['submit'])){
-            isset($_POST['password']) ? $password = trim($_POST['password']) : $password = '';
-            isset($_POST['confirmPassword']) ? $confirmPassword = trim($_POST['confirmPassword']) : $confirmPassword = '';
+                $password = Request::issetTrim('password');
+                $confirmPassword = Request::issetTrim('confirmPassword');
             $errors = userhelper::passwordError($password, $confirmPassword);
             if(empty($errors)){
 

@@ -1,11 +1,10 @@
 <?php include_once 'adminTemplate.phtml'?>
 <div class="col-md-9">   
-<a class="btn btn-primary btn-lg btn-block" href="<?php App::config('url'); ?> ">Create new product</a>
+<a class="btn btn-primary btn-lg btn-block" href="<?php App::config('url');?>AdminProducts/createProducts ">Create new product</a>
 <br>
         <table class="table">
             <thead>
                 <tr>
-                <th scope="col"></th>
                 <th scope="col">Title</th>
                 <th scope="col">Author</th>
                 <th scope="col">Image</th>
@@ -22,8 +21,6 @@
                 <?php if(isset($products)): ?>
                 <?php foreach ($products as $key): ?>
                 <tr>
-                <td><input type="checkbox" name="scales"></td>
-                <td><?php echo $key-> title ?></td>
                 <td><?php echo $key-> title ?></td>
                 <td><?php echo $key-> author ?></td>
                 <td><?php echo $key-> image ?></td>
@@ -32,8 +29,8 @@
                 <td><?php echo $key-> quantity ?></td>
                 <td><?php echo $key-> content ?></td>
                 <td><?php echo $key-> pdf ?></td>
-                <td><a href="<?= App::config('url');?>AdminUsers/updateUsers/<?= $key->id ?>"><i title="update" class="fas fa-2x fa-pencil-alt"></i></a></td>
-                <td><a style="color:red" href="<?= App::config('url');?>AdminUsers/deleteUsers/<?= $key->id ?>"><i title="detele" class="fas fa-2x fa-trash-alt"></i></a></td>
+                <td><a href="<?= App::config('url');?>AdminProducts/updateProducts/<?= $key->id ?>"><i title="update" class="fas fa-2x fa-pencil-alt"></i></a></td>
+                <td><a style="color:red" href="<?= App::config('url');?>AdminProducts/deleteProducts/<?= $key->id ?>"><i title="detele" class="fas fa-2x fa-trash-alt"></i></a></td>
                 </tr>
                 <?php endforeach; ?>
                 <?php endif; ?>

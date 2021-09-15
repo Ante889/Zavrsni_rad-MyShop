@@ -40,11 +40,11 @@ class AdminUsersController extends Controller
             'email' => '',
             'password' => ''
         ];
-        isset($_POST['name']) ? $name = trim($_POST['name']) : $name = '';
-        isset($_POST['lastname']) ? $lastname = trim($_POST['lastname']) : $lastname = '';
-        isset($_POST['email']) ?$email = strtolower(trim($_POST['email'])) : $email = '';
-        isset($_POST['password']) ? $password = trim($_POST['password']) : $password = '';
-        isset($_POST['confirmPassword']) ? $confirmPassword = trim($_POST['confirmPassword']) : $confirmPassword = '';
+        $name = Request::issetTrim('name');
+        $lastname = Request::issetTrim('lastname');
+        $email = strtolower(Request::issetTrim('email'));
+        $password = Request::issetTrim('password');
+        $confirmPassword = Request::issetTrim('confirmPassword');
     
         if(isset($_POST['submit'])){
             
@@ -82,33 +82,23 @@ class AdminUsersController extends Controller
 
 
     public function updateUsers(array $parameters=[])
-    {
-        $SuccessMsg='';     
+    { 
         $UsersClass = new Users;
         $UsersClass -> where= $parameters[0];
         $Fields = $UsersClass-> select('id')[0];
     
         if(isset($_POST['submit'])){
 
-        isset($_POST['name']) ? $name = trim($_POST['name']) : $name = '';
-        isset($_POST['role']) ? $role = trim($_POST['role']) : $role = '';
-        isset($_POST['lastname']) ? $lastname = trim($_POST['lastname']) : $lastname = '';
-        isset($_POST['email']) ?$email = strtolower(trim($_POST['email'])) : $email = '';
-        isset($_POST['password']) ? $password = trim($_POST['password']) : $password = '';
-
-        $UsersClass -> name = $name;
-        $UsersClass -> lastname = $lastname;
-        $UsersClass -> password =  password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
-        $UsersClass -> email = strtolower($email);
-        $UsersClass -> register_time = time();
-        $UsersClass -> role = $role;
+        $UsersClass -> name = Request::issetTrim('name');
+        $UsersClass -> lastname = Request::issetTrim('lastname');
+        $UsersClass -> password =  password_hash(Request::issetTrim('password'), PASSWORD_BCRYPT, ['cost' => 12]);
+        $UsersClass -> email = strtolower(Request::issetTrim('email'));
+        $UsersClass -> role = Request::issetTrim('role');
         $UsersClass -> where = $parameters[0];
         $UsersClass -> update('id');
-        $SuccessMsg= 'Account has been successfully created';
         Request::redirect(App::config('url'). 'AdminUsers/updateUsers/'. $parameters[0]);
         }
         $this -> view -> render($this->path.'adminUsersUpdate',[
-            'succesMsg' => $SuccessMsg,
             'returnField' => [
               'id' => $Fields -> id,
               'name' => $Fields -> name, 

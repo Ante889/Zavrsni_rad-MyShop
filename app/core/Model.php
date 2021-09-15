@@ -76,7 +76,6 @@ class Model
    {
        $connection = DB::getInstance();
        $sql = "SELECT * FROM " .static::$db_table." WHERE ".$where." LIKE ?";
-       echo $sql;
        $result = $connection -> prepare($sql);
        $result -> bindParam(1,$Like);
        $result -> execute();
