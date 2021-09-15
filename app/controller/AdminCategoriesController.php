@@ -33,7 +33,7 @@ class AdminCategoriesController extends AuthorizationController
         $error="";
         if(isset($_POST['submit']))
         {
-            $error = userhelper::nameError(trim($_POST['name']));
+            $error = categoryhelper::addError(trim($_POST['name']));
             if(empty($error))
             {
                 $categoriesClass -> name = trim($_POST['name']);
@@ -54,7 +54,7 @@ class AdminCategoriesController extends AuthorizationController
         $error="";
         if(isset($_POST['submitUpdate'])&& $_POST['selectCategories'] != "")
         {
-            $error = userhelper::nameError(trim($_POST['nameUpdate']));
+            $error = categoryhelper ::addError(trim($_POST['nameUpdate']));
             if(empty($error))
             {
                 $categoriesClass -> name = trim($_POST['nameUpdate']);

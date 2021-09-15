@@ -8,10 +8,32 @@ class userhelper{
             return 'Field cannot be empty';
         }else if(strlen($string) < 2 ){
             return 'Field must contain at least 2 characters';
+        }else if(strlen($string) > 35 ){
+            return 'Input is too long';
         }else if(preg_match('~[0-9]+~',$string)){
             return  'Only letters are allowed';
         }
         return '';
+    }
+
+    public static function emptyError(string $string){
+        if(empty($string)){
+            return 'Field cannot be empty';
+        }
+        return '';
+    }
+
+    public static function emailUpdateError($newEmail,$oldEmail){
+        $UsersClass = static::shortSelect('Users','email',$newEmail);
+        if(empty($newEmail)){
+            return 'Field cannot be empty';
+        }else if($newEmail != $oldEmail){
+            if(!empty($UsersClass)){
+                return 'Email exists';
+            }
+        }
+        return '';
+
     }
 
     public static function emailError(string $email){

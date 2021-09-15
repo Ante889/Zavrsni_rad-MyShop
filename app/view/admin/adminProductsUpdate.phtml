@@ -2,7 +2,7 @@
 <div class="col-md-9"> 
 <a class="btn btn-danger" href="<?= App::config('url');?>AdminProducts">Back</a>
 <br><br>
-        <form action="" method="post" enctype="multipart/form-data">
+        <form action="<?= App::config('url'); ?>AdminProducts/updateProducts<?= $returnField['id'] ?> " method="post" enctype="multipart/form-data">
             <div class="form-group">
                 <h4>Update product</h4>
                 <hr>

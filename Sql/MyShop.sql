@@ -1,5 +1,6 @@
 DROP database IF EXISTS myshop;
-create database myshop;
+create database 
+		myshop default character set utf8mb4;
 use myshop;
 
 

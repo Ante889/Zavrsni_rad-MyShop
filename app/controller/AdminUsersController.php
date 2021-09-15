@@ -37,6 +37,7 @@ class AdminUsersController extends Controller
         $errors= [
             'name' => '',
             'lastname'=> '',
+            'role' => '',
             'email' => '',
             'password' => ''
         ];
@@ -45,14 +46,15 @@ class AdminUsersController extends Controller
         $email = strtolower(Request::issetTrim('email'));
         $password = Request::issetTrim('password');
         $confirmPassword = Request::issetTrim('confirmPassword');
-    
+        $role = Request::issetTrim('role');
+
         if(isset($_POST['submit'])){
             
             $errors['name'] = userhelper::nameError($name);
             $errors['lastname'] = userhelper::nameError($lastname);
             $errors['email'] = userhelper::emailError($email);            
             $errors['password'] = userhelper::passwordError($password,$confirmPassword);
-    
+            $errors['role'] = userhelper::emptyError($role); 
             //Create user
     
             if(empty($errors['name']) && empty($errors['lastname']) && empty($errors['email']) && empty($errors['password'])){
@@ -62,7 +64,7 @@ class AdminUsersController extends Controller
                 $UsersClass -> password =  password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
                 $UsersClass -> email = strtolower($email);
                 $UsersClass -> register_time = time();
-                $UsersClass -> role = 'user';
+                $UsersClass -> role = $role;
                 $UsersClass -> Create();
                 $SuccessMsg= 'Account has been successfully created';
             }
@@ -74,6 +76,7 @@ class AdminUsersController extends Controller
               'name' => $name, 
               'lastname' => $lastname,
               'email' => $email, 
+              'role' => $role,
               'password' => $password, 
               'confirmPassword' => $confirmPassword, 
             ]
@@ -86,19 +89,40 @@ class AdminUsersController extends Controller
         $UsersClass = new Users;
         $UsersClass -> where= $parameters[0];
         $Fields = $UsersClass-> select('id')[0];
-    
+        $errors= [
+            'name' => '',
+            'lastname'=> '',
+            'role' => '',
+            'email' => '',
+            'password' => ''
+        ];
+        $name = Request::issetTrim('name');
+        $lastname = Request::issetTrim('lastname');
+        $email = strtolower(Request::issetTrim('email'));
+        $password = Request::issetTrim('password');
+        $role = Request::issetTrim('role');
+
         if(isset($_POST['submit'])){
 
-        $UsersClass -> name = Request::issetTrim('name');
-        $UsersClass -> lastname = Request::issetTrim('lastname');
-        $UsersClass -> password =  password_hash(Request::issetTrim('password'), PASSWORD_BCRYPT, ['cost' => 12]);
-        $UsersClass -> email = strtolower(Request::issetTrim('email'));
-        $UsersClass -> role = Request::issetTrim('role');
+        $errors['name'] = userhelper::nameError($name);
+        $errors['lastname'] = userhelper::nameError($lastname);
+        $errors['email'] = userhelper::emailUpdateError($email,$Fields-> email);            
+        $errors['password'] = userhelper::passwordError($password,$password);    
+        $errors['role'] = userhelper::emptyError($role); 
+
+        if(empty($errors['name']) && empty($errors['lastname']) && empty($errors['email']) && empty($errors['password']) && empty($errors['role'])){
+        $UsersClass -> name = $name;
+        $UsersClass -> lastname = $lastname;
+        $UsersClass -> password =  password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
+        $UsersClass -> email = strtolower($email);
+        $UsersClass -> role = $role;
         $UsersClass -> where = $parameters[0];
         $UsersClass -> update('id');
         Request::redirect(App::config('url'). 'AdminUsers/updateUsers/'. $parameters[0]);
         }
+    }
         $this -> view -> render($this->path.'adminUsersUpdate',[
+            'errors' => $errors,
             'returnField' => [
               'id' => $Fields -> id,
               'name' => $Fields -> name, 

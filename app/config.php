@@ -9,7 +9,7 @@ if($_SERVER['SERVER_ADDR'] === '127.0.0.1'){
         'password' => '101910'
     ];
 }else{
-    $url = 'http://www.ante-online.com/';
+    $url = 'https://ante-online.com/';
     $database = [
         'server' => 'localhost',
         'name' => 'ante_online',
