@@ -1,4 +1,6 @@
-<?php include_once 'adminTemplate.phtml'?>
+<?php 
+include APP_PATH . 'view' . DIRECTORY_SEPARATOR . 'admin'. DIRECTORY_SEPARATOR .'adminTemplate.phtml';
+?>
     <div class="col-md-9">  
     
         <form action="<?= App::config('url'); ?>AdminCategories/createCategories" method="post">

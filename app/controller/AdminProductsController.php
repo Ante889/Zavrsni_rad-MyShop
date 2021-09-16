@@ -3,7 +3,7 @@
 
 class AdminProductsController extends Controller
 {
-    private $path = 'admin'. DIRECTORY_SEPARATOR ;
+    private $path = 'admin'. DIRECTORY_SEPARATOR . 'products'. DIRECTORY_SEPARATOR ;
 
     public function __construct()
     {
@@ -54,8 +54,6 @@ class AdminProductsController extends Controller
         {
             $imageName ='';
         }
-        
-    
         if(isset($_POST['submit'])){
             
             $errors['title'] = producthelper::basicError($title);
@@ -102,27 +100,68 @@ class AdminProductsController extends Controller
 
     public function updateProducts(array $parameters=[])
     {
+        $errors= [
+            'title' => '',
+            'author' => '', 
+            'image' => '',
+            'price' => '',
+            'category' => '', 
+            'quantity' => '',
+            'content' => '', 
+            'pdf' => ''
+        ];
 
         $ProductsClass = new Products;
         $ProductsClass -> where= $parameters[0];
         $Fields = $ProductsClass-> select('id')[0];
-    
+        if(empty($Fields)){
+            Request::redirect(App::config('url'). 'AdminProducts');
+            return;
+        }
+        $image = isset($_FILES['image']) ? $_FILES['image'] : '';
+
         if(isset($_POST['submit'])){
 
-        $ProductsClass -> title = Request::issetTrim('title');
-        $ProductsClass -> author = Request::issetTrim('author');
-        $ProductsClass -> image =  Request::issetTrim('image');
-        $ProductsClass -> price = Request::issetTrim('price');
-        $ProductsClass -> category = Request::issetTrim('category');
-        $ProductsClass -> quantity = Request::issetTrim('quantity');
-        $ProductsClass -> content = Request::issetTrim('content');
-        $ProductsClass -> pdf = Request::issetTrim('pdf');
-        $ProductsClass -> where = $parameters[0];
-        $ProductsClass -> update('id');
-        Request::redirect(App::config('url'). 'AdminProducts/updateProducts/'. $parameters[0]);
+        $errors['title'] = producthelper::basicError(Request::issetTrim('title'));
+        $errors['author'] = producthelper::basicError(Request::issetTrim('author'));
+        $errors['image'] = producthelper::photoError($image);
+        $errors['price'] = producthelper::numbersError(Request::issetTrim('price'));
+        $errors['category'] = producthelper::numbersError(Request::issetTrim('category'));
+        $errors['quantity'] = producthelper::numbersError(Request::issetTrim('quantity'));
+        $errors['content'] = producthelper::basicError(Request::issetTrim('content'));
+        $errors['pdf'] = producthelper::basicError(Request::issetTrim('pdf'));
+        if(empty($image['name'])){
+            unset($errors['image']);
         }
+
+        if(empty($errors['title']) && empty($errors['author']) && empty($errors['image']) && empty($errors['price'])&& empty($errors['category'])&& empty($errors['quantity'])&& empty($errors['content'])&& empty($errors['pdf'])){
+        
+            if(!empty($image['name'])){
+                $imageName = uniqid().basename($image['name']);
+                unlink(IMAGE_PATH . $Fields-> image);
+                move_uploaded_file($image['tmp_name'], IMAGE_PATH .$imageName);
+            }else 
+            {
+                $imageName =$Fields-> image;
+            }
+
+            $ProductsClass -> title = Request::issetTrim('title');
+            $ProductsClass -> author = Request::issetTrim('author');
+            $ProductsClass -> image =  $imageName;
+            $ProductsClass -> price = Request::issetTrim('price');
+            $ProductsClass -> category = Request::issetTrim('category');
+            $ProductsClass -> quantity = Request::issetTrim('quantity');
+            $ProductsClass -> content = Request::issetTrim('content');
+            $ProductsClass -> pdf = Request::issetTrim('pdf');
+            $ProductsClass -> where = $parameters[0];
+            $ProductsClass -> update('id');
+            Request::redirect(App::config('url'). 'AdminProducts/updateProducts/'. $parameters[0]);
+        }
+    }
         $this -> view -> render($this->path.'adminProductsUpdate',[
+            'errors' => $errors,
             'returnField' => [
+              'id' => $parameters[0],
               'title' => $Fields -> title,
               'author' => $Fields -> author, 
               'image' => $Fields ->image,

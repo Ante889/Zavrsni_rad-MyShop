@@ -9,14 +9,18 @@ class producthelper{
         }else if(strlen($string) < 2 ){
             return 'Field must contain at least 2 characters';
         }
+
         return '';
     }
 
     public static function numbersError(string $string){
+        $int=(int)$string;
         if(empty($string)){
             return 'Field cannot be empty';
         }else if(!preg_match('~[0-9]+~',$string)){
             return  'Only numbers are allowed';
+        }else if($int < 0){
+            return  'You cannot enter negative numbers';
         }
         return '';
     }

@@ -3,7 +3,7 @@
 
 class AdminUsersController extends Controller
 {
-    private $path = 'admin'. DIRECTORY_SEPARATOR ;
+    private $path = 'admin'. DIRECTORY_SEPARATOR . 'users'. DIRECTORY_SEPARATOR ;
 
     public function __construct()
     {
@@ -89,6 +89,10 @@ class AdminUsersController extends Controller
         $UsersClass = new Users;
         $UsersClass -> where= $parameters[0];
         $Fields = $UsersClass-> select('id')[0];
+        if(empty($Fields)){
+            Request::redirect(App::config('url'). 'AdminUsers');
+            return;
+        }
         $errors= [
             'name' => '',
             'lastname'=> '',

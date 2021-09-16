@@ -4,7 +4,7 @@
 class AdminCategoriesController extends AuthorizationController
 {
 
-    private $path = 'admin'. DIRECTORY_SEPARATOR ;
+    private $path = 'admin'. DIRECTORY_SEPARATOR . 'categories'. DIRECTORY_SEPARATOR ;
 
     public function __construct()
     {
