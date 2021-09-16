@@ -32,7 +32,7 @@ include APP_PATH . 'view' . DIRECTORY_SEPARATOR . 'admin'. DIRECTORY_SEPARATOR .
                 </div>
                 <div class="mb-3">
                     <label for="image" class="form-label">Image</label><br>
-                    <input type="file" name="image" id="image" value = "<?= $returnField['price'] ?>">
+                    <input type="file" name="image" id="image" value = "<?= $returnField['image'] ?>">
                     <?php if(isset($errors['image'])): ?>
                         <h4 style = "color:red"><?= $errors['image'];?></h4>
                     <?php endif ?>  
@@ -44,9 +44,19 @@ include APP_PATH . 'view' . DIRECTORY_SEPARATOR . 'admin'. DIRECTORY_SEPARATOR .
                             <h4 style = "color:red"><?= $errors['price'];?></h4>
                     <?php endif ?>  
                 </div>
+                
                 <div class="mb-3">
-                    <label for="category" class="form-label">Category</label>
-                    <input type="text" name="category" class="form-control" id="category" value = "<?= $returnField['category'] ?>">
+                    <label for="category" class="form-label">Category - </label>
+                    <select class="form-select" name="category">
+                        <option value="" selected>Choice category</option>
+                        <?php foreach($categories as $key):?>
+                            <?php if($key->id == $returnField['category']):?>
+                                <option selected value="<?= $key->id ?>"><?= $key-> name?></option>
+                            <?php else: ?>
+                                <option value="<?= $key->id ?>"><?= $key-> name?></option>
+                            <?php endif ?>
+                        <?php endforeach ?>
+                    </select>
                     <?php if(isset($errors['category'])): ?>
                             <h4 style = "color:red"><?= $errors['category'];?></h4>
                     <?php endif ?>  

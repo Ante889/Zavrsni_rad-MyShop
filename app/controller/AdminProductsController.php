@@ -18,10 +18,15 @@ class AdminProductsController extends Controller
 
     public function index()
     {
-        $productsClass = New Products;
 
-        $products = $productsClass -> selectAll();
- 
+        $productsClass = New Products;
+        if(isset($_POST['submit']) && !empty($_POST['title']))
+        {
+            $products= $productsClass -> selectAllLike("%".trim($_POST['title'])."%",'title');
+        }else
+        {
+            $products = $productsClass -> selectAll();;
+        }  
         $this -> view -> render($this->path.'adminProducts',[
             'products' => $products
         ]);
@@ -29,6 +34,8 @@ class AdminProductsController extends Controller
 
     public function createProducts()
     {
+        $categories= new Categories;
+        $categories= $categories -> selectAll();
         $SuccessMsg='';
         $errors= [
             'title' => '',
@@ -60,7 +67,7 @@ class AdminProductsController extends Controller
             $errors['author'] = producthelper::basicError($author);
             $errors['image'] = producthelper::photoError($image);
             $errors['price'] = producthelper::numbersError($price);
-            $errors['category'] = producthelper::numbersError($category);
+            $errors['category'] = producthelper::categoryError($category);
             $errors['quantity'] = producthelper::numbersError($quantity);
             $errors['content'] = producthelper::basicError($content);
             $errors['pdf'] = producthelper::basicError($pdf);       
@@ -72,7 +79,7 @@ class AdminProductsController extends Controller
                 $ProductsClass -> title = $title;
                 $ProductsClass -> author = $author;
                 $ProductsClass -> image = $imageName;
-                $ProductsClass -> title = $price;
+                $ProductsClass -> price = $price;
                 $ProductsClass -> category = $category;
                 $ProductsClass -> quantity = $quantity;
                 $ProductsClass -> content = $content;
@@ -83,6 +90,7 @@ class AdminProductsController extends Controller
             }
         }
         $this -> view -> render($this->path.'adminProductsAdd',[
+            'categories' => $categories,
             'errors' => $errors,
             'succesMsg' => $SuccessMsg,
             'returnField' => [
@@ -100,6 +108,8 @@ class AdminProductsController extends Controller
 
     public function updateProducts(array $parameters=[])
     {
+        $categories= new Categories;
+        $categories= $categories -> selectAll();
         $errors= [
             'title' => '',
             'author' => '', 
@@ -159,6 +169,7 @@ class AdminProductsController extends Controller
         }
     }
         $this -> view -> render($this->path.'adminProductsUpdate',[
+            'categories' => $categories,
             'errors' => $errors,
             'returnField' => [
               'id' => $parameters[0],

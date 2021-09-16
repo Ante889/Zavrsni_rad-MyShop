@@ -9,8 +9,15 @@ class producthelper{
         }else if(strlen($string) < 2 ){
             return 'Field must contain at least 2 characters';
         }
-
         return '';
+    }
+
+    public static function categoryError($categoryName)
+    {
+
+        if(empty($categoryName) && $categoryName === ""){
+            return 'Field cannot be empty';
+        }
     }
 
     public static function numbersError(string $string){
