@@ -1,0 +1,60 @@
+<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+  <ol class="carousel-indicators">
+    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+  </ol>
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img class="d-block w-100" src="..." alt="First slide">
+    </div>
+  </div>
+  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>
+<hr><br>
+<div class="container">
+   <div class="row">
+       <div class="col-md-3">  
+       <div id="list-example" class="list-group">
+        <h3 class="text-center">Categories</h3>
+            <hr>
+            <a class="list-group-item list-group-item-action" href="<?= App::config('url')?>">See all</a>
+            <?php foreach($categories as $category): ?>
+            <a class="list-group-item list-group-item-action" href="<?= App::config('url'); ?>index/index/<?= $category->id ?>"><?= $category->name; ?>(<?= $ProductsInCategory[$category->name] ?>)</a>
+            <?php endforeach;?>
+        </div>
+       </div>
+       <div class="col-md-9">
+        <h2 class="text-center">BOOKS</h2>
+        <hr>
+            <div class="container">
+                <div class="row">
+                    <?php foreach($products as $product): ?>
+                        
+                    <div class="col-md-4 mt-5">  
+                        <div class="card" style="width: 14rem;">
+                            <img style ="max-height:200px" class="card-img-top" src="../../public/images/<?= $product->image ?>" alt="Card image cap">
+                            <div class="card-body">
+                                <a href="#"><h4 class="card-title text-center"><?= $product->title?></h4></a>
+                                <p class="card-text text-center"><?php Request::LimitString($product->content,95) ?></p>
+                                <p class="card-text text-center"> Author: <?= $product->author ?></p>
+                                <h5 class="card-text text-center"> Price: <?= $product->price ?>$</h5>
+                            </div>
+                            <a href="#" class="btn btn-primary btn-lg btn-block">Buy</a>
+                        </div>
+                    </div>
+
+                    <?php endforeach;?>
+                </div>
+            </div>
+       </div>
+
+    </div>
+</div>

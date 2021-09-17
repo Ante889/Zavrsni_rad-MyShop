@@ -37,4 +37,13 @@ class Request
         return isset($_POST[$string]) ? trim($_POST[$string]) : '';
     }
 
+    public static function LimitString($str, $limit)
+    {
+        if (strlen($str) > $limit){
+             echo substr($str, 0, $limit-3) . '...';
+        }else{
+            echo $str;
+        }
+    }
+
 }
