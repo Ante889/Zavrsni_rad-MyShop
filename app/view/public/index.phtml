@@ -32,7 +32,12 @@
         </div>
        </div>
        <div class="col-md-9">
-        <h2 class="text-center">BOOKS</h2>
+        <h2 class="text-center"><?= $bigTitle ?></h2>
+        <?php if(isset($displayCategory)):?>
+          <hr>
+          <h3 class="text-center"><?=$displayCategory ?></h3>
+
+        <?php endif ?>
         <hr>
             <div class="container">
                 <div class="row">
@@ -42,12 +47,12 @@
                         <div class="card" style="width: 14rem;">
                             <img style ="max-height:200px" class="card-img-top" src="../../public/images/<?= $product->image ?>" alt="Card image cap">
                             <div class="card-body">
-                                <a href="#"><h4 class="card-title text-center"><?= $product->title?></h4></a>
+                                <a href="<?=App::config('url')?>index/productpage/<?= $product->id ?>"><h4 class="card-title text-center"><?= $product->title?></h4></a>
                                 <p class="card-text text-center"><?php Request::LimitString($product->content,95) ?></p>
                                 <p class="card-text text-center"> Author: <?= $product->author ?></p>
                                 <h5 class="card-text text-center"> Price: <?= $product->price ?>$</h5>
                             </div>
-                            <a href="#" class="btn btn-primary btn-lg btn-block">Buy</a>
+                            <a href="<?=App::config('url')?>index/productpage/<?= $product->id ?>" class="btn btn-primary btn-lg btn-block">Buy</a>
                         </div>
                     </div>
 

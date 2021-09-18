@@ -7,7 +7,6 @@ class App
     {
 
         $Route = explode('/', Request::getRoute());
-
         //CLASS
 
         if(empty($Route[1])){

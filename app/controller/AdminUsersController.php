@@ -142,7 +142,7 @@ class AdminUsersController extends Controller
 
     public function deleteUsers(array $parameters=[])
     {
-        $usersClass = New users;
+        $usersClass = New Users;
         $usersClass -> where = $parameters[0];
         $usersClass -> delete('id');
         Request::redirect(App::config('url'). 'AdminUsers');

@@ -86,11 +86,11 @@ class userhelper{
     }
 
     public static function setRemembermeToken($email){
-
+        $User = static::shortSelect('Users','email',$email);
         $token = bin2hex(random_bytes(52));
-        setcookie('CookieT/', $token, time() + 3600 * 30);
+        setcookie('CookieT/', $User->id.'.'.$token, time() + 3600 * 30);
         $UsersClass=new Users;
-        $UsersClass -> rememberme_token = $token;
+        $UsersClass -> rememberme_token =password_hash($token, PASSWORD_BCRYPT, ['cost' => 12]);
         $UsersClass -> where = $email;
         $UsersClass -> Update('email');
 
@@ -99,12 +99,15 @@ class userhelper{
     public static function LoginWithCookie(){
 
         if(isset($_COOKIE['CookieT/'])){
-            $UsersClass = static::shortSelect('Users','rememberme_token',$_COOKIE['CookieT/']);
+            $cookie= explode('.',$_COOKIE['CookieT/']);
+            $UsersClass = static::shortSelect('Users','id',$cookie[0]);
+            if(password_verify($cookie[1], $UsersClass->rememberme_token)){
             unset($UsersClass -> password);
             unset($UsersClass -> confirm_email_token);
             unset($UsersClass -> reset_password_token);
             unset($UsersClass -> rememberme_token);
             return $UsersClass;
+            }
         }    
     }
 

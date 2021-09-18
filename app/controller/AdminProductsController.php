@@ -84,7 +84,8 @@ class AdminProductsController extends Controller
                 $ProductsClass -> quantity = $quantity;
                 $ProductsClass -> content = $content;
                 $ProductsClass -> pdf = $pdf;
-                $ProductsClass -> Create();
+                $ProductsClass -> creation_time= time();
+                $ProductsClass -> create();
                 $SuccessMsg= 'Product has been successfully created';
                 move_uploaded_file($image['tmp_name'], IMAGE_PATH .$imageName);
             }
