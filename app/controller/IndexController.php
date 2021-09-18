@@ -9,11 +9,23 @@ class IndexController extends Controller
 
     public function index(array $parameters=[])
     {   
+        $limit = 6;
+        $offset = 0;
         $bigTitle = 'BOOKS';
         $categoriesClass = new Categories;
         $Categories = $categoriesClass -> selectAll();
         $ProductsClass = new Products;
         $displayCategory=null;
+
+        //Ako je postavljena stranice postavi limit
+        if(!empty($_GET['page'])){
+            $offset = ($limit * $_GET['page']) - $limit;
+            $page = $_GET['page'];
+        }else{
+            $page = 1;
+        }
+
+        // Prikaži kategorije
         foreach($Categories as $key){
             if(isset($parameters[0]) && $key -> id === $parameters[0]){
                 $bigTitle=$key->name;
@@ -21,29 +33,40 @@ class IndexController extends Controller
             $ProductsClass->where = $key->id;
             $ProductsInCategory[$key->name] = count($ProductsClass->select('category'));
         }
+        //Prikaži proizvode 
         $ProductsClass = new Products;
         if(isset($parameters[0]))
         {
             $ProductsClass->where = $parameters[0];
-            $Products = $ProductsClass-> select('category');
+            $ProductsNumber = count($ProductsClass -> select('category'));
+            $Products = $ProductsClass-> selectLimit('category',$limit,$offset);
+            $pathForPager = 'index/index/'.$parameters[0].'?page=';
         }elseif(!empty($_GET['search'])){
             $bigTitle = 'Search result - ' . $_GET['search'];
-            $Products = $ProductsClass-> selectAllLike('%'.trim($_GET['search']).'%','title');
+            $ProductsNumber = count($ProductsClass -> selectAllLike('%'.trim($_GET['search']).'%','title'));
+            $Products = $ProductsClass-> selectAllLikeLimit('%'.trim($_GET['search']).'%','title',$limit,$offset);
+            $pathForPager = 'index?search='.$_GET['search'].'&page=';
             if(count($Products) == 0){
                 $bigTitle = 'No result';
             }
         }else{
-            $Products = $ProductsClass-> selectAll();
+            $ProductsNumber = count($ProductsClass -> selectAll());
+            $Products = $ProductsClass-> selectAllLimit($limit,$offset);
+            $pathForPager = 'index/index?page=';
         }
-
-
 
         $this -> view -> render($this->path.'index',[
             'ProductsInCategory' => $ProductsInCategory,
             'categories' => $Categories,
             'products' => $Products,
             'displayCategory' => $displayCategory,
-            'bigTitle' => $bigTitle
+            'bigTitle' => $bigTitle,
+            'pagination' =>[
+                'itemsNumber' => ceil($ProductsNumber/$limit),
+                'maxPage' => ceil($ProductsNumber/$limit) - (ceil($ProductsNumber/$limit)-$page) + 2,
+                'path' => $pathForPager,
+                'page' => $page
+            ],
         ]);
     }
 
@@ -69,7 +92,7 @@ class IndexController extends Controller
 
         $this -> view -> render($this->path.'productpage',[
             'product' => $product,
-            'Availability' => $Availability 
+            'Availability' => $Availability
         ]
             );
     }

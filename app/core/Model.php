@@ -82,6 +82,40 @@ class Model
        return $result -> fetchALL();
    }
 
+   public function selectAllLikeLimit(string $Like, string $where, int $limit, int $offset)
+   {
+       $connection = DB::getInstance();
+       $sql = "SELECT * FROM " .static::$db_table." WHERE ".$where." LIKE ?
+       LIMIT ". $limit . " OFFSET " . $offset;
+       ;
+       $result = $connection -> prepare($sql);
+       $result -> bindParam(1,$Like);
+       $result -> execute();
+       return $result -> fetchALL();
+   }
+
+   public function selectAllLimit(int $limit, int $offset)
+   {
+        $connection = DB::getInstance();
+        $sql = "SELECT * FROM " .static::$db_table .
+         " LIMIT ". $limit . " OFFSET ". $offset;
+        $result = $connection -> prepare($sql);
+        $result -> execute();
+        return $result -> fetchALL();
+
+   }
+
+   public function selectLimit (string $whereName, int $limit, int $offset)
+   {
+        $where = ['where' => $this -> where];
+        $connection = DB::getInstance();
+        $sql = "SELECT * FROM " .static::$db_table. " WHERE ".$whereName." = :where 
+        LIMIT " . $limit . " OFFSET ". $offset;
+        $result = $connection -> prepare($sql);
+        $result -> execute($where);
+        return $result -> fetchALL();
+   } 
+
    public function delete (string $where)
    {
         $whereparam = ['where' => $this -> where];
