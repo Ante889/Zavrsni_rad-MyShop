@@ -66,7 +66,7 @@ class IndexController extends Controller
                 'maxPage' => ceil($ProductsNumber/$limit) - (ceil($ProductsNumber/$limit)-$page) + 2,
                 'path' => $pathForPager,
                 'page' => $page
-            ],
+            ]
         ]);
     }
 

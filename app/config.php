@@ -1,7 +1,8 @@
 <?php
-
+$localhost= false;
 if($_SERVER['SERVER_ADDR'] === '127.0.0.1'){
     $url = 'http://zavrsnirad.xyz/';
+    $localhost= true;
     $database = [
         'server' => 'localhost',
         'name' => 'myshop',
@@ -19,7 +20,7 @@ if($_SERVER['SERVER_ADDR'] === '127.0.0.1'){
 }
 
 return [
-
+    'localhost' => $localhost,
     'siteTitle' => 'Book shop',
     'url' => $url,
     'database' => $database

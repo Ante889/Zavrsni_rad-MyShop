@@ -18,17 +18,36 @@ class AdminProductsController extends Controller
 
     public function index()
     {
+        $limit=10;
+        $offset=0;
+
+        if(!empty($_GET['page'])){
+            $offset = ($limit * $_GET['page']) - $limit;
+            $page = $_GET['page'];
+        }else{
+            $page = 1;
+        }
 
         $productsClass = New Products;
         if(isset($_POST['submit']) && !empty($_POST['title']))
         {
-            $products= $productsClass -> selectAllLike("%".trim($_POST['title'])."%",'title');
+            $ProductsNumber = count($productsClass -> selectAllLike("%".trim($_POST['title'])."%",'title'));
+            $products= $productsClass -> selectAllLikeLimit("%".trim($_POST['title'])."%",'title',$limit,$offset);
+            $pathForPager = 'AdminProducts/search='. $_POST['title'] .'?page=';
         }else
         {
-            $products = $productsClass -> selectAll();;
+            $ProductsNumber = count($productsClass -> selectAll());
+            $products = $productsClass -> selectAllLimit($limit,$offset);
+            $pathForPager = 'AdminProducts?page=';
         }  
         $this -> view -> render($this->path.'adminProducts',[
-            'products' => $products
+            'products' => $products,
+            'pagination' =>[
+                'itemsNumber' => ceil($ProductsNumber/$limit),
+                'maxPage' => ceil($ProductsNumber/$limit) - (ceil($ProductsNumber/$limit)-$page) + 2,
+                'path' => $pathForPager,
+                'page' => $page
+            ],
         ]);
     }
 

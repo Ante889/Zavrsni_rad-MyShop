@@ -18,16 +18,36 @@ class AdminUsersController extends Controller
 
     public function index()
     {
+        $limit =10;
+        $offset = 0;
+
+        if(!empty($_GET['page'])){
+            $offset = ($limit * $_GET['page']) - $limit;
+            $page = $_GET['page'];
+        }else{
+            $page = 1;
+        }
+
         $usersClass = New Users;
         if(isset($_POST['submit']) && !empty($_POST['email']))
         {
-            $users= $usersClass -> selectAllLike("%".trim($_POST['email'])."%",'email');
+            $ProductsNumber = count($usersClass -> selectAllLike("%".trim($_POST['email'])."%",'email'));
+            $users= $usersClass -> selectAllLikeLimit("%".trim($_POST['email'])."%",'email',$limit,$offset);
+            $pathForPager = 'AdminUsers/search='. $_POST['email'].'?page=';
         }else
         {
-            $users = $usersClass -> selectAll();
+            $ProductsNumber = count($usersClass -> selectAll());
+            $users = $usersClass -> selectAllLimit($limit,$offset);
+            $pathForPager = 'AdminUsers?page=';
         }  
         $this -> view -> render($this->path.'adminUsers',[
-            'users' => $users
+            'users' => $users,
+            'pagination' =>[
+                'itemsNumber' => ceil($ProductsNumber/$limit),
+                'maxPage' => ceil($ProductsNumber/$limit) - (ceil($ProductsNumber/$limit)-$page) + 2,
+                'path' => $pathForPager,
+                'page' => $page
+            ],
         ]);
     }
 
