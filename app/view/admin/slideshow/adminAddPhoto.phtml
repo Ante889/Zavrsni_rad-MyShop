@@ -1,0 +1,27 @@
+<?php 
+include APP_PATH . 'view' . DIRECTORY_SEPARATOR . 'admin'. DIRECTORY_SEPARATOR .'adminTemplate.phtml';
+?>
+<div class="col-md-9"> 
+<a class="btn btn-danger" href="<?= App::config('url');?>AdminSlideshow">Back</a>
+<br><br>
+        <form action="<?= App::config('url'); ?>AdminSlideshow/addPhoto" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <?php if(isset($succesMsg)): ?>
+                    <h4 style = "color:green"><?= $succesMsg;?></h4>
+                <?php endif ?> 
+                <h4>Add new photo(1920x1080)</h4>
+                <hr>
+                <div class="mb-3">
+                    <label for="image" class="form-label">Image</label><br>
+                    <input type="file" name="image" id="image" value = "<?= $returnField['image'] ?>">
+                    <?php if(isset($error)): ?>
+                        <h4 style = "color:red"><?= $error;?></h4>
+                    <?php endif ?>  
+                </div>
+                <input type="submit" name="submit" class="btn btn-primary" value="Add">
+                <br><br>
+            </div>
+        </form>
+    </div>
+    </div>
+</div>

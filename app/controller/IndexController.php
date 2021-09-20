@@ -55,12 +55,18 @@ class IndexController extends Controller
             $pathForPager = 'index/index?page=';
         }
 
+        //Slideshow
+        $slideshowClass = new Slideshow;
+        $slideshowClass -> where = '1';
+        $visible = $slideshowClass -> select('visible'); 
+
         $this -> view -> render($this->path.'index',[
             'ProductsInCategory' => $ProductsInCategory,
             'categories' => $Categories,
             'products' => $Products,
             'displayCategory' => $displayCategory,
             'bigTitle' => $bigTitle,
+            'visible' => $visible,
             'pagination' =>[
                 'itemsNumber' => ceil($ProductsNumber/$limit),
                 'maxPage' => ceil($ProductsNumber/$limit) - (ceil($ProductsNumber/$limit)-$page) + 2,

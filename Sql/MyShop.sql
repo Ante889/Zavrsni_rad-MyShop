@@ -83,7 +83,8 @@ create table bought(
 create table slideshow(
 
 	id int primary key auto_increment not null,
-	photo varchar(255) not null 
+	photo varchar(255) not null,
+	visible varchar (1) 
 
 );
 
