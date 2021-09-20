@@ -11,9 +11,7 @@ class AdminCategoriesController extends AuthorizationController
         parent::__construct();
         if(!Request::isAdmin())
         {
-            $indexController = new IndexController;
-            $indexController -> index();
-            exit;
+            Request::redirect(App::config('url'));
         }
         
     }

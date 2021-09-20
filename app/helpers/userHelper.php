@@ -101,7 +101,7 @@ class userhelper{
         if(isset($_COOKIE['CookieT/'])){
             $cookie= explode('.',$_COOKIE['CookieT/']);
             $UsersClass = static::shortSelect('Users','id',$cookie[0]);
-            if(password_verify($cookie[1], $UsersClass->rememberme_token)){
+            if(isset($UsersClass->rememberme_token) && password_verify($cookie[1], $UsersClass->rememberme_token)){
             unset($UsersClass -> password);
             unset($UsersClass -> confirm_email_token);
             unset($UsersClass -> reset_password_token);
@@ -155,9 +155,7 @@ class userhelper{
     public static function RedirectIfLogin()
     {
         if(Request::isLogin()){
-            $Index = new IndexController;
-            $Index -> index();
-            exit;
+            Request::redirect(App::config('url'));
         }
     }
 }

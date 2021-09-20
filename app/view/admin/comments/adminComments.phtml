@@ -1,0 +1,51 @@
+<?php 
+include APP_PATH . 'view' . DIRECTORY_SEPARATOR . 'admin'. DIRECTORY_SEPARATOR .'adminTemplate.phtml';
+?>
+<div class="col-md-9">   
+<br>
+        <table class="table">
+            <thead>
+                <tr>
+                <th scope="col">User</th>
+                <th scope="col">Product</th>
+                <th scope="col">Comment</th>
+                <th scope="col">Date</th>  
+                <th scope="col">Approved</th>
+                <th scope="col">Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if(isset($commentsInner)): ?>
+                <?php for ($i=0; $i < count($commentsInner); $i++): ?>
+                <tr>
+                <td><?= $commentsInner[$i]-> title ?></td>
+                <td><?= $commentsInner[$i]-> name ?></td>
+                <td><?= Request::LimitString($commentsContent[$i]-> comment, 10) ?></td>
+                <td><?= $commentsContent[$i]-> comment_date ?></td>
+                <td><a style="color:red" href="<?= App::config('url');?>AdminProducts/deleteProducts/<?= $commentsContent[$i]->id ?>"><i title="detele" class="fas fa-2x fa-trash-alt"></i></a></td>
+                </tr>
+                <?php endfor; ?>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    
+        <hr>
+        <form action="<?= App::config('url'); ?>AdminProducts" method="post">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm">
+                        <input type="text" name="title" class="form-control" placeholder="Search comments by posts">
+                    <br>
+                    <?php if(isset($error)): ?>
+                        <h5 style = "color:red"><?= $error ?></h5>
+                    <?php endif ?>
+                    </div>
+                    <div class="col-sm">
+                        <input type="submit" name="submit" class="btn btn-primary" value="Search">  
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    </div>
+</div>

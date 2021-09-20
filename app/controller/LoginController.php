@@ -42,8 +42,7 @@ class LoginController extends Controller
                 unset($result -> reset_password_token);
                 unset($result -> rememberme_token);
                 $_SESSION['User'] = $result;
-                $IndexController = new IndexController;
-                $IndexController-> index();
+                Request::redirect(App::config('url'));
                 return;
             }
         }

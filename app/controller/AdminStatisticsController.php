@@ -9,9 +9,7 @@ class AdminStatisticsController extends Controller
         parent::__construct();
         if(!Request::isAdmin())
         {
-            $indexController = new IndexController;
-            $indexController -> index();
-            exit;
+            Request::redirect(App::config('url'));
         }
     }
 

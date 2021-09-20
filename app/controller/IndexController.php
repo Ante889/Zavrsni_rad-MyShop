@@ -12,6 +12,7 @@ class IndexController extends Controller
         $limit = 6;
         $offset = 0;
         $bigTitle = 'BOOKS';
+        $ProductsInCategory=[];
         $categoriesClass = new Categories;
         $Categories = $categoriesClass -> selectAll();
         $ProductsClass = new Products;
@@ -78,6 +79,10 @@ class IndexController extends Controller
 
     public function productpage(array $parameters=[])
     {
+        if(isset($_POST['submit']))
+        {
+            $this->insertComment($parameters[0]);
+        }
         if(!empty($parameters[0]))
         {   $Availability=null;
             $productClass= new Products;
@@ -92,7 +97,7 @@ class IndexController extends Controller
             }
 
         }else{
-            $this -> index();
+            //Request::redirect(App::config('url'));
             return;
         }
 
@@ -101,6 +106,18 @@ class IndexController extends Controller
             'Availability' => $Availability
         ]
             );
+    }
+
+    public function insertComment($parameters)
+    {
+        $commentsClass= new Comments;
+        $commentsClass -> user = $_SESSION['User'] -> id;
+        $commentsClass -> product = $parameters[0];
+        $commentsClass -> comment = $_POST['content'];
+        $commentsClass -> comment_date= date("d-m-y H:i:s"); 
+        $commentsClass -> approved = 1;
+        $commentsClass -> create();
+
     }
     
 
