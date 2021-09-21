@@ -142,7 +142,10 @@ class Model
         $whereKey='';
         $whereParm='';
         foreach($select as $key => $value)
-        {
+        {   //Ako želim slučajno izvuci iz iste tablice 2 vrijednosti moram staviti broj u key
+            if (preg_match('~[0-9]+~', $key)) {
+                $key = substr($key, 0, -1);
+            }
             $selectResult = $selectResult . $key.'.'. $value.',';
         }
 

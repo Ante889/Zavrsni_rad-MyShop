@@ -10,9 +10,9 @@
         <h4>Price</h4>
         <p><?= $product -> price ?>$</p>
         <h4>Status</h4>
-        <p><?= $Availability ?></p>
+        <p><?= $availability ?></p>
         <h4>Rating</h4>
-        <p><?= $Availability ?></p>
+        <p><?= $availability ?></p>
         <a href="#" class="btn btn-primary btn-lg btn-block">Buy</a>
     </div>
   </div><br><br>
@@ -26,27 +26,30 @@
 				<h2 class="text-center">Comments</h2>
                 <hr/>
 				<ul class="comments">
+        <?php foreach($comments as $key) :?>
 				<li class="clearfix">
 				  <div class="post-comments">
-				      <p class="meta">Dec 2, 2021 <b>Someone</b> says : <i class="pull-right"><a href="#"></a></i></p>
+				      <p class="meta"><?= $key->comment_date ?> <b><?= $key->name ?></b> says : <i class="pull-right"></i></p>
 				      <p>
-				          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-				          Etiam a sapien odio, sit amet
+              <?= $key->comment ?>
 				      </p>
 				  </div>
 				</li>
-                <li class="clearfix">
-                    <div class="post-comments">
-                        <form action="<?=App::config('url')?>index/productpage/<?= $product->id ?>" method="POST">
-                            <div class="form-group">
-                                <input type="text" class="form-control" name="content">
-                            </div>
-                            <div class="form-group">
-                                <input type="submit" name="submit" class="btn btn-primary" value="Submit">
-                            </div>
-                        </form>
+        <?php endforeach ?>
+
+        
+        <li class="clearfix">
+            <div class="post-comments">
+                <form action="<?=App::config('url')?>index/productpage/<?= $product->id ?>" method="POST">
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="content">
                     </div>
-                </li>
+                    <div class="form-group">
+                        <input type="submit" name="submit" class="btn btn-primary" value="Submit">
+                    </div>
+                </form>
+            </div>
+        </li>
 				</ul>
 			</div>
 		</div>

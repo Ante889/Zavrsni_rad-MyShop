@@ -17,10 +17,14 @@ class AdminCommentsController extends Controller
     public function index()
     {
         $commentsClass = new Comments;
-        $commentsContent = $commentsClass -> selectAll();
         $commentsInner =  $commentsClass -> innerSelect([
+            'comments1' => 'id',
             'products' => 'title',
+            'comments2' => 'product',
             'users' => 'name',
+            'comments3' => 'comment',
+            'comments4' => 'comment_date',
+            'comments5' => 'approved'
             ],
             'products',
             ['products-comments',
@@ -31,8 +35,16 @@ class AdminCommentsController extends Controller
         );
         $this -> view -> render($this->path.'adminComments',[
             'commentsInner' => $commentsInner,
-            'commentsContent' => $commentsContent
         ]);
+    }
+
+    public function deleteComments(array $parameters=[])
+    {
+        $comment = userhelper::shortSelect('Comments','id',$parameters[0]);
+        $commentsClass = New Comments;
+        $commentsClass -> where = $parameters[0];
+        $commentsClass -> delete('id');
+        Request::redirect(App::config('url'). 'AdminComments');
     }
 
 }

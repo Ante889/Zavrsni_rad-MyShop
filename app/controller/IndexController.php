@@ -95,15 +95,17 @@ class IndexController extends Controller
             }elseif($product -> quantity == 0){
                 $Availability = 'Not available';
             }
+            $comments = $this->getComments($parameters[0]);
 
         }else{
-            //Request::redirect(App::config('url'));
+            Request::redirect(App::config('url'));
             return;
         }
 
         $this -> view -> render($this->path.'productpage',[
             'product' => $product,
-            'Availability' => $Availability
+            'availability' => $Availability,
+            'comments' => $comments
         ]
             );
     }
@@ -119,10 +121,40 @@ class IndexController extends Controller
         $commentsClass -> create();
 
     }
+
+    public function getComments($id)
+    {
+        $commentsClass = new Comments;
+        $commentsInner =  $commentsClass -> innerSelect([
+            'comments1' => 'id',
+            'comments2' => 'product',
+            'users' => 'name',
+            'comments3' => 'comment',
+            'comments4' => 'comment_date',
+            'comments5' => 'approved'
+            ],
+            'comments',
+            ['comments-users'],
+            [
+            'comments.product' => $id
+            ]
+        );
+        $comments=[];
+        foreach ($commentsInner as $key => $value)
+        {
+            if($value-> approved == 1)
+            {
+                $comments[$key] = $value;
+            }
+        }
+        return $comments;
+
+    }
     
 
     public function error(array $parameters=[])
     {
         $this -> view -> render($this->path.'error');
     }
+
 }
