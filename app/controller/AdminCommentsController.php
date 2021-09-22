@@ -85,7 +85,7 @@ class AdminCommentsController extends Controller
         $commentsClass = New Comments;
         $commentsClass -> where = $parameters[0];
         $commentsClass -> delete('id');
-        if($comment-> approve ==1){
+        if($comment-> approved == 1){
             Request::redirect(App::config('url'). 'AdminComments');
         }else{
             Request::redirect(App::config('url'). 'AdminComments/index/notapproved');

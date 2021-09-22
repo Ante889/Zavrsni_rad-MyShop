@@ -5,6 +5,7 @@ class IndexController extends Controller
 {
 
     private $path = 'public'. DIRECTORY_SEPARATOR ;
+    private $error ="";
 
 
     public function index(array $parameters=[])
@@ -79,6 +80,17 @@ class IndexController extends Controller
 
     public function productpage(array $parameters=[])
     {
+        if(!empty($_GET['page'])){
+            $offset = (10 * $_GET['page']) - 10;
+            $page = $_GET['page'];
+        }else{
+            $page = 1;
+        }
+        $commentsClass= new Comments;
+        $commentsClass->where = $parameters[0];
+        $commentsClass = count($commentsClass -> select('product'));
+        $pathForPager = 'index/productpage/'.$parameters[0].'?page=';
+
         if(isset($_POST['submit']))
         {
             $this->insertComment($parameters[0]);
@@ -103,29 +115,40 @@ class IndexController extends Controller
         }
 
         $this -> view -> render($this->path.'productpage',[
+            'commentError' => $this->error,
             'product' => $product,
             'availability' => $Availability,
-            'comments' => $comments
+            'comments' => $comments,
+            'pagination' =>[
+                'itemsNumber' => ceil($commentsClass/10),
+                'maxPage' => ceil($commentsClass/10) - (ceil($commentsClass/10)-$page) + 2,
+                'path' => $pathForPager,
+                'page' => $page
+            ]
         ]
-            );
+    );
     }
 
     public function insertComment($parameters)
     {
         $commentsClass= new Comments;
-        $commentsClass -> user = $_SESSION['User'] -> id;
-        $commentsClass -> product = $parameters[0];
-        $commentsClass -> comment = $_POST['content'];
-        $commentsClass -> comment_date= date("d-m-y H:i:s"); 
+        $this -> error= commenthelper::commentError(trim($_POST['content']));
+        if(empty($this -> error)){
+        $commentsClass -> user = trim($_SESSION['User'] -> id);
+        $commentsClass -> product = trim($parameters[0]);
+        $commentsClass -> comment = trim($_POST['content']);
+        $commentsClass -> comment_date= date("d-m-y"); 
         $commentsClass -> approved = 1;
         $commentsClass -> create();
-
+        }
     }
 
     public function getComments($id)
     {
+        $limit= 10;
+        $offset = 0;
         $commentsClass = new Comments;
-        $commentsInner =  $commentsClass -> innerSelect([
+        $commentsInner =  $commentsClass -> innerSelectLimit([
             'comments1' => 'id',
             'comments2' => 'product',
             'users' => 'name',
@@ -137,7 +160,7 @@ class IndexController extends Controller
             ['comments-users'],
             [
             'comments.product' => $id
-            ]
+            ],$limit,$offset
         );
         $comments=[];
         foreach ($commentsInner as $key => $value)

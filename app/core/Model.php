@@ -125,59 +125,6 @@ class Model
    }
 //////////////////////////////////////////////////////////
 
-
-   public static function innerSelect(array $select, string $from, array $tabels, array $where)
-   {
-
-        $innerJoin = [
-            'categories-products' => 'inner join products on products.id = categories.id',
-            'products-bought' => 'inner join bought on products.id = bought.product',
-            'products-comments' => 'inner join comments on products.id = comments.product',
-            'products-rating' => 'inner join rating on products.id = rating.product',
-            'rating-users' => 'inner join users on rating.user = users.id',
-            'comments-users'=> 'inner join users on comments.user = users.id',
-            'bought-orders'=> 'inner join orders on bought.orders = orders.id',
-            'users-orders'=> 'inner join orders on orders.user = users.id',
-        ];
-        $selectResult='';
-        $innerResult='';
-        $whereKey='';
-        $whereParm='';
-        foreach($select as $key => $value)
-        {   //Ako želim slučajno izvuci iz iste tablice 2 vrijednosti moram staviti broj u key
-            if (preg_match('~[0-9]+~', $key)) {
-                $key = substr($key, 0, -1);
-            }
-            $selectResult = $selectResult . $key.'.'. $value.',';
-        }
-
-        foreach($tabels as $key)
-        {
-            foreach($innerJoin as $innerKey => $innerValue)
-            {
-                if($innerKey === $key){
-                    $innerResult = $innerResult .' '. $innerValue.' ' ;
-                }
-            }
-        }
-
-        foreach($where as $key => $value)
-        {
-            $whereKey = $key;
-            $whereParm=$value;
-        }
-
-
-        $connection = DB::getInstance();
-        $sql = "SELECT ". rtrim($selectResult, ' ,').
-        " FROM ". $from . " " .  $innerResult . 
-        " WHERE " . $whereKey . '= ?';
-        $result = $connection-> prepare($sql);
-        $result -> bindParam(1,$whereParm);
-        $result -> execute();
-        return $result -> fetchALL();
-   }
-
    public static function innerSelectLimit(array $select, string $from, array $tabels, array $where, int $limit , int $offset)
    {
 
@@ -223,7 +170,7 @@ class Model
         $connection = DB::getInstance();
         $sql = "SELECT ". rtrim($selectResult, ' ,').
         " FROM ". $from . " " .  $innerResult . 
-        " WHERE " . $whereKey . "= ? 
+        " WHERE " . $whereKey . "= ? ORDER BY id DESC
         LIMIT ". $limit . " OFFSET ". $offset;
         $result = $connection-> prepare($sql);
         $result -> bindParam(1,$whereParm);
