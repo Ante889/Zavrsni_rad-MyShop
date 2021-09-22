@@ -10,7 +10,6 @@ create table products (
 	title varchar(50) not null,
 	author varchar(50) not null,
 	image varchar(255) not null,
-	special_image varchar(50) NOT NULL,
 	price decimal(18.2) not null,
 	category int not null,
 	quantity int not null,

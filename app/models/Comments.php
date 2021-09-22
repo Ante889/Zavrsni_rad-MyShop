@@ -13,4 +13,5 @@ class Comments extends Model
     public $comment_date;
     public $approved;
     public $where;//Stavljaš samo kad radiš update/select;
+
 }

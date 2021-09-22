@@ -14,15 +14,43 @@ class AdminCommentsController extends Controller
         }
     }
 
-    public function index()
+    public function index($parm=[])
     {
-        $where = ['comments.approved' => '1'];
-        if(isset($_POST['search'])){
-            $where = ['product' => $_POST['search']];
+        $limit = 10;
+        $offset = 0;
+        $whereKey ='comments.approved';
+
+        if(!empty($_GET['page'])){
+            $offset = ($limit * $_GET['page']) - $limit;
+            $page = $_GET['page'];
+        }else{
+            $page = 1;
         }
-        
+
+        if(isset($parm[0]) && $parm[0] == "notapproved")
+        {
+            $whereParm=2;
+            $searchFormLink= '/index/'.$parm[0];
+            $pathForPager = 'AdminComments/index/notapproved?page=';
+        }else{
+            $whereParm=1;
+            $searchFormLink=null;
+            $pathForPager = 'AdminComments?page=';
+        }   
+
         $commentsClass = new Comments;
-        $commentsInner =  $commentsClass -> innerSelect([
+        $commentsClass -> where = $whereParm;
+        $commentsNumber =  count($commentsClass->select('approved'));
+
+        if(isset($_POST['search'])){
+            $whereKey ='products.title';
+            $whereParm=$_POST['search'];
+            $pathForPager = 'AdminComments?page=';
+            $commentsClass -> where = $whereParm;
+            $commentsNumber =  count($commentsClass->select('title'));
+        }        
+
+        $commentsInner =  $commentsClass -> innerSelectLimit([
             'comments1' => 'id',
             'products' => 'title',
             'comments2' => 'product',
@@ -35,11 +63,19 @@ class AdminCommentsController extends Controller
             ['products-comments',
              'comments-users'],
             [
-            $where[0]
-            ]
+            $whereKey => $whereParm
+            ],$limit,$offset
         );
+        
         $this -> view -> render($this->path.'adminComments',[
             'commentsInner' => $commentsInner,
+            'searchFormLink' => $searchFormLink,
+            'pagination' =>[
+                'itemsNumber' => ceil($commentsNumber/$limit),
+                'maxPage' => ceil($commentsNumber/$limit) - (ceil($commentsNumber/$limit)-$page) + 2,
+                'path' => $pathForPager,
+                'page' => $page
+            ]
         ]);
     }
 
@@ -49,7 +85,29 @@ class AdminCommentsController extends Controller
         $commentsClass = New Comments;
         $commentsClass -> where = $parameters[0];
         $commentsClass -> delete('id');
-        Request::redirect(App::config('url'). 'AdminComments');
+        if($comment-> approve ==1){
+            Request::redirect(App::config('url'). 'AdminComments');
+        }else{
+            Request::redirect(App::config('url'). 'AdminComments/index/notapproved');
+        }
+        
+    }
+
+    public function status(array $parameters=[])
+    {
+        $comment = userhelper::shortSelect('Comments','id',$parameters[0]);
+        $commentsClass = New Comments;
+        if($comment->approved == 1){
+            $commentsClass -> approved = 2;
+            $commentsClass -> where = $parameters[0];
+            $commentsClass -> update('id');
+            Request::redirect(App::config('url'). 'AdminComments');
+        }else{
+            $commentsClass -> approved = 1;
+            $commentsClass -> where = $parameters[0];
+            $commentsClass -> update('id');
+            Request::redirect(App::config('url'). 'AdminComments/index/notapproved');
+        }
     }
 
 }

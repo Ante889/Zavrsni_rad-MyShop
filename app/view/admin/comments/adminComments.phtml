@@ -10,7 +10,7 @@ include APP_PATH . 'view' . DIRECTORY_SEPARATOR . 'admin'. DIRECTORY_SEPARATOR .
                 <th scope="col">Product</th>
                 <th scope="col">Comment</th>
                 <th scope="col">Date</th>  
-                <th scope="col">Approved</th>
+                <th scope="col">Status</th>     
                 <th scope="col">Delete</th>
                 </tr>
             </thead>
@@ -22,27 +22,32 @@ include APP_PATH . 'view' . DIRECTORY_SEPARATOR . 'admin'. DIRECTORY_SEPARATOR .
                 <td><a href="<?= App::config('url')?>index/productpage/<?=$key->product ?>"><?= $key -> title ?></a></td>
                 <td><?= Request::LimitString($key-> comment, 10) ?></td>
                 <td><?= $key-> comment_date ?></td>
-                <td><?= $key-> approved ?></td>
+                <?php if($key -> approved == 2): ?>
+                <td><a href="<?= App::config('url');?>AdminComments/status/<?= $key->id ?>"><i title="Approve" style="color:green" class="fas fa-3x fa-check-square"></i></a></td>
+                <?php else: ?>
+                <td><a href="<?= App::config('url');?>AdminComments/status/<?= $key->id ?>"><i title="Disapprove" style="color:red" class="fas fa-3x fa-times"></i></a></td>
+                <?php endif?>
                 <td><a style="color:red" href="<?= App::config('url');?>AdminComments/deleteComments/<?= $key->id ?>"><i title="detele" class="fas fa-2x fa-trash-alt"></i></a></td>
                 </tr>
                 <?php endforeach; ?>
                 <?php endif; ?>
             </tbody>
         </table>
+        <?= Util::Pagination($pagination) ?>
     
         <hr>
-        <form action="<?= App::config('url'); ?>AdminProducts" method="post">
+        <form action="<?= App::config('url'); ?>AdminComments<?=$searchFormLink?>" method="post">
             <div class="container">
                 <div class="row">
                     <div class="col-sm">
-                        <input type="text" name="title" class="form-control" placeholder="Search comments by posts">
+                        <input type="text" name="search" class="form-control" placeholder="Search comments by products">
                     <br>
                     <?php if(isset($error)): ?>
                         <h5 style = "color:red"><?= $error ?></h5>
                     <?php endif ?>
                     </div>
                     <div class="col-sm">
-                        <input type="submit" name="submit" class="btn btn-primary" value="Search">  
+                        <input type="submit" class="btn btn-primary" value="Search">  
                     </div>
                 </div>
             </div>
