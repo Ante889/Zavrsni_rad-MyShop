@@ -16,6 +16,11 @@ class AdminCommentsController extends Controller
 
     public function index()
     {
+        $where = ['comments.approved' => '1'];
+        if(isset($_POST['search'])){
+            $where = ['product' => $_POST['search']];
+        }
+        
         $commentsClass = new Comments;
         $commentsInner =  $commentsClass -> innerSelect([
             'comments1' => 'id',
@@ -30,7 +35,7 @@ class AdminCommentsController extends Controller
             ['products-comments',
              'comments-users'],
             [
-            'comments.approved' => '1'
+            $where[0]
             ]
         );
         $this -> view -> render($this->path.'adminComments',[
