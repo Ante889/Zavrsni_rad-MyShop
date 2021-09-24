@@ -1,8 +1,21 @@
 <br><br>
 <div class="container">
   <div class="row">
-      <div class="col-md-6 col-sm-12">
+      <div class="col-md-6 col-sm-12 text-center">
         <img class="img-thumbnail" src="../../public/images/<?= $product -> image ?>">
+        <?php if(Request::isLogin()):?>
+          <?php if($checkrating === true):?>
+          <h4>Rate product</h4>
+            <a href="<?= App::config('url');?>index/setRating/<?=$product->id;?>/1"><i class="fas fa-2x fa-star"></i></a>
+            <a href="<?= App::config('url');?>index/setRating/<?=$product->id;?>/2"><i class="fas fa-2x fa-star"></i></a>
+            <a href="<?= App::config('url');?>index/setRating/<?=$product->id;?>/3"><i class="fas fa-2x fa-star"></i></a>
+            <a href="<?= App::config('url');?>index/setRating/<?=$product->id;?>/4"><i class="fas fa-2x fa-star"></i></a>
+            <a href="<?= App::config('url');?>index/setRating/<?=$product->id;?>/5"><i class="fas fa-2x fa-star"></i></a>
+          <?php else:?>
+            <h4>Your rate</h4>
+            <?=Util::stars($checkrating,'fa-2x')?>
+          <?php endif ?> 
+        <?php endif ?> 
       </div>
       <div class="col-md-6 text-center ">
         <h2 class = "text-center"><?= $product -> title ?></h2><hr> 
@@ -12,7 +25,7 @@
         <h4>Status</h4>
         <p><?= $availability ?></p>
         <h4>Rating</h4>
-        <p><?= $availability ?></p>
+        <p><?= $rating ?></p>
         <a href="#" class="btn btn-primary btn-lg btn-block">Buy</a>
     </div>
   </div><br><br>

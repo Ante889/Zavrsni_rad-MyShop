@@ -55,6 +55,7 @@
                                 <p class="card-text text-center"><?php Request::LimitString($product->content,95) ?></p>
                                 <p class="card-text text-center"> Author: <?= $product->author ?></p>
                                 <h5 class="card-text text-center"> Price: <?= $product->price ?>$</h5>
+                                <p class="card-text text-center"> Rating: <?=Util::stars($product->rating,'')?></p>
                             </div>
                             <a href="<?=App::config('url')?>index/productpage/<?= $product->id ?>" class="btn btn-primary btn-lg btn-block">Buy</a>
                         </div>

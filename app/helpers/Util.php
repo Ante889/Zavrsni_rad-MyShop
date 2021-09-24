@@ -35,5 +35,26 @@ class Util
         </nav>
 <?php
     }
+    public static function stars($rating, $size){
+            if (is_numeric($rating)){
+        ?>
+            <?php for ($i=0; $i < floor($rating); $i++):?>
+              <i class="fas <?=$size?> fa-star"></i>
+            <?php endfor?>
+            <?php if($rating - floor($rating) <= 0.2  && $rating - floor($rating) > 0.0 ): ?>
+                <i class="far <?=$size?> fa-star"></i>
+            <?php elseif($rating - floor($rating) > 0.2 && $rating - floor($rating) < 0.8 ): ?>
+                <i class="fas <?=$size?> fa-star-half-alt"></i>
+            <?php elseif($rating - floor($rating) <= 0.8  && $rating - floor($rating) > 1 ): ?>
+                <i class="fas <?=$size?> fa-star"></i>
+            <?php endif?>     
+            <?php for ($i=0; $i < 5-ceil($rating); $i++):?>
+              <i class="far <?=$size?> fa-star"></i>
+            <?php endfor?>
+<?php
+            }else{
+                echo "no rating";
+            }
+    }
 }
 ?>

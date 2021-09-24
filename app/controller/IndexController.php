@@ -56,6 +56,12 @@ class IndexController extends Controller
             $Products = $ProductsClass-> selectAllLimit($limit,$offset);
             $pathForPager = 'index/index?page=';
         }
+        
+        //dodaj rating u products array
+        foreach ($Products as $key) {
+            $rating =$this->getRating($key -> id);
+            $key-> rating = $rating;  
+        }
 
         //Slideshow
         $slideshowClass = new Slideshow;
@@ -115,6 +121,8 @@ class IndexController extends Controller
         }
 
         $this -> view -> render($this->path.'productpage',[
+            'rating' => $this-> getRating($parameters[0]),
+            'checkrating' => $this-> checkRating($parameters[0]),
             'commentError' => $this->error,
             'product' => $product,
             'availability' => $Availability,
@@ -172,6 +180,49 @@ class IndexController extends Controller
         }
         return $comments;
 
+    }
+
+    public function getRating($product)
+    {
+        $ratingClass= new Ratings;
+        $ratingClass -> where = $product;
+        $result= $ratingClass -> select('product');
+        for ($i=0; $i < count($result); $i++) { 
+            $allRatings[$i] = $result[$i] ->rating;
+        }
+        if(isset($allRatings)){
+        $result = array_sum($allRatings) / count($result);
+        return $result;
+        }else{
+            return 'no rating';
+        }
+    }
+
+    public function setRating($param=[])// prvi parametar product drugi rating
+    {
+        if($this -> checkRating($param[0]) === true)
+        {
+            $ratingClass= new Ratings;
+            $ratingClass -> user = $_SESSION['User'] -> id;
+            $ratingClass -> product = $param[0];
+            $ratingClass -> rating = $param[1];
+            $ratingClass -> create();
+        }
+        Request::redirect(App::config('url').'index/productpage/'. $param[0]);
+    }
+
+    public function checkRating($product)
+    {
+        $ratingClass= new Ratings;
+        $ratingClass -> where = $product;
+        $result= $ratingClass -> select('product');
+        foreach ($result as $key) {
+            if($key -> user == $_SESSION['User']->id)
+            {
+                return $key -> rating;
+            }
+        }
+        return true;
     }
     
 
