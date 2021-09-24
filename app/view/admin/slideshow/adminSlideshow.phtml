@@ -11,7 +11,7 @@ include APP_PATH . 'view' . DIRECTORY_SEPARATOR . 'admin'. DIRECTORY_SEPARATOR .
             <?php foreach($photos as $key):?>
             <div class="col-sm mt-5">
                 <div class="card" style="width: 14rem;">
-                <a class="btn btn-danger btn-lg" href="<?php App::config('url');?>AdminSlideshow/deletePhoto/<?=$key->id?>">DELETE</a>
+                <a onclick="return confirm('Do you want to delete the image')" class="btn btn-danger btn-lg" href="<?php App::config('url');?>AdminSlideshow/deletePhoto/<?=$key->id?>">DELETE</a>
                 <a href="<?= App::config('url')?>AdminSlideshow/setPhoto/<?=$key->id?>">
                 <img class=" <?php if($key->visible == 1){ echo 'borderimg'; }else{ echo 'removebox-sizing'; } ?>" style ="max-width:200px" src="../../public/images/<?=$key->photo?>">
             </a>

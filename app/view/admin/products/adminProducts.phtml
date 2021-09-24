@@ -36,7 +36,7 @@ include APP_PATH . 'view' . DIRECTORY_SEPARATOR . 'admin'. DIRECTORY_SEPARATOR .
                 </td>
                 <td><?= $key-> pdf ?></td>
                 <td><a href="<?= App::config('url');?>AdminProducts/updateProducts/<?= $key->id ?>"><i title="update" class="fas fa-2x fa-pencil-alt"></i></a></td>
-                <td><a style="color:red" href="<?= App::config('url');?>AdminProducts/deleteProducts/<?= $key->id ?>"><i title="detele" class="fas fa-2x fa-trash-alt"></i></a></td>
+                <td onclick="return confirm('Do you want to delete the product')"><a style="color:red" href="<?= App::config('url');?>AdminProducts/deleteProducts/<?= $key->id ?>"><i title="detele" class="fas fa-2x fa-trash-alt"></i></a></td>
                 </tr>
                 <?php endforeach; ?>
                 <?php endif; ?>

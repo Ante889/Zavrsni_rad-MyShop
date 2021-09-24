@@ -27,7 +27,7 @@ include APP_PATH . 'view' . DIRECTORY_SEPARATOR . 'admin'. DIRECTORY_SEPARATOR .
                 <?php else: ?>
                 <td><a href="<?= App::config('url');?>AdminComments/status/<?= $key->id ?>"><i title="Disapprove" style="color:red" class="fas fa-3x fa-times"></i></a></td>
                 <?php endif?>
-                <td><a style="color:red" href="<?= App::config('url');?>AdminComments/deleteComments/<?= $key->id ?>"><i title="detele" class="fas fa-2x fa-trash-alt"></i></a></td>
+                <td onclick="return confirm('Do you want to delete the comment')"><a style="color:red" href="<?= App::config('url');?>AdminComments/deleteComments/<?= $key->id ?>"><i title="detele" class="fas fa-2x fa-trash-alt"></i></a></td>
                 </tr>
                 <?php endforeach; ?>
                 <?php endif; ?>
