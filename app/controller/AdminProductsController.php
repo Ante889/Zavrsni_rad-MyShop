@@ -18,6 +18,16 @@ class AdminProductsController extends Controller
     {
         $limit=10;
         $offset=0;
+        $errorDiscount ='';
+        if(isset($_POST['setDiscount']))
+        {
+            $discount = Request::issetTrim('setDiscount');
+            $errorDiscount = producthelper::discountError($discount);
+            if(empty($errorDiscount))
+            {
+                $this->allProductDiscount($discount);
+            }
+        }
 
         if(!empty($_GET['page'])){
             $offset = ($limit * $_GET['page']) - $limit;
@@ -39,6 +49,7 @@ class AdminProductsController extends Controller
             $pathForPager = 'AdminProducts?page=';
         }  
         $this -> view -> render($this->path.'adminProducts',[
+            'errorDiscount' => $errorDiscount,
             'products' => $products,
             'pagination' =>[
                 'itemsNumber' => ceil($ProductsNumber/$limit),
@@ -218,6 +229,29 @@ class AdminProductsController extends Controller
         $productsClass = New Products;
         $productsClass -> where = $parameters[0];
         $productsClass -> delete('id');
+        Request::redirect(App::config('url'). 'AdminProducts');
+    }
+
+    public function allProductDiscount($discount)
+    {
+        $productClass= new Products;
+        $products = $productClass -> selectAll();
+        foreach ($products as $key) {
+            $productClass -> discount = $discount;
+            $productClass -> where = $key->id;
+            $productClass -> update('id');
+        }
+    }
+
+    public function removeDiscount()
+    {
+        $productClass= new Products;
+        $products = $productClass -> selectAll();
+        foreach ($products as $key) {
+            $productClass -> discount = '%';
+            $productClass -> where = $key->id;
+            $productClass -> update('id');
+        }
         Request::redirect(App::config('url'). 'AdminProducts');
     }
 }

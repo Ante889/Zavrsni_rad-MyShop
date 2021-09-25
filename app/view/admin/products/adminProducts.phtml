@@ -4,6 +4,23 @@ include APP_PATH . 'view' . DIRECTORY_SEPARATOR . 'admin'. DIRECTORY_SEPARATOR .
 <div class="col-md-9">   
 <a class="btn btn-primary btn-lg btn-block" href="<?php App::config('url');?>AdminProducts/createProducts ">Create new product</a>
 <br>
+<form class="float-right" action="<?= App::config('url');?>AdminProducts" method="post">
+    <div class="container ">
+        <div class="row">
+            <div class="form-group mx-sm-3 mb-2">
+                <input type="text" name="setDiscount" class="form-control" placeholder="Set discount for all products">
+            </div>
+            <div class="col-sm">
+                <input type="submit" class="btn btn-primary" value="Apply"> 
+                <a onclick="return confirm('Do you want to remove all discounts')" class="btn btn-danger" href="<?= App::config('url');?>AdminProducts/removeDiscount">Remove discount</a> 
+            </div>
+            <br><br><br>
+        </div>
+        <?php if(isset($errorDiscount)): ?>
+                <h4 style = "color:red"><?= $errorDiscount;?></h4>
+        <?php endif ?> 
+    </div>
+</form>
         <table class="table">
             <thead>
                 <tr>
