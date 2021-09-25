@@ -121,8 +121,9 @@ class IndexController extends Controller
         }
 
         $this -> view -> render($this->path.'productpage',[
-            'rating' => $this-> getRating($parameters[0]),
             'checkrating' => $this-> checkRating($parameters[0]),
+            'countrating' => $this-> countRating($parameters[0]),
+            'rating' => $this-> getRating($parameters[0]),
             'commentError' => $this->error,
             'product' => $product,
             'availability' => $Availability,
@@ -200,7 +201,7 @@ class IndexController extends Controller
 
     public function setRating($param=[])// prvi parametar product drugi rating
     {
-        if($this -> checkRating($param[0]) === true)
+        if(isset($_SESSION['User']) && $this -> checkRating($param[0]) === true)
         {
             $ratingClass= new Ratings;
             $ratingClass -> user = $_SESSION['User'] -> id;
@@ -223,6 +224,14 @@ class IndexController extends Controller
             }
         }
         return true;
+    }
+
+    public function countRating($product)
+    {
+        $ratingClass= new Ratings;
+        $ratingClass -> where = $product;
+        $result= $ratingClass -> select('product');
+        return count($result);
     }
     
 
