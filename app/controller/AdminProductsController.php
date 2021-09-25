@@ -72,6 +72,7 @@ class AdminProductsController extends Controller
         $quantity = Request::issetTrim('quantity');
         $content = Request::issetTrim('content');
         $pdf = Request::issetTrim('pdf');
+        $discount = Request::issetTrim('discount');
         if($image != ''){
             $imageName = uniqid().basename($image['name']);
         }else 
@@ -87,11 +88,12 @@ class AdminProductsController extends Controller
             $errors['category'] = producthelper::categoryError($category);
             $errors['quantity'] = producthelper::numbersError($quantity);
             $errors['content'] = producthelper::basicError($content);
-            $errors['pdf'] = producthelper::basicError($pdf);       
+            $errors['pdf'] = producthelper::basicError($pdf);      
+            $errors['discount'] = producthelper::discountError($discount); 
            
             //Create product
     
-            if(empty($errors['title']) && empty($errors['author']) && empty($errors['image']) && empty($errors['price'])&& empty($errors['category'])&& empty($errors['quantity'])&& empty($errors['content'])&& empty($errors['pdf'])){
+            if(empty($errors['title']) && empty($errors['author']) && empty($errors['image']) && empty($errors['price'])&& empty($errors['category'])&& empty($errors['quantity'])&& empty($errors['content'])&& empty($errors['pdf']) && empty($errors['discount'])){
                 $ProductsClass = new Products;
                 $ProductsClass -> title = $title;
                 $ProductsClass -> author = $author;
@@ -102,6 +104,7 @@ class AdminProductsController extends Controller
                 $ProductsClass -> content = $content;
                 $ProductsClass -> pdf = $pdf;
                 $ProductsClass -> creation_time= time();
+                $ProductsClass -> discount = $discount;
                 $ProductsClass -> create();
                 $SuccessMsg= 'Product has been successfully created';
                 move_uploaded_file($image['tmp_name'], IMAGE_PATH .$imageName);
@@ -119,7 +122,8 @@ class AdminProductsController extends Controller
                 'category' => $category, 
                 'quantity' => $quantity,
                 'content' => $content, 
-                'pdf' => $pdf
+                'pdf' => $pdf,
+                'discount' => $discount
             ]
         ]);
     }
@@ -136,7 +140,8 @@ class AdminProductsController extends Controller
             'category' => '', 
             'quantity' => '',
             'content' => '', 
-            'pdf' => ''
+            'pdf' => '',
+            'discount' => ''
         ];
 
         $ProductsClass = new Products;
@@ -158,11 +163,12 @@ class AdminProductsController extends Controller
         $errors['quantity'] = producthelper::numbersError(Request::issetTrim('quantity'));
         $errors['content'] = producthelper::basicError(Request::issetTrim('content'));
         $errors['pdf'] = producthelper::basicError(Request::issetTrim('pdf'));
+        $errors['discount']= producthelper::discountError(Request::issetTrim('discount'));
         if(empty($image['name'])){
             unset($errors['image']);
         }
 
-        if(empty($errors['title']) && empty($errors['author']) && empty($errors['image']) && empty($errors['price'])&& empty($errors['category'])&& empty($errors['quantity'])&& empty($errors['content'])&& empty($errors['pdf'])){
+        if(empty($errors['title']) && empty($errors['author']) && empty($errors['image']) && empty($errors['price'])&& empty($errors['category'])&& empty($errors['quantity'])&& empty($errors['content'])&& empty($errors['pdf']) && empty($errors['discount'])){
         
             if(!empty($image['name'])){
                 $imageName = uniqid().basename($image['name']);
@@ -181,6 +187,7 @@ class AdminProductsController extends Controller
             $ProductsClass -> quantity = Request::issetTrim('quantity');
             $ProductsClass -> content = Request::issetTrim('content');
             $ProductsClass -> pdf = Request::issetTrim('pdf');
+            $ProductsClass -> discount = Request::issetTrim('discount');
             $ProductsClass -> where = $parameters[0];
             $ProductsClass -> update('id');
             Request::redirect(App::config('url'). 'AdminProducts/updateProducts/'. $parameters[0]);
@@ -198,7 +205,8 @@ class AdminProductsController extends Controller
               'category' => $Fields ->category, 
               'quantity' => $Fields ->quantity,
               'content' => $Fields ->content, 
-              'pdf' => $Fields ->pdf
+              'pdf' => $Fields ->pdf,
+              'discount' => $Fields->discount
             ]
         ]);
     }

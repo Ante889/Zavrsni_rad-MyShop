@@ -16,6 +16,7 @@ create table products (
 	content text not NULL,
 	pdf varchar(50) NOT NULL, 
 	creation_time varchar(50) NOT null
+	discount varchar (3)
 
 );
 

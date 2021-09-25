@@ -21,7 +21,13 @@
         <h2 class = "text-center"><?= $product -> title ?></h2><hr> 
         
         <h4>Price</h4>
+        <?php if(isset($product->discount) && $product->discount != '%') :?>
+        <p style="color:red"><s>Price: <?= $product -> price ?>$</s></p>
+        <p> Discount: <?= $product->discount ?>%<p>
+        <p style="color:green"> Price: <?= $product->price * (1-(producthelper::floatDiscount($product->discount))) ?>$</p>
+        <?php else:?>
         <p><?= $product -> price ?>$</p>
+        <?php endif?>
         <h4>Status</h4>
         <p><?= $availability ?></p>
         <h4>Rating</h4>

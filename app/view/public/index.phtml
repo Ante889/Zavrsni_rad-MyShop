@@ -49,13 +49,23 @@
                         
                     <div class="col-md-4 mt-5">  
                         <div class="card" style="width: 14rem;">
+                        <?php if(isset($product->discount) && $product->discount != '%') :?>
+                        <h2 style="background-color:green" class="card-text text-center">Special offer</h2>
+                        <?php endif?>
                             <img style ="max-height:200px" class="card-img-top" src="../../public/images/<?= $product->image ?>" alt="Card image cap">
                             <div class="card-body">
                                 <a href="<?=App::config('url')?>index/productpage/<?= $product->id ?>"><h4 class="card-title text-center"><?= $product->title?></h4></a>
                                 <p class="card-text text-center"><?php Request::LimitString($product->content,95) ?></p>
                                 <p class="card-text text-center"> Author: <?= $product->author ?></p>
+                                <?php if(isset($product->discount) && $product->discount != '%') :?>
+                                <h5 style="color:red" class="card-text text-center"> <s>Price: <?= $product->price ?>$</s></h5>
+                                <h5 class="card-text text-center"> Discount: <?= $product->discount ?>%</h5>
+                                <h5 style="color:green" class="card-text text-center"> Price: <?= $product->price * (1-(producthelper::floatDiscount($product->discount))) ?>$</h5>
+                                <?php else:?>
                                 <h5 class="card-text text-center"> Price: <?= $product->price ?>$</h5>
+                                <?php endif?>
                                 <p class="card-text text-center"> Rating: <?=Util::stars($product->rating,'')?></p>
+
                             </div>
                             <a href="<?=App::config('url')?>index/productpage/<?= $product->id ?>" class="btn btn-primary btn-lg btn-block">Buy</a>
                         </div>

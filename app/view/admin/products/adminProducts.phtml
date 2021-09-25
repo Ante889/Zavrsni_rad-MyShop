@@ -11,6 +11,7 @@ include APP_PATH . 'view' . DIRECTORY_SEPARATOR . 'admin'. DIRECTORY_SEPARATOR .
                 <th scope="col">Author</th>
                 <th scope="col">Image</th>
                 <th scope="col">Price</th>  
+                <th scope="col">Discount</th>  
                 <th scope="col">Category</th>
                 <th scope="col">Quantity</th>  
                 <th scope="col">Content</th>
@@ -27,6 +28,7 @@ include APP_PATH . 'view' . DIRECTORY_SEPARATOR . 'admin'. DIRECTORY_SEPARATOR .
                 <td><?= $key-> author ?></td>
                 <td><img style ="max-width:80px" src="public/images/<?=$key->image ?>"></td>
                 <td><?= $key-> price ?></td>
+                <td><?= $key-> discount ?></td>
                 <td><?= $key-> category ?></td>
                 <td><?= $key-> quantity ?></td>
                 <td>

@@ -44,6 +44,13 @@ include APP_PATH . 'view' . DIRECTORY_SEPARATOR . 'admin'. DIRECTORY_SEPARATOR .
                     <?php endif ?> 
                 </div>
                 <div class="mb-3">
+                    <label for="discount" class="form-label">Discount %  (type % to set discount 0)</label>
+                    <input type="text" name="discount" class="form-control" id="discount" value = "<?= $returnField['discount'] ?>">
+                    <?php if(isset($errors['discount'])): ?>
+                        <h4 style = "color:red"><?= $errors['discount'];?></h4>
+                    <?php endif ?> 
+                </div>
+                <div class="mb-3">
                     <label for="category" class="form-label">Category - </label>
                     <select class="form-select" name="category">                    
                         <?php foreach($categories as $key):?>

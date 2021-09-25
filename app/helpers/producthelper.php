@@ -12,6 +12,25 @@ class producthelper{
         return '';
     }
 
+    public static function discountError(string $string){
+
+        if($string === '%'){
+            return '';
+        }
+
+        $int=(int)$string;
+        if(empty($string)){
+            return 'Field cannot be empty';
+        }else if(!preg_match('~[0-9]+~',$string)){
+            return  'Only numbers are allowed';
+        }else if($int < 0){
+            return  'You cannot enter negative numbers';
+        }else if($int > 100){
+            return  '100 percent is the maximum';
+        }
+        return '';
+    }
+
     public static function categoryError($categoryName)
     {
 
@@ -52,5 +71,13 @@ class producthelper{
 	 	}
         return $Errors;
         
+    }
+
+    public static function floatDiscount($discount){
+        if(strlen($discount) == 1){
+            return '0.0'.$discount;
+        }else{
+            return '0.'.$discount;
+        }
     }
 }
