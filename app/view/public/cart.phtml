@@ -8,13 +8,16 @@
                     <th class="text-center">Quantity</th>
                     <th class="text-center">Subtotal</th>
                     <th class="text-center">Discount</th>
-                    <th class="text-center"><a class="btn btn-sm btn-outline-danger" href="#">Clear Cart</a></th>
+                    <th class="text-center"><a class="btn btn-sm btn-outline-danger" href="<?= App::config('url');?>Cart/destroyCart">Clear Cart</a></th>
                 </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($_SESSION['Cart'] as $key):?>
                     <td>
                         <div class="product-item">
                             <a class="product-thumb" href="#"><img src="https://via.placeholder.com/220x180/9932CC/000000" alt="Product"></a>
                             <div class="product-info">
-                                <h4 class="product-title"><a href="#">Cole Haan Crossbody</a></h4><span><em>Author:</em> -</span>
+                                <h4 class="product-title"><a href="#"><?= $key['title'] ?></a></h4><span><em>Author:</em> <?= $key['author'] ?></span>
                             </div>
                         </div>
                     </td>
@@ -29,10 +32,11 @@
                             </select>
                         </div>
                     </td>
-                    <td class="text-center text-lg text-medium">$200.00</td>
-                    <td class="text-center">—</td>
-                    <td class="text-center"><a class="remove-from-cart" href="#" data-toggle="tooltip" title="" data-original-title="Remove item"><i class="fas fa-2x fa-trash-alt"></i></a></td>
+                    <td class="text-center text-lg text-medium">$<?= $key['price'] ?></td>
+                    <td class="text-center"><?= $key['discount'] ?></td>
+                    <td class="text-center"><a class="remove-from-cart" href="<?= App::config('url');?>Cart/removeProduct/<?=$key['id']?>" data-toggle="tooltip" title="" data-original-title="Remove item"><i class="fas fa-2x fa-trash-alt"></i></a></td>
                 </tr>
+                <?php endforeach ?>
             </tbody>
         </table>
     </div>
