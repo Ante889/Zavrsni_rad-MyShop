@@ -20,8 +20,8 @@
                             </div>
                         </div>
                     </td>
-                    <td class="text-center text-lg text-medium">$<?= $key['price'] * $key['quantityInCart']?></td>
-                    <td class="text-center"><?= $key['discount'] ?></td>
+                    <td class="text-center text-lg text-medium">$<?= $key['price']?></td>
+                    <td class="text-center"><?= $key['discount'] == '%'? 0 : $key['discount'] ?></td>
                     <td class="text-center"><a class="remove-from-cart" href="<?= App::config('url');?>Cart/removeProduct/<?=$key['id']?>" data-toggle="tooltip" title="" data-original-title="Remove item"><i class="fas fa-2x fa-trash-alt"></i></a></td>
                 </tr>
                 <?php endforeach ?>

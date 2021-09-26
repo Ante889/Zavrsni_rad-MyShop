@@ -28,8 +28,6 @@
         <?php else:?>
         <p><?= $product -> price ?>$</p>
         <?php endif?>
-        <h4>Status</h4>
-        <p><?= $availability ?></p>
         <h4>Rating</h4>
         <p><?= $rating . '('. $countrating .')' ?></p>
         <a href="<?= App::config('url');?>Cart/addProductToCart/<?= $product-> id ?>" class="btn btn-primary btn-lg btn-block">Put into cart </a>

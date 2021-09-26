@@ -102,17 +102,10 @@ class IndexController extends Controller
             $this->insertComment($parameters[0]);
         }
         if(!empty($parameters[0]))
-        {   $Availability=null;
+        {
             $productClass= new Products;
             $productClass -> where = $parameters[0];
             $product=$productClass -> select('id')[0];
-            if($product -> quantity > 10){
-                $Availability = 'Available';
-            }elseif($product -> quantity < 10){
-                $Availability = 'less than 10';
-            }elseif($product -> quantity == 0){
-                $Availability = 'Not available';
-            }
             $comments = $this->getComments($parameters[0]);
 
         }else{
@@ -126,7 +119,6 @@ class IndexController extends Controller
             'rating' => $this-> getRating($parameters[0]),
             'commentError' => $this->error,
             'product' => $product,
-            'availability' => $Availability,
             'comments' => $comments,
             'pagination' =>[
                 'itemsNumber' => ceil($commentsClass/10),

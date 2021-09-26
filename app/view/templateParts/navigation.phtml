@@ -17,12 +17,12 @@
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Cart(0)
+          Cart(<?=isset($_SESSION['Cart'])? count($_SESSION['Cart']):0 ?>)
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="" >Items (Number)</a>
+          <a class="text-center" >Items (<?=isset($_SESSION['Cart'])? count($_SESSION['Cart']):0 ?>)</a>
           <hr>
-          <a class="text-center" >Price (Number)</a>
+          <a class="text-center" >Price (<?=isset($_SESSION['Cart'])? producthelper::totalprice():0?>)</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="<?= App::config('url'); ?>cart">Go to cart</a>
         </div>

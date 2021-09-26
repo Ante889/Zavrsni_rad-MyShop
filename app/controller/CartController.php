@@ -25,7 +25,6 @@ class CartController extends AuthorizationController
                 'title' => $product-> title,
                 'author' => $product-> author,
                 'discount' => $product-> discount,
-                'quantityInCart' => 1,
                 'price' => $product->price * (1-producthelper::floatDiscount($product->discount))
             ];
         }

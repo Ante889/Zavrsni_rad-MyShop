@@ -74,7 +74,6 @@ create table bought(
 
 	orders int,
 	product int,
-	quantity int,
 	price decimal(18,2)
 
 );
