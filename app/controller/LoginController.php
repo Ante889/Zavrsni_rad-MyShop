@@ -42,6 +42,7 @@ class LoginController extends Controller
                 unset($result -> reset_password_token);
                 unset($result -> rememberme_token);
                 $_SESSION['User'] = $result;
+                $_SESSION['Cart'] = [];
                 Request::redirect(App::config('url'));
                 return;
             }
@@ -122,6 +123,7 @@ class LoginController extends Controller
         $UsersClass -> where = $_SESSION['User']->id;
         $UsersClass -> update('id');
         unset($_SESSION['User']);
+        unset($_SESSION['Cart']);
         session_destroy();
         $this->index();
 

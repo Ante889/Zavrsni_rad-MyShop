@@ -15,7 +15,7 @@ create table products (
 	quantity int not null,
 	content text not NULL,
 	pdf varchar(50) NOT NULL, 
-	creation_time varchar(50) NOT null
+	creation_time varchar(50) NOT null,
 	discount varchar (3)
 
 );

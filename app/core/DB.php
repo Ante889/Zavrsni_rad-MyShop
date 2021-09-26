@@ -13,6 +13,7 @@ class DB extends PDO
             $dsn = 'mysql:host='.$base['server'].';dbname='. $base['name'].';';
             self::$instance = new PDO($dsn, $base['user'], $base['password']);
             self::$instance -> setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE,PDO::FETCH_OBJ);
+            self::$instance->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
         }
         return self::$instance;
     }

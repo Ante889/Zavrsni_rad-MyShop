@@ -31,7 +31,7 @@
             <hr>
             <a class="list-group-item list-group-item-action" href="<?= App::config('url')?>">See all</a>
             <?php foreach($categories as $category): ?>
-            <a class="list-group-item list-group-item-action" href="<?= App::config('url'); ?>index/index/<?= $category->id ?>"><?= $category->name; ?>(<?= $ProductsInCategory[$category->name] ?>)</a>
+            <a class="list-group-item list-group-item-action" href="<?= App::config('url'); ?>Index/index/<?= $category->id ?>"><?= $category->name; ?>(<?= $ProductsInCategory[$category->name] ?>)</a>
             <?php endforeach;?>
         </div>
        </div>
@@ -54,7 +54,7 @@
                         <?php endif?>
                             <img style ="max-height:200px" class="card-img-top" src="../../public/images/<?= $product->image ?>" alt="Card image cap">
                             <div class="card-body">
-                                <a href="<?=App::config('url')?>index/productpage/<?= $product->id ?>"><h4 class="card-title text-center"><?= $product->title?></h4></a>
+                                <a href="<?=App::config('url')?>Index/productpage/<?= $product->id ?>"><h4 class="card-title text-center"><?= $product->title?></h4></a>
                                 <p class="card-text text-center"><?php Request::LimitString($product->content,95) ?></p>
                                 <p class="card-text text-center"> Author: <?= $product->author ?></p>
                                 <?php if(isset($product->discount) && $product->discount != '%') :?>
@@ -67,7 +67,7 @@
                                 <p class="card-text text-center"> Rating: <?=Util::stars($product->rating,'')?></p>
 
                             </div>
-                            <a href="<?=App::config('url')?>index/productpage/<?= $product->id ?>" class="btn btn-primary btn-lg btn-block">Buy</a>
+                            <a href="<?=App::config('url')?>Index/productpage/<?= $product->id ?>" class="btn btn-primary btn-lg btn-block">Buy</a>
                         </div>
                     </div>
 

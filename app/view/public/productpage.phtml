@@ -6,11 +6,11 @@
         <?php if(Request::isLogin()):?>
           <?php if($checkrating === true):?>
           <h4>Rate product</h4>
-            <a href="<?= App::config('url');?>index/setRating/<?=$product->id;?>/1"><i class="fas fa-2x fa-star"></i></a>
-            <a href="<?= App::config('url');?>index/setRating/<?=$product->id;?>/2"><i class="fas fa-2x fa-star"></i></a>
-            <a href="<?= App::config('url');?>index/setRating/<?=$product->id;?>/3"><i class="fas fa-2x fa-star"></i></a>
-            <a href="<?= App::config('url');?>index/setRating/<?=$product->id;?>/4"><i class="fas fa-2x fa-star"></i></a>
-            <a href="<?= App::config('url');?>index/setRating/<?=$product->id;?>/5"><i class="fas fa-2x fa-star"></i></a>
+            <a href="<?= App::config('url');?>Index/setRating/<?=$product->id;?>/1"><i class="fas fa-2x fa-star"></i></a>
+            <a href="<?= App::config('url');?>Index/setRating/<?=$product->id;?>/2"><i class="fas fa-2x fa-star"></i></a>
+            <a href="<?= App::config('url');?>Index/setRating/<?=$product->id;?>/3"><i class="fas fa-2x fa-star"></i></a>
+            <a href="<?= App::config('url');?>Index/setRating/<?=$product->id;?>/4"><i class="fas fa-2x fa-star"></i></a>
+            <a href="<?= App::config('url');?>Index/setRating/<?=$product->id;?>/5"><i class="fas fa-2x fa-star"></i></a>
           <?php else:?>
             <h4>Your rate</h4>
             <?=Util::stars($checkrating,'fa-2x')?>
@@ -32,7 +32,7 @@
         <p><?= $availability ?></p>
         <h4>Rating</h4>
         <p><?= $rating . '('. $countrating .')' ?></p>
-        <a href="#" class="btn btn-primary btn-lg btn-block">Buy</a>
+        <a href="#" class="btn btn-primary btn-lg btn-block">Put into cart </a>
     </div>
   </div><br><br>
   <h2 class="text-center">About product</h2>
@@ -60,7 +60,7 @@
         
         <li class="clearfix">
             <div class="post-comments">
-                <form action="<?=App::config('url')?>index/productpage/<?= $product->id ?>" method="POST">
+                <form action="<?=App::config('url')?>Index/productpage/<?= $product->id ?>" method="POST">
                     <div class="form-group">
                         <input type="text" class="form-control" name="content">
                     </div>
