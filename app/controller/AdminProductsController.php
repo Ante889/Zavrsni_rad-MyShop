@@ -71,7 +71,6 @@ class AdminProductsController extends Controller
             'image' => '',
             'price' => '',
             'category' => '', 
-            'quantity' => '',
             'content' => '', 
             'pdf' => ''
         ];
@@ -80,7 +79,6 @@ class AdminProductsController extends Controller
         $image = isset($_FILES['image']) ? $_FILES['image'] : '';
         $price = Request::issetTrim('price');
         $category = Request::issetTrim('category');
-        $quantity = Request::issetTrim('quantity');
         $content = Request::issetTrim('content');
         $pdf = Request::issetTrim('pdf');
         $discount = Request::issetTrim('discount');
@@ -97,21 +95,19 @@ class AdminProductsController extends Controller
             $errors['image'] = producthelper::photoError($image);
             $errors['price'] = producthelper::numbersError($price);
             $errors['category'] = producthelper::categoryError($category);
-            $errors['quantity'] = producthelper::numbersError($quantity);
             $errors['content'] = producthelper::basicError($content);
             $errors['pdf'] = producthelper::basicError($pdf);      
             $errors['discount'] = producthelper::discountError($discount); 
            
             //Create product
     
-            if(empty($errors['title']) && empty($errors['author']) && empty($errors['image']) && empty($errors['price'])&& empty($errors['category'])&& empty($errors['quantity'])&& empty($errors['content'])&& empty($errors['pdf']) && empty($errors['discount'])){
+            if(empty($errors['title']) && empty($errors['author']) && empty($errors['image']) && empty($errors['price'])&& empty($errors['category'])&& empty($errors['content'])&& empty($errors['pdf']) && empty($errors['discount'])){
                 $ProductsClass = new Products;
                 $ProductsClass -> title = $title;
                 $ProductsClass -> author = $author;
                 $ProductsClass -> image = $imageName;
                 $ProductsClass -> price = $price;
                 $ProductsClass -> category = $category;
-                $ProductsClass -> quantity = $quantity;
                 $ProductsClass -> content = $content;
                 $ProductsClass -> pdf = $pdf;
                 $ProductsClass -> creation_time= time();
@@ -131,7 +127,6 @@ class AdminProductsController extends Controller
                 'image' => $imageName,
                 'price' => $price,
                 'category' => $category, 
-                'quantity' => $quantity,
                 'content' => $content, 
                 'pdf' => $pdf,
                 'discount' => $discount
@@ -149,7 +144,6 @@ class AdminProductsController extends Controller
             'image' => '',
             'price' => '',
             'category' => '', 
-            'quantity' => '',
             'content' => '', 
             'pdf' => '',
             'discount' => ''
@@ -171,7 +165,6 @@ class AdminProductsController extends Controller
         $errors['image'] = producthelper::photoError($image);
         $errors['price'] = producthelper::numbersError(Request::issetTrim('price'));
         $errors['category'] = producthelper::numbersError(Request::issetTrim('category'));
-        $errors['quantity'] = producthelper::numbersError(Request::issetTrim('quantity'));
         $errors['content'] = producthelper::basicError(Request::issetTrim('content'));
         $errors['pdf'] = producthelper::basicError(Request::issetTrim('pdf'));
         $errors['discount']= producthelper::discountError(Request::issetTrim('discount'));
@@ -179,7 +172,7 @@ class AdminProductsController extends Controller
             unset($errors['image']);
         }
 
-        if(empty($errors['title']) && empty($errors['author']) && empty($errors['image']) && empty($errors['price'])&& empty($errors['category'])&& empty($errors['quantity'])&& empty($errors['content'])&& empty($errors['pdf']) && empty($errors['discount'])){
+        if(empty($errors['title']) && empty($errors['author']) && empty($errors['image']) && empty($errors['price'])&& empty($errors['category'])&& empty($errors['content'])&& empty($errors['pdf']) && empty($errors['discount'])){
         
             if(!empty($image['name'])){
                 $imageName = uniqid().basename($image['name']);
@@ -195,7 +188,6 @@ class AdminProductsController extends Controller
             $ProductsClass -> image =  $imageName;
             $ProductsClass -> price = Request::issetTrim('price');
             $ProductsClass -> category = Request::issetTrim('category');
-            $ProductsClass -> quantity = Request::issetTrim('quantity');
             $ProductsClass -> content = Request::issetTrim('content');
             $ProductsClass -> pdf = Request::issetTrim('pdf');
             $ProductsClass -> discount = Request::issetTrim('discount');
@@ -214,7 +206,6 @@ class AdminProductsController extends Controller
               'image' => $Fields ->image,
               'price' => $Fields ->price,
               'category' => $Fields ->category, 
-              'quantity' => $Fields ->quantity,
               'content' => $Fields ->content, 
               'pdf' => $Fields ->pdf,
               'discount' => $Fields->discount

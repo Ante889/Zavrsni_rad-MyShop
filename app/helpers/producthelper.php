@@ -80,4 +80,13 @@ class producthelper{
             return '0.'.$discount;
         }
     }
+
+    public static function totalprice(){
+        $totalprice=0;
+        foreach ($_SESSION['Cart'] as $key)
+        {
+            $totalprice = $totalprice + ($key['price']);
+        }
+        return $totalprice . '$';
+    }
 }

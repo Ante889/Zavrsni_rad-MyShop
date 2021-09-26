@@ -12,7 +12,6 @@ create table products (
 	image varchar(255) not null,
 	price decimal(18.2) not null,
 	category int not null,
-	quantity int not null,
 	content text not NULL,
 	pdf varchar(50) NOT NULL, 
 	creation_time varchar(50) NOT null,

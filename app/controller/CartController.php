@@ -24,14 +24,10 @@ class CartController extends AuthorizationController
                 'image' => $product-> image,
                 'title' => $product-> title,
                 'author' => $product-> author,
-                'quantity' => $product-> quantity,
-                'price' => $product-> price,
                 'discount' => $product-> discount,
-                'quantityInCart' => 1
+                'quantityInCart' => 1,
+                'price' => $product->price * (1-producthelper::floatDiscount($product->discount))
             ];
-        }else
-        {
-            $_SESSION['Cart'][$product-> id]['quantityInCart']++;
         }
         Request::redirect(App::config('url').'Cart/index');
     }
