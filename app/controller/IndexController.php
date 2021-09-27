@@ -209,10 +209,13 @@ class IndexController extends Controller
         $ratingClass= new Ratings;
         $ratingClass -> where = $product;
         $result= $ratingClass -> select('product');
-        foreach ($result as $key) {
-            if($key -> user == $_SESSION['User']->id)
-            {
-                return $key -> rating;
+        if(isset($_SESSION['User']))
+        {
+            foreach ($result as $key) {
+                if($key -> user == $_SESSION['User']->id)
+                {
+                    return $key -> rating;
+                }
             }
         }
         return true;
