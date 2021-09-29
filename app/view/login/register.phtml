@@ -25,12 +25,12 @@
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
-                <input type="password" name="password" class="form-control" id="password" value = "<?= $returnField['password'] ?>" placeholder="Set password">
+                <input type="password" name="password" class="form-control" id="password" placeholder="Set password">
                 <h5 style="color:red"><?= $errors['password']?></h5>
             </div>
             <div class="mb-3">
                 <label for="confirmPassword" class="form-label">Confirm password</label>
-                <input type="password" name="confirmPassword" class="form-control" id="confirmPassword" value = "<?= $returnField['confirmPassword'] ?>" placeholder="Confirm password">
+                <input type="password" name="confirmPassword" class="form-control" id="confirmPassword" placeholder="Confirm password">
             </div>
             <input type="submit" name="submit" class="btn btn-primary btn-lg btn-block" value="Create account">
             <h5 style="color:green"><?= $succesMsg?></h5>

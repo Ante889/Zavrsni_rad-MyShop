@@ -108,7 +108,7 @@ class IndexController extends Controller
             $product=$productClass -> select('id')[0];
             $comments = $this->getComments($parameters[0]);
 
-        }else{
+        }if(empty($parameters[0]) || empty($product)){
             Request::redirect(App::config('url'));
             return;
         }

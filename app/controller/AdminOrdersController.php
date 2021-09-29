@@ -1,0 +1,80 @@
+<?php 
+
+
+class AdminOrdersController extends Controller
+{
+    private $path = 'admin'. DIRECTORY_SEPARATOR . 'orders'. DIRECTORY_SEPARATOR ;
+
+    public function __construct()
+    {
+        parent::__construct();
+        if(!Request::isAdmin())
+        {
+            Request::redirect(App::config('url'));
+        }
+    }
+
+    public function index()
+    {
+        $limit = 10;
+        $offset = 0;
+        $ordersClass = New Orders;
+        $ordersInner =  $ordersClass -> innerSelectLimit([
+            'orders1' => 'id',
+            'orders2' => 'status',
+            'orders3' => 'transaction_id',
+            'orders4' => 'amount',
+            'orders5' => 'order_date',
+            'orders6' => 'user',
+            'users' => 'name'
+            ],
+            'orders',
+            [
+            'orders-users'
+            ],
+            [
+            'orders.status' => 'success'
+            ],$limit,$offset
+        );
+        $this -> view -> render($this->path.'adminOrders',[
+            'ordersInner' => $ordersInner
+        ]);
+    }
+
+
+    public function details($parameters=[])
+    {
+        $orderClass = New Orders;
+        $orderInner =  $orderClass -> innerSelectLimit([
+            'orders1' => 'id',
+            'products1' => 'title',
+            'products2' => 'author',
+            'products3' => 'image',
+            'products4' => 'price',
+            'orders4' => 'amount',
+            'orders5' => 'transaction_id',
+            ],
+            'products',
+            [
+            'products-bought',
+            'bought-orders',
+            'orders-users'
+            ],
+            [
+            'bought.orders' => $parameters[0]
+            ],999,0
+        );
+        if(!empty($orderInner))
+        {
+            $this -> view -> render($this->path.'adminOrdersDetails',[
+                'orderInner' => $orderInner
+            ]);
+        }else
+        {
+            Request::redirect(App::config('url'). 'AdminOrders');
+        }
+        
+    }
+
+
+}

@@ -137,6 +137,10 @@ class Model
             'comments-users'=> 'inner join users on comments.user = users.id',
             'bought-orders'=> 'inner join orders on bought.orders = orders.id',
             'users-orders'=> 'inner join orders on orders.user = users.id',
+            //obratno
+            'orders-users'=> 'inner join users on users.id = orders.user',
+            'orders-bought'=> 'inner join bought on bought.orders = orders.id',
+            'bought-products' => 'inner join products on products.id = bought.product'
         ];
         $selectResult='';
         $innerResult='';

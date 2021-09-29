@@ -1,0 +1,54 @@
+<?php 
+include APP_PATH . 'view' . DIRECTORY_SEPARATOR . 'admin'. DIRECTORY_SEPARATOR .'adminTemplate.phtml';
+?>
+<div class="col-md-9">   
+<br>
+        <table class="table">
+            <thead>
+                <tr>
+                <th scope="col">Buyer</th>
+                <th scope="col">Status</th>
+                <th scope="col">Transaction_id</th>  
+                <th scope="col">Price</th>
+                <th scope="col">Date</th>   
+                <th scope="col">Details</th>  
+                <th scope="col">Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if(isset($ordersInner)): ?>
+                <?php foreach($ordersInner as $key): ?>
+                <tr>
+                <td><?= $key-> name ?></td>
+                <td><a href="<?= App::config('url')?>index/productpage/<?=$key->product ?>"><?= $key -> status ?></a></td>
+                <td><?= $key-> transaction_id ?></td>
+                <td><?= $key-> amount ?></td>
+                <td><?= $key-> order_date ?></td>
+                <td><a class="btn btn-primary" href="<?= App::config('url')?>AdminOrders/details/<?=$key->id ?>">Details</a></td>
+                <td onclick="return confirm('Do you want to delete the comment')"><a style="color:red" href="<?= App::config('url');?>AdminComments/deleteComments/<?= $key->id ?>"><i title="detele" class="fas fa-2x fa-trash-alt"></i></a></td>
+                </tr>
+                <?php endforeach; ?>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    
+        <hr>
+        <form action="<?= App::config('url'); ?>AdminComments<?=$searchFormLink?>" method="post">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm">
+                        <input type="text" name="search" class="form-control" placeholder="Search comments by products">
+                    <br>
+                    <?php if(isset($error)): ?>
+                        <h5 style = "color:red"><?= $error ?></h5>
+                    <?php endif ?>
+                    </div>
+                    <div class="col-sm">
+                        <input type="submit" class="btn btn-primary" value="Search">  
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    </div>
+</div>

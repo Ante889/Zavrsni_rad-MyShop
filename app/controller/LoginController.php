@@ -52,7 +52,6 @@ class LoginController extends Controller
             'errors' => $errors,
             'returnField' => [
                 'email' => $email, 
-                'password' => $password
               ]
         ]);
    
@@ -103,8 +102,6 @@ class LoginController extends Controller
               'name' => $name, 
               'lastname' => $lastname,
               'email' => $email, 
-              'password' => $password, 
-              'confirmPassword' => $confirmPassword, 
               'alert' => ''
             ]
         ]);
