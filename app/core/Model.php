@@ -31,7 +31,7 @@ class Model
         $connection = DB::getInstance();
         $sql = "INSERT INTO " . static::$db_table ." (" . rtrim($keys, ',') .") 
         VALUES (".rtrim($values, ',').")";
-        $test=$connection->prepare($sql) -> execute($parameters);
+        $connection->prepare($sql) -> execute($parameters);
 
     }
 

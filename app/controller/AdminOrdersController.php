@@ -41,6 +41,30 @@ class AdminOrdersController extends Controller
         ]);
     }
 
+    public function create()
+    {
+        $amount = 0;
+        foreach ($_SESSION['Cart'] as $key) {
+            $amount = $amount + $key['price'];
+        }
+
+        $ordersClass = new Orders;
+        if(!empty($_SESSION['Cart']) &&
+            $ordersClass -> createOrder([
+                'status' => 'success',
+                'amount' => $amount,
+                'transaction_id' => '16519814196896',
+                'order_date' => date('d.m.y'),
+                'user' => $_SESSION['User']->id
+            ]) 
+        ){
+        unset($_SESSION['Cart']);
+        $_SESSION['Cart'] = [];
+        }
+        
+        
+    }
+
 
     public function details($parameters=[])
     {
@@ -75,6 +99,4 @@ class AdminOrdersController extends Controller
         }
         
     }
-
-
 }
