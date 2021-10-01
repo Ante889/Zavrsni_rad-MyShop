@@ -70,8 +70,8 @@ include APP_PATH . 'view' . DIRECTORY_SEPARATOR . 'admin'. DIRECTORY_SEPARATOR .
                     <?php endif ?>  
                 </div>
                 <div class="mb-3">
-                    <label for="pdf" class="form-label">Pdf</label>
-                    <input type="text" name="pdf" class="form-control" id="pdf" value = "<?= $returnField['pdf'] ?>">
+                    <label for="pdf" class="form-label">Pdf</label><br>
+                    <input type="file" name="pdf" id="pdf" value = "<?= $returnField['pdf'] ?>">
                     <?php if(isset($errors['pdf'])): ?>
                             <h4 style = "color:red"><?= $errors['pdf'];?></h4>
                     <?php endif ?>  

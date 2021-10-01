@@ -80,7 +80,7 @@ class AdminProductsController extends Controller
         $price = Request::issetTrim('price');
         $category = Request::issetTrim('category');
         $content = Request::issetTrim('content');
-        $pdf = Request::issetTrim('pdf');
+        $pdf = isset($_FILES['pdf']) ? $_FILES['pdf'] : '';
         $discount = Request::issetTrim('discount');
         if($image != ''){
             $imageName = uniqid().basename($image['name']);
@@ -88,6 +88,13 @@ class AdminProductsController extends Controller
         {
             $imageName ='';
         }
+        if($pdf != ''){
+            $pdfName = uniqid().'-'.basename($pdf['name']);
+        }else 
+        {
+            $pdfName ='';
+        }
+
         if(isset($_POST['submit'])){
             
             $errors['title'] = producthelper::basicError($title);
@@ -96,7 +103,7 @@ class AdminProductsController extends Controller
             $errors['price'] = producthelper::numbersError($price);
             $errors['category'] = producthelper::categoryError($category);
             $errors['content'] = producthelper::basicError($content);
-            $errors['pdf'] = producthelper::basicError($pdf);      
+            $errors['pdf'] = producthelper::photoError($pdf);      
             $errors['discount'] = producthelper::discountError($discount); 
            
             //Create product
@@ -109,12 +116,13 @@ class AdminProductsController extends Controller
                 $ProductsClass -> price = $price;
                 $ProductsClass -> category = $category;
                 $ProductsClass -> content = $content;
-                $ProductsClass -> pdf = $pdf;
+                $ProductsClass -> pdf = $pdfName;
                 $ProductsClass -> creation_time= time();
                 $ProductsClass -> discount = $discount;
                 $ProductsClass -> create();
                 $SuccessMsg= 'Product has been successfully created';
                 move_uploaded_file($image['tmp_name'], IMAGE_PATH .$imageName);
+                move_uploaded_file($pdf['tmp_name'], PDF_PATH .$pdfName);
             }
         }
         $this -> view -> render($this->path.'adminProductsAdd',[
@@ -157,6 +165,7 @@ class AdminProductsController extends Controller
             return;
         }
         $image = isset($_FILES['image']) ? $_FILES['image'] : '';
+        $pdf = isset($_FILES['pdf']) ? $_FILES['pdf'] : '';
 
         if(isset($_POST['submit'])){
 
@@ -166,10 +175,13 @@ class AdminProductsController extends Controller
         $errors['price'] = producthelper::numbersError(Request::issetTrim('price'));
         $errors['category'] = producthelper::numbersError(Request::issetTrim('category'));
         $errors['content'] = producthelper::basicError(Request::issetTrim('content'));
-        $errors['pdf'] = producthelper::basicError(Request::issetTrim('pdf'));
+        $errors['pdf'] = producthelper::photoError($pdf);
         $errors['discount']= producthelper::discountError(Request::issetTrim('discount'));
         if(empty($image['name'])){
             unset($errors['image']);
+        }
+        if(empty($pdf['name'])){
+            unset($errors['pdf']);
         }
 
         if(empty($errors['title']) && empty($errors['author']) && empty($errors['image']) && empty($errors['price'])&& empty($errors['category'])&& empty($errors['content'])&& empty($errors['pdf']) && empty($errors['discount'])){
@@ -182,6 +194,14 @@ class AdminProductsController extends Controller
             {
                 $imageName =$Fields-> image;
             }
+            if(!empty($pdf['name'])){
+                $pdfName = uniqid().'-'.basename($pdf['name']);
+                unlink(PDF_PATH . $Fields-> pdf);
+                move_uploaded_file($pdf['tmp_name'], PDF_PATH .$pdfName);
+            }else 
+            {
+                $pdfName =$Fields-> pdf;
+            }
 
             $ProductsClass -> title = Request::issetTrim('title');
             $ProductsClass -> author = Request::issetTrim('author');
@@ -189,7 +209,7 @@ class AdminProductsController extends Controller
             $ProductsClass -> price = Request::issetTrim('price');
             $ProductsClass -> category = Request::issetTrim('category');
             $ProductsClass -> content = Request::issetTrim('content');
-            $ProductsClass -> pdf = Request::issetTrim('pdf');
+            $ProductsClass -> pdf = $pdfName;
             $ProductsClass -> discount = Request::issetTrim('discount');
             $ProductsClass -> where = $parameters[0];
             $ProductsClass -> update('id');
@@ -217,6 +237,7 @@ class AdminProductsController extends Controller
     {
         $products = userhelper::shortSelect('Products','id',$parameters[0]);
         unlink(IMAGE_PATH . $products-> image);
+        unlink(PDF_PATH . $products-> pdf);
         $productsClass = New Products;
         $productsClass -> where = $parameters[0];
         $productsClass -> delete('id');

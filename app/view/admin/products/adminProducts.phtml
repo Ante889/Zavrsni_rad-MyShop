@@ -31,7 +31,6 @@ include APP_PATH . 'view' . DIRECTORY_SEPARATOR . 'admin'. DIRECTORY_SEPARATOR .
                 <th scope="col">Discount</th>  
                 <th scope="col">Category</th>
                 <th scope="col">Content</th>
-                <th scope="col">Pdf</th> 
                 <th scope="col">Update</th>
                 <th scope="col">Delete</th>
                 </tr>
@@ -51,7 +50,6 @@ include APP_PATH . 'view' . DIRECTORY_SEPARATOR . 'admin'. DIRECTORY_SEPARATOR .
                     Request::LimitString($key->content, 10);
                     ?>
                 </td>
-                <td><?= $key-> pdf ?></td>
                 <td><a href="<?= App::config('url');?>AdminProducts/updateProducts/<?= $key->id ?>"><i title="update" class="fas fa-2x fa-pencil-alt"></i></a></td>
                 <td onclick="return confirm('Do you want to delete the product')"><a style="color:red" href="<?= App::config('url');?>AdminProducts/deleteProducts/<?= $key->id ?>"><i title="detele" class="fas fa-2x fa-trash-alt"></i></a></td>
                 </tr>
