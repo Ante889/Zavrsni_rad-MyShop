@@ -48,4 +48,22 @@ class CartController extends AuthorizationController
         }
         Request::redirect(App::config('url').'Cart/index');
     }
+
+    public function thankyou()
+    {
+        if(isset($_GET['tx']))
+        {
+            $amount = $_GET['amt'];
+            $transaction = $_GET['tx'];
+            $status = $_GET['st'];
+            $ordersController = new AdminOrdersController;
+            $ordersController -> create($status,$transaction,$amount); 
+            Request::redirect(App::config('url').'cart/thankyou');
+
+        }else{
+            $_SESSION['thankyou'] = 'thank you for buyng [item]';
+            Request::redirect(App::config('url').'index/mybooks');
+        }
+
+    }
 }

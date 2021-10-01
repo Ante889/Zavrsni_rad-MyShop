@@ -25,7 +25,7 @@ include APP_PATH . 'view' . DIRECTORY_SEPARATOR . 'admin'. DIRECTORY_SEPARATOR .
                 <td><?= $key-> amount ?></td>
                 <td><?= $key-> order_date ?></td>
                 <td><a class="btn btn-primary" href="<?= App::config('url')?>AdminOrders/details/<?=$key->id ?>">Details</a></td>
-                <td onclick="return confirm('Do you want to delete the comment')"><a style="color:red" href="<?= App::config('url');?>AdminComments/deleteComments/<?= $key->id ?>"><i title="detele" class="fas fa-2x fa-trash-alt"></i></a></td>
+                <td onclick="return confirm('Do you want to delete the comment')"><a style="color:red" href=""><i title="detele" class="fas fa-2x fa-trash-alt"></i></a></td>
                 </tr>
                 <?php endforeach; ?>
                 <?php endif; ?>

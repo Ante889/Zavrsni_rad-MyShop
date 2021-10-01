@@ -41,7 +41,7 @@ class AdminOrdersController extends Controller
         ]);
     }
 
-    public function create()
+    public function create($status,$transaction,$amount)
     {
         $amount = 0;
         foreach ($_SESSION['Cart'] as $key) {
@@ -61,8 +61,6 @@ class AdminOrdersController extends Controller
         unset($_SESSION['Cart']);
         $_SESSION['Cart'] = [];
         }
-        
-        
     }
 
 

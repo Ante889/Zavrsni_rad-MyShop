@@ -130,6 +130,12 @@ class IndexController extends Controller
     );
     }
 
+    public function mybooks()
+    {
+        $this -> view -> render($this->path.'mybooks');
+        unset($_SESSION['thankyou']);
+    }
+
     public function insertComment($parameters)
     {
         $commentsClass= new Comments;
