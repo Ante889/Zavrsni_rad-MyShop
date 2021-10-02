@@ -9,7 +9,7 @@ if($_SERVER['SERVER_ADDR'] === '127.0.0.1'){
 return [
     'localhost' => $localhost,
     'siteTitle' => 'Book shop',
-    'url' => 'http://zavrsnirad.xyz/',
+    'url' => 'http://polaznikpp23.xyz/',
     'database' => [
         'server' => 'localhost',
         'name' => 'myshop',

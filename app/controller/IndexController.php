@@ -129,11 +129,64 @@ class IndexController extends Controller
         ]
     );
     }
-
-    public function mybooks()
+    public function mybooks($parameters=[])
     {
-        $this -> view -> render($this->path.'mybooks');
-        unset($_SESSION['thankyou']);
+        if(isset($parameters[0]))
+        {
+            $local_file = PDF_PATH . $parameters[0];
+            $download_file = $parameters[0];
+
+            // set the download rate limit (=> 20,5 kb/s)
+            $download_rate = 20.5;
+            if(file_exists($local_file) && is_file($local_file))
+            {
+                header('Cache-control: private');
+                header('Content-Type: application/octet-stream');
+                header('Content-Length: '.filesize($local_file));
+                header('Content-Disposition: filename='.$download_file);
+
+                flush();
+                $file = fopen($local_file, "r");
+                while(!feof($file))
+                {
+                    print fread($file, round($download_rate * 1024));
+                    flush();
+                    sleep(1);
+                }
+                fclose($file);}
+            else {
+                die('Error: The file '.$local_file.' does not exist!');
+            }
+        }
+
+        if(request::isLogin()){
+            $ordersClass = New Orders;
+            $ordersClass -> where = $_SESSION['User'] -> id;
+            $products = $ordersClass -> innerSelectLimit(
+                [
+                    'orders' => 'id',
+                    'products' => 'pdf',
+                    'products1' => 'image',
+                    'products2' => 'title',
+                    'products3' => 'author'
+                ],
+                'orders',
+                [
+                    'orders-bought',
+                    'bought-products'
+                ],
+                [
+                    'orders.status' => 'success'
+                ],999,0
+            );
+            $this -> view -> render($this->path.'mybooks',[
+                'products' => $products
+            ]);
+            unset($_SESSION['thankyou']);
+        }else{
+            Request::redirect(App::config('url'));
+        }
+        
     }
 
     public function insertComment($parameters)

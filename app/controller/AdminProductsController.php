@@ -196,7 +196,6 @@ class AdminProductsController extends Controller
             }
             if(!empty($pdf['name'])){
                 $pdfName = uniqid().'-'.basename($pdf['name']);
-                unlink(PDF_PATH . $Fields-> pdf);
                 move_uploaded_file($pdf['tmp_name'], PDF_PATH .$pdfName);
             }else 
             {
