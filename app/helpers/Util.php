@@ -6,7 +6,7 @@ class Util
 
     public static function Pagination($pagination)
     {?>
-        
+        <?php if($pagination['itemsNumber'] >= 1):?>
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
             <li class="page-item">
@@ -33,6 +33,7 @@ class Util
             </li>
             </ul>
         </nav>
+        <?php endif?>
 <?php
     }
     public static function stars($rating, $size){

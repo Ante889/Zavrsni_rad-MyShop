@@ -42,12 +42,20 @@ class AdminCommentsController extends Controller
         $commentsClass -> where = $whereParm;
         $commentsNumber =  count($commentsClass->select('approved'));
 
-        if(isset($_POST['search'])){
+        if(isset($_GET['search'])){
             $whereKey ='products.title';
-            $whereParm=$_POST['search'];
-            $pathForPager = 'AdminComments?page=';
+            $whereParm=$_GET['search'];
+            $pathForPager = 'AdminComments?search='. $_GET['search'] .'&page=';
             $commentsClass -> where = $whereParm;
-            $commentsNumber =  count($commentsClass->select('title'));
+            $commentsNumber =  count(
+                $commentsInner =  $commentsClass -> innerSelectLimit([
+                'products' => 'id'
+                ],
+                'products',
+                ['products-comments'],
+                ['products.title' => $whereParm
+                ],9999,0
+            ));
         }        
 
         $commentsInner =  $commentsClass -> innerSelectLimit([

@@ -56,13 +56,16 @@ class IndexController extends Controller
             $Products = $ProductsClass-> selectAllLimit($limit,$offset);
             $pathForPager = 'index/index?page=';
         }
-        
-        //dodaj rating u products array
+        //dodaj rating u products array i provjeri jesu li visible
+        $Product=[];
         foreach ($Products as $key) {
             $rating =$this->getRating($key -> id);
-            $key-> rating = $rating;  
+            $key-> rating = $rating; 
+            if($key->visible == 'visible')
+            {
+                $Product[$key->id] = $key;
+            }
         }
-
         //Slideshow
         $slideshowClass = new Slideshow;
         $slideshowClass -> where = '1';
@@ -71,7 +74,7 @@ class IndexController extends Controller
         $this -> view -> render($this->path.'index',[
             'ProductsInCategory' => $ProductsInCategory,
             'categories' => $Categories,
-            'products' => $Products,
+            'products' => $Product,
             'displayCategory' => $displayCategory,
             'bigTitle' => $bigTitle,
             'visible' => $visible,
@@ -87,7 +90,6 @@ class IndexController extends Controller
     public function productpage(array $parameters=[])
     {
         if(!empty($_GET['page'])){
-            $offset = (10 * $_GET['page']) - 10;
             $page = $_GET['page'];
         }else{
             $page = 1;
@@ -107,8 +109,8 @@ class IndexController extends Controller
             $productClass -> where = $parameters[0];
             $product=$productClass -> select('id')[0];
             $comments = $this->getComments($parameters[0]);
-
-        }if(empty($parameters[0]) || empty($product)){
+        }
+        if(empty($parameters[0]) || empty($product) || $product->visible != 'visible'){
             Request::redirect(App::config('url'));
             return;
         }
@@ -195,7 +197,7 @@ class IndexController extends Controller
         $this -> error= commenthelper::commentError(trim($_POST['content']));
         if(empty($this -> error)){
         $commentsClass -> user = trim($_SESSION['User'] -> id);
-        $commentsClass -> product = trim($parameters[0]);
+        $commentsClass -> product = trim($parameters);
         $commentsClass -> comment = trim($_POST['content']);
         $commentsClass -> comment_date= date("d-m-y"); 
         $commentsClass -> approved = 1;
@@ -207,6 +209,9 @@ class IndexController extends Controller
     {
         $limit= 10;
         $offset = 0;
+        if(!empty($_GET['page'])){
+            $offset = (10 * $_GET['page']) - 10;
+        }
         $commentsClass = new Comments;
         $commentsInner =  $commentsClass -> innerSelectLimit([
             'comments1' => 'id',
@@ -288,6 +293,10 @@ class IndexController extends Controller
         return count($result);
     }
     
+    public function contact(array $parameters=[])
+    {
+        $this -> view -> render($this->path.'contact');
+    }
 
     public function error(array $parameters=[])
     {

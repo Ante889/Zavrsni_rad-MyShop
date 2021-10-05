@@ -36,7 +36,7 @@ include APP_PATH . 'view' . DIRECTORY_SEPARATOR . 'admin'. DIRECTORY_SEPARATOR .
         <?= Util::Pagination($pagination) ?>
     
         <hr>
-        <form action="<?= App::config('url'); ?>AdminComments<?=$searchFormLink?>" method="post">
+        <form action="<?= App::config('url'); ?>AdminComments<?=$searchFormLink?>" method="GET">
             <div class="container">
                 <div class="row">
                     <div class="col-sm">

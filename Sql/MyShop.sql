@@ -12,6 +12,7 @@ create table products (
 	price decimal(18.2) not null,
 	category int not null,
 	content text not NULL,
+	visible varchar(20) default 'visible',
 	pdf varchar(50) NOT NULL, 
 	creation_time varchar(50) NOT null,
 	discount varchar (3)

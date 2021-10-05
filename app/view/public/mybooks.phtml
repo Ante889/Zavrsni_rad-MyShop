@@ -1,12 +1,14 @@
+<h2 class="text-center">My books</h2>
+
 <?php if(isset($_SESSION['thankyou'])):?>
-<h1><?= $_SESSION['thankyou']?></h1>
+<h1 style="color:green"><?= $_SESSION['thankyou']?></h1>
 <?php endif ?>
 
 
 <div class="container">
+<div style="height: 600px;" class="overflow-auto container-fluid">
     <div class="row">
         <?php foreach($products as $product): ?>
-            
         <div class="col-md-4 mt-5">  
             <div class="card" style="width: 14rem;">
                 <img style ="max-height:200px" class="card-img-top" src="../../public/images/<?= $product->image ?>" alt="Card image cap">
@@ -17,6 +19,6 @@
                 <a href="<?= App::config('url');?>index/mybooks/<?=$product->pdf?>" class="btn btn-primary btn-lg btn-block">Download</a>
             </div>
         </div>
-
         <?php endforeach;?>
-    </div>
+        </div>
+</div>

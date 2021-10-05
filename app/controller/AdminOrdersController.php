@@ -18,7 +18,14 @@ class AdminOrdersController extends Controller
     {
         $limit = 10;
         $offset = 0;
+        if(!empty($_GET['page'])){
+            $offset = ($limit * $_GET['page']) - $limit;
+            $page = $_GET['page'];
+        }else{
+            $page = 1;
+        }
         $ordersClass = New Orders;
+        $OrdersNumber = count($ordersClass -> selectAll());
         $ordersInner =  $ordersClass -> innerSelectLimit([
             'orders1' => 'id',
             'orders2' => 'status',
@@ -36,8 +43,15 @@ class AdminOrdersController extends Controller
             'orders.status' => 'success'
             ],$limit,$offset
         );
+        $pathForPager = 'AdminOrders?page=';
         $this -> view -> render($this->path.'adminOrders',[
-            'ordersInner' => $ordersInner
+            'ordersInner' => $ordersInner,
+            'pagination' =>[
+                'itemsNumber' => ceil($OrdersNumber/$limit),
+                'maxPage' => ceil($OrdersNumber/$limit) - (ceil($OrdersNumber/$limit)-$page) + 2,
+                'path' => $pathForPager,
+                'page' => $page
+            ]
         ]);
     }
 

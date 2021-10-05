@@ -32,7 +32,7 @@ include APP_PATH . 'view' . DIRECTORY_SEPARATOR . 'admin'. DIRECTORY_SEPARATOR .
                 <th scope="col">Category</th>
                 <th scope="col">Content</th>
                 <th scope="col">Update</th>
-                <th scope="col">Delete</th>
+                <th scope="col">Status</th>
                 </tr>
             </thead>
             <tbody>
@@ -51,7 +51,11 @@ include APP_PATH . 'view' . DIRECTORY_SEPARATOR . 'admin'. DIRECTORY_SEPARATOR .
                     ?>
                 </td>
                 <td><a href="<?= App::config('url');?>AdminProducts/updateProducts/<?= $key->id ?>"><i title="update" class="fas fa-2x fa-pencil-alt"></i></a></td>
-                <td onclick="return confirm('Do you want to delete the product')"><a style="color:red" href="<?= App::config('url');?>AdminProducts/deleteProducts/<?= $key->id ?>"><i title="detele" class="fas fa-2x fa-trash-alt"></i></a></td>
+                <?php if($key -> visible == 'visible'): ?>
+                <td><a class="btn btn-success" href="<?= App::config('url');?>AdminProducts/visibleProducts/<?= $key->id ?>">Visible</a></td>
+                <?php else: ?>
+                <td><a class="btn btn-danger" href="<?= App::config('url');?>AdminProducts/visibleProducts/<?= $key->id ?>">Unvisible</a></td>
+                <?php endif;?>  
                 </tr>
                 <?php endforeach; ?>
                 <?php endif; ?>

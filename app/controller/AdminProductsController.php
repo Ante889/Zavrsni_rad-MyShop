@@ -232,14 +232,19 @@ class AdminProductsController extends Controller
         ]);
     }
 
-    public function deleteProducts(array $parameters=[])
+    public function visibleProducts(array $parameters=[])
     {
         $products = userhelper::shortSelect('Products','id',$parameters[0]);
-        unlink(IMAGE_PATH . $products-> image);
-        unlink(PDF_PATH . $products-> pdf);
+        $change= 'visible';
+        if($products->visible == 'visible')
+        {
+            $change = 'unvisible';
+        }
+
         $productsClass = New Products;
+        $productsClass -> visible = $change;
         $productsClass -> where = $parameters[0];
-        $productsClass -> delete('id');
+        $productsClass -> update('id');
         Request::redirect(App::config('url'). 'AdminProducts');
     }
 

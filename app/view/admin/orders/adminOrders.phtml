@@ -12,7 +12,6 @@ include APP_PATH . 'view' . DIRECTORY_SEPARATOR . 'admin'. DIRECTORY_SEPARATOR .
                 <th scope="col">Price</th>
                 <th scope="col">Date</th>   
                 <th scope="col">Details</th>  
-                <th scope="col">Delete</th>
                 </tr>
             </thead>
             <tbody>
@@ -25,12 +24,12 @@ include APP_PATH . 'view' . DIRECTORY_SEPARATOR . 'admin'. DIRECTORY_SEPARATOR .
                 <td><?= $key-> amount ?></td>
                 <td><?= $key-> order_date ?></td>
                 <td><a class="btn btn-primary" href="<?= App::config('url')?>AdminOrders/details/<?=$key->id ?>">Details</a></td>
-                <td onclick="return confirm('Do you want to delete the comment')"><a style="color:red" href=""><i title="detele" class="fas fa-2x fa-trash-alt"></i></a></td>
                 </tr>
                 <?php endforeach; ?>
                 <?php endif; ?>
             </tbody>
         </table>
+        <?=Util::Pagination($pagination)?>
         <hr>
     </div>
     </div>
