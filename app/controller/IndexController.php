@@ -293,9 +293,14 @@ class IndexController extends Controller
         return count($result);
     }
     
-    public function contact(array $parameters=[])
+    public function contact()
     {
         $this -> view -> render($this->path.'contact');
+    }
+
+    public function erdiagram()
+    {
+        $this -> view -> render($this->path.'erdiagram');
     }
 
     public function error(array $parameters=[])

@@ -9,4 +9,20 @@ class Categories extends Model
     public $id;
     public $name;
     public $where;//Stavljaš samo kad radiš update/select;
+
+    public static function selectAllCategories()
+    {
+        $connection= DB::getInstance();
+        $sql = 
+        '
+            select 
+            a.id,a.name, count(b.id) as products 
+            from categories a 
+            left join  products b on a.id = b.category
+            group by a.name; 
+        ';
+        $result = $connection -> prepare($sql);
+        $result -> execute();
+        return $result -> fetchAll();
+    }
 }

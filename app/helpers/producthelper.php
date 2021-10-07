@@ -54,6 +54,11 @@ class producthelper{
     public static function photoError($file)
     {
         $Errors= '';
+        $type = explode('/',$file['type']);
+        if(!empty($type[0]) &&  $type[0] != 'image')
+        {
+            $Errors = "File must be image";
+        }
 	    $Upload_error_array = [
 		0 => "There is no error, the file uploaded with success.",
 		1 => "The uploaded file exceeds the upload_max_filesize",
@@ -70,7 +75,32 @@ class producthelper{
 	 		$Errors = $Upload_error_array[$file['error']];
 	 	}
         return $Errors;
-        
+    }
+
+    public static function pdfError($file)
+    {
+        $Errors= '';
+        $type = explode('/',$file['type']);
+        if(!empty($type[1]) && $type[1] != 'pdf')
+        {
+            $Errors = "File must be pdf format";
+        }
+	    $Upload_error_array = [
+		0 => "There is no error, the file uploaded with success.",
+		1 => "The uploaded file exceeds the upload_max_filesize",
+		2 => "The uploaded file exceeds the MAX_FILE_SIZE",
+		3 => "The uploaded file was only partially uploaded.",
+		4 => "No file was uploaded.",
+		6 => "Missing a temporary folder.",
+		7 => "Failed to write file to disk.",
+		8 => "A PHP extension stopped the file upload." ];
+	 	if(empty($file) || !is_array($file) || !$file ){
+	 		$Errors = "There was no file uploaded here";
+		}
+		else if ($file['error'] !=0) {
+	 		$Errors = $Upload_error_array[$file['error']];
+	 	}
+        return $Errors;
     }
 
     public static function floatDiscount($discount){

@@ -19,7 +19,7 @@ class AdminCategoriesController extends AuthorizationController
     public function index()
     {
         $categoriesClass = New Categories;
-        $categories = $categoriesClass -> selectAll();
+        $categories = $categoriesClass -> selectAllCategories();
         $this -> view -> render($this->path.'adminCategories',[
             'categories' => $categories
         ]);

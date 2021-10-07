@@ -103,7 +103,7 @@ class AdminProductsController extends Controller
             $errors['price'] = producthelper::numbersError($price);
             $errors['category'] = producthelper::categoryError($category);
             $errors['content'] = producthelper::basicError($content);
-            $errors['pdf'] = producthelper::photoError($pdf);      
+            $errors['pdf'] = producthelper::pdfError($pdf);      
             $errors['discount'] = producthelper::discountError($discount); 
            
             //Create product
@@ -175,7 +175,7 @@ class AdminProductsController extends Controller
         $errors['price'] = producthelper::numbersError(Request::issetTrim('price'));
         $errors['category'] = producthelper::numbersError(Request::issetTrim('category'));
         $errors['content'] = producthelper::basicError(Request::issetTrim('content'));
-        $errors['pdf'] = producthelper::photoError($pdf);
+        $errors['pdf'] = producthelper::pdfError($pdf);
         $errors['discount']= producthelper::discountError(Request::issetTrim('discount'));
         if(empty($image['name'])){
             unset($errors['image']);
