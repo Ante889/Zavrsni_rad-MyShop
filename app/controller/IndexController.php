@@ -163,7 +163,6 @@ class IndexController extends Controller
 
         if(request::isLogin()){
             $ordersClass = New Orders;
-            $ordersClass -> where = $_SESSION['User'] -> id;
             $products = $ordersClass -> innerSelectLimit(
                 [
                     'orders' => 'id',
@@ -175,10 +174,11 @@ class IndexController extends Controller
                 'orders',
                 [
                     'orders-bought',
-                    'bought-products'
+                    'bought-products',
+                    'orders-users'
                 ],
                 [
-                    'orders.status' => 'success'
+                    'orders.user' => $_SESSION['User'] -> id
                 ],999,0
             );
             $this -> view -> render($this->path.'mybooks',[

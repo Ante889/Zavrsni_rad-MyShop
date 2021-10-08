@@ -2,6 +2,7 @@ DROP database IF EXISTS myshop;
 create database myshop default character set utf8mb4;
 use myshop;
 
+SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
 
 create table products (
 

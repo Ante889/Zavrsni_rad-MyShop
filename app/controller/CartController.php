@@ -61,7 +61,7 @@ class CartController extends AuthorizationController
             Request::redirect(App::config('url').'cart/thankyou');
 
         }else{
-            $_SESSION['thankyou'] = 'thank you for buyng book. Enjoy!';
+            $_SESSION['thankyou'] = 'thank you for buying book. Enjoy!';
             Request::redirect(App::config('url').'index/mybooks');
         }
 
