@@ -119,22 +119,17 @@ class userhelper{
             . bin2hex(random_bytes(10)). '.'
             . bin2hex(random_bytes(10)). '.'
             . bin2hex(random_bytes(10)). '.'
-            . bin2hex(random_bytes(10)).',';
+            . bin2hex(random_bytes(10));
             $UsersClass = new Users;
             $UsersClass -> reset_password_token = $token;
             $UsersClass -> where = $email;
             $UsersClass -> update('email');
 
             //Test //// za sad ide u spam
-
             $to      = $email;
             $subject = 'Reset password'; 
             $message = 'reset password on link '. App::config('url') . 'Login/resetPassword/'. $token;
-            $headers = 'From: Ante-online.com' . "\r\n" .
-                'Reply-To: ante-online' . "\r\n" .
-                'X-Mailer: PHP/' . phpversion();
-
-            mail($to, $subject, $message, $headers);
+            mailerhelper::sendmail($to,$subject,$subject,$message);
             return 'Please check email';
 
         }else{

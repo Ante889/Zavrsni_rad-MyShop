@@ -90,6 +90,7 @@ class LoginController extends Controller
                 $UsersClass -> email = strtolower($email);
                 $UsersClass -> register_time = time();
                 $UsersClass -> role = 'user';
+                $UsersClass -> confirm_email_token = 
                 $UsersClass -> Create();
                 $SuccessMsg= $name. ' your account has been successfully created';
             }
@@ -146,7 +147,7 @@ class LoginController extends Controller
         $SuccessMsg='';
         $errors='';
         $protection = explode(".",$parameters[0]);
-        if(isset($parameters[0]) && strlen($parameters[0]) == 105 && count($protection) ==5){
+        if(isset($parameters[0]) && strlen($parameters[0]) == 104 && count($protection) ==5){
             if(isset($_POST['submit'])){
                 $password = Request::issetTrim('password');
                 $confirmPassword = Request::issetTrim('confirmPassword');
@@ -158,9 +159,11 @@ class LoginController extends Controller
                 $UsersClass -> reset_password_token = 'empty';
                 $UsersClass -> where = trim($parameters[0]);
                 $UsersClass -> update('reset_password_token');
-                $SuccessMsg='Password updated. Login now';
+                Request::redirect(App::config('url').'login');        
             }else{
-                $errors= "Token dose not exists";
+                if(empty($errors)){
+                    $errors= "Token dose not exists";
+                }      
             }
         }
         }else{

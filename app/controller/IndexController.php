@@ -295,6 +295,13 @@ class IndexController extends Controller
     
     public function contact()
     {
+
+        if($_POST)
+        {
+            mailerhelper::sendMail('Ante.filipovic72@gmail.com',$_POST['email'],$_POST['name'],$_POST['message']);
+            Request::redirect(App::config('url').'index/contact');
+        }
+
         $this -> view -> render($this->path.'contact');
     }
 

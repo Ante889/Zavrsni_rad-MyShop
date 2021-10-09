@@ -10,7 +10,7 @@ require_once 'phpmailer/SMTP.php';
 
 class mailerhelper
 {
-    public function sendMail($email, $title, $subject, $msg)
+    public static function sendMail($email, $title, $subject, $msg)
     {
         $mail = new PHPMailer(true);
 
