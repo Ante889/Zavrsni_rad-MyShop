@@ -86,7 +86,7 @@ class AdminOrdersController extends Controller
             'products1' => 'title',
             'products2' => 'author',
             'products3' => 'image',
-            'products4' => 'price',
+            'bought' => 'price',
             'orders4' => 'amount',
             'orders5' => 'transaction_id',
             ],

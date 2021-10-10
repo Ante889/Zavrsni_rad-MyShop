@@ -59,6 +59,29 @@ class CartController extends AuthorizationController
             $ordersController = new AdminOrdersController;
             $ordersController -> create($status,$transaction,$amount); 
             Request::redirect(App::config('url').'cart/thankyou');
+            $order = userhelper::shortSelect('Orders','transaction_id',$transaction);
+            $orderClass = New Orders;
+            $orderInner =  $orderClass -> innerSelectLimit([
+                'orders1' => 'id',
+                'products1' => 'title',
+                'products2' => 'author',
+                'products3' => 'image',
+                'bought' => 'price',
+                'orders4' => 'amount',
+                'orders5' => 'transaction_id',
+                ],
+                'products',
+                [
+                'products-bought',
+                'bought-orders',
+                'orders-users'
+                ],
+                [
+                'bought.orders' => $order->id
+                ],999,0
+            );
+            $msg = Util::ordersList($orderInner);
+            mailerhelper::sendMail($_SESSION['User']->email,'Transaction: '.'Transaction: '.$transaction,$transaction,$msg);
 
         }else{
             $_SESSION['thankyou'] = 'thank you for buying book. Enjoy!';

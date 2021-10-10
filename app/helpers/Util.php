@@ -57,5 +57,35 @@ class Util
                 echo "no rating";
             }
     }
+    public static function ordersList($orderInner)
+    {
+        ?>
+        <h3 style ="color:green">Transaction -<?= $orderInner[0] -> transaction_id;?></h3>
+    <br>
+    <!-- Shopping Cart-->
+    <div class="table-responsive shopping-cart">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th class="text-center">Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($orderInner as $key):?>
+                    <td>
+                        <div class="product-item">
+                            <a class="product-thumb" href="#"><img src="<?= App::config('url');?>/public/images/<?=$key->image?>" alt="Product"></a>
+                            <div class="product-info">
+                                <h4 class="product-title"><a href="<?= App::config('url');?>index/productpage/<?=$key->id ?>"><?= $key->title?></a></h4><span><em>Author:</em> <?= $key->author ?></span>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="text-center text-lg text-medium">$<?= $key->price?></td>
+                </tr>
+                <?php endforeach ?>
+            </tbody>
+        </table>
+    <?php }
 }
 ?>
