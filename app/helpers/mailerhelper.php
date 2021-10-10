@@ -23,7 +23,7 @@ class mailerhelper
         $mail->Port = 587;
 
         $mail->Username ='ante.online72@gmail.com';  // YOUR gmail email
-        $mail->Password ='Antefilipovic1';  // YOUR gmail password
+        $mail->Password ='';  // YOUR gmail password
 
         // Sender and recipient settings
         $mail->setFrom($email, $title);
