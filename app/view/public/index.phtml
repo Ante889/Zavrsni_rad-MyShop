@@ -1,3 +1,7 @@
+<?php if(isset($_SESSION['confirmMsg'])):?>
+  <h3 style="color:green"><?=$_SESSION['confirmMsg'];?></h3>
+<?php endif;?>
+
 <?php if(!isset($_SERVER['REDIRECT_PATH_INFO'])): ?>
 <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
   <ol class="carousel-indicators">

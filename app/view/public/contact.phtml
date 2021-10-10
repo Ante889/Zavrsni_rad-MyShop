@@ -21,6 +21,9 @@
                             <textarea class="form-control" id="message" name="message" rows="6" required></textarea>
                         </div>
                         <div class="mx-auto">
+                        <?php if(isset($msg)) :?>
+                            <h3><?php echo $msg?></h3>
+                        <?php endif;?>
                         <input type="submit" class="btn btn-primary text-right" value="Send"></div>
                     </form>
                 </div>

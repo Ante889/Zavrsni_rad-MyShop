@@ -7,7 +7,6 @@ class IndexController extends Controller
     private $path = 'public'. DIRECTORY_SEPARATOR ;
     private $error ="";
 
-
     public function index(array $parameters=[])
     {   
         $limit = 6;
@@ -85,6 +84,7 @@ class IndexController extends Controller
                 'page' => $page
             ]
         ]);
+        unset($_SESSION['confirmMsg']);
     }
 
     public function productpage(array $parameters=[])
@@ -295,14 +295,41 @@ class IndexController extends Controller
     
     public function contact()
     {
-
+        $msg = '';
+        if(isset($_SESSION['contactMsg'])){
+            $msg = $_SESSION['contactMsg'];
+            unset($_SESSION['contactMsg']);
+        }
         if($_POST)
         {
-            mailerhelper::sendMail('Ante.filipovic72@gmail.com',$_POST['email'],$_POST['name'],$_POST['message']);
+            if(mailerhelper::sendMail('Ante.filipovic72@gmail.com',$_POST['email'],$_POST['name'],$_POST['message']))
+            {
+                $msg=$_SESSION['contactMsg'] = 'Message sent';
+            }else
+            {
+                $msg=$_SESSION['contactMsg'] = 'The message cannot be sent';
+            }
             Request::redirect(App::config('url').'index/contact');
+            
         }
 
-        $this -> view -> render($this->path.'contact');
+        $this -> view -> render($this->path.'contact',[
+            'msg' => $msg
+        ]);
+    }
+
+    public function confirm($parameters= [])
+    {   $user = userhelper::shortSelect('Users','confirm_email_token',$parameters[0]);
+        if(!empty($user)){
+            $usersClass = new Users;
+            $usersClass -> confirm_email_token = 'confirmed';
+            $usersClass -> where = $parameters[0];
+            $usersClass-> update('confirm_email_token');
+            $_SESSION['confirmMsg'] = 'Your email is confirmed';
+        }else{
+            Request::redirect(App::config('url').'index');
+        }
+        Request::redirect(App::config('url').'index');
     }
 
     public function erdiagram()

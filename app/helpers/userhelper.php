@@ -92,7 +92,7 @@ class userhelper{
         $UsersClass=new Users;
         $UsersClass -> rememberme_token =password_hash($token, PASSWORD_BCRYPT, ['cost' => 12]);
         $UsersClass -> where = $email;
-        $UsersClass -> Update('email');
+        $UsersClass -> update('email');
 
     }
 

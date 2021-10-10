@@ -23,7 +23,7 @@ class mailerhelper
         $mail->Port = 587;
 
         $mail->Username ='ante.online72@gmail.com';  // YOUR gmail email
-        $mail->Password ='';  // YOUR gmail password
+        $mail->Password ='Antefilipovic1';  // YOUR gmail password
 
         // Sender and recipient settings
         $mail->setFrom($email, $title);
@@ -37,9 +37,10 @@ class mailerhelper
         //$mail->AltBody = 'Plain text message body for non-HTML email client. Gmail SMTP email body.';
 
         $mail->send();
+        return true;
 
     } catch (Exception $e) {
-        echo "Error";
+        return false;
     }
     }
 }

@@ -38,15 +38,34 @@ class LoginController extends Controller
                 $UsersClass -> where = $email;
                 $result = $UsersClass -> select('email')[0];
                 unset($result -> password);
-                unset($result -> confirm_email_token);
                 unset($result -> reset_password_token);
                 unset($result -> rememberme_token);
                 $_SESSION['User'] = $result;
                 $_SESSION['Cart'] = [];
-                Request::redirect(App::config('url'));
-                return;
+                if($_SESSION['User'] -> confirm_email_token !== 'confirmed')
+                {
+                    unset($_SESSION['User']);
+                    unset($_SESSION['Cart']);
+                    session_destroy();
+                    $this -> view -> render('login/login',[
+                        'errors' => [
+                            'email' => '',
+                            'password' => '',
+                            'alert' => 'Please confirm your email'],
+                        'returnField' => [
+                            'email' => '',
+                            'password' => '']
+                    ]);
+                    return;
+                }else
+                {
+                    Request::redirect(App::config('url'));
+                    return;
+                }
+                
             }
         }
+        
 
         $this -> view -> render($this->path . '/login',[
             'errors' => $errors,
@@ -83,6 +102,7 @@ class LoginController extends Controller
             //Create user
     
             if(empty($errors['name']) && empty($errors['lastname']) && empty($errors['email']) && empty($errors['password'])){
+                $token =bin2hex(random_bytes(20));
                 $UsersClass = new Users;
                 $UsersClass -> name = $name;
                 $UsersClass -> lastname = $lastname;
@@ -90,9 +110,10 @@ class LoginController extends Controller
                 $UsersClass -> email = strtolower($email);
                 $UsersClass -> register_time = time();
                 $UsersClass -> role = 'user';
-                $UsersClass -> confirm_email_token = 
+                $UsersClass -> confirm_email_token = $token;
                 $UsersClass -> Create();
-                $SuccessMsg= $name. ' your account has been successfully created';
+                $SuccessMsg= 'Your account has been successfully created. <br> We sent you email to confirm your email';
+                mailerhelper::sendMail(strtolower($email),'Confirm email','Confirm email','Click on link : '.App::config('url').'index/confirm/'.$token);
             }
         }
     
