@@ -58,7 +58,6 @@ class CartController extends AuthorizationController
             $status = $_GET['st'];
             $ordersController = new AdminOrdersController;
             $ordersController -> create($status,$transaction,$amount); 
-            Request::redirect(App::config('url').'cart/thankyou');
             $order = userhelper::shortSelect('Orders','transaction_id',$transaction);
             $orderClass = New Orders;
             $orderInner =  $orderClass -> innerSelectLimit([
@@ -81,8 +80,8 @@ class CartController extends AuthorizationController
                 ],999,0
             );
             $msg = Util::ordersList($orderInner);
-            mailerhelper::sendMail($_SESSION['User']->email,'Transaction: '.'Transaction: '.$transaction,$transaction,$msg);
-
+            mailerhelper::sendMail($_SESSION['User']->email,'Transaction: '.$transaction,'Transaction: '.$transaction,$msg);
+            Request::redirect(App::config('url').'cart/thankyou');
         }else{
             $_SESSION['thankyou'] = 'thank you for buying book. Enjoy!';
             Request::redirect(App::config('url').'index/mybooks');

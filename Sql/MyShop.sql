@@ -60,7 +60,7 @@ create table comments(
 	product int,
 	comment text,
 	comment_date date,
-	approved bit
+	approved varchar(100)
 
 );
 
@@ -102,6 +102,10 @@ alter table comments add foreign key (user) references users(id) ON DELETE CASCA
 alter table rating add foreign key (product) references products(id);
 alter table rating add foreign key (user) references users(id) ON DELETE SET DEFAULT;
 
+select 
+b.price, a.title
+from bought b 
+left join products a on b.product = a.id;
 
 
 

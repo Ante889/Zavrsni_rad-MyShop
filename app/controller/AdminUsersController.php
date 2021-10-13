@@ -19,7 +19,7 @@ class AdminUsersController extends Controller
         $limit =10;
         $offset = 0;
 
-        if(!empty($_GET['page'])){
+        if(!empty($_GET['page']) && $_GET['page'] >0){
             $offset = ($limit * $_GET['page']) - $limit;
             $page = $_GET['page'];
         }else{

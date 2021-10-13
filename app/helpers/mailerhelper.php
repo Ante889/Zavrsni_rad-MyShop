@@ -10,7 +10,7 @@ require_once 'phpmailer/SMTP.php';
 
 class mailerhelper
 {
-    public static function sendMail($email, $title, $subject, $msg)
+    public static function sendMail($email, $title, $subject, $msg,$altBody ='')
     {
         $mail = new PHPMailer(true);
 
@@ -34,7 +34,7 @@ class mailerhelper
         $mail->IsHTML(true);
         $mail->Subject = $subject;
         $mail->Body = $msg;
-        //$mail->AltBody = 'Plain text message body for non-HTML email client. Gmail SMTP email body.';
+        $mail -> isHTML(true);
 
         $mail->send();
         return true;

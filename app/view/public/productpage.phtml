@@ -31,7 +31,11 @@
         <?php endif?>
         <h4>Rating</h4>
         <p><?= $rating . '('. $countrating .')' ?></p>
-        <a href="<?= App::config('url');?>Cart/addProductToCart/<?= $product-> id ?>" class="btn btn-primary btn-lg btn-block">Put into cart </a>
+        <?php if(in_array($product->id,(array)$purchased)): ?>
+          <a class="btn btn-success btn-lg btn-block">Purchased </a>
+            <?php else:?>
+              <a href="<?= App::config('url');?>Cart/addProductToCart/<?= $product-> id ?>" class="btn btn-primary btn-lg btn-block">Put into cart </a>
+              <?php endif ?>
     </div>
   </div><br><br>
   <h2 class="text-center">About product</h2>
@@ -51,7 +55,11 @@
 				      <p>
               <?= $key->comment ?>
 				      </p>
-				  </div>
+              <?php if(in_array($key->id,$myComments)): ?>
+              <a class="btn btn-danger" href="<?= App::config('url')?>index/productpage/<?= $product-> id ?>?deleteComment=<?=$key->id ?>">Delete</a>
+              <?php endif ?>
+            </div>
+          
 				</li>
         <?php endforeach ?>
         <?=Util::Pagination($pagination)?>

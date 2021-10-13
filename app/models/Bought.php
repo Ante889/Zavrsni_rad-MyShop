@@ -1,7 +1,7 @@
 <?php
 
 
-class Orders extends Model
+class Bought extends Model
 {
 
     protected static $db_parameters = (['orders','product','price','where']);
@@ -10,5 +10,24 @@ class Orders extends Model
     public $product;
     public $price;
     public $where;//Stavljaš samo kad radiš update/select;
+
+
+
+    public static function selectAllPrices()
+    {
+
+        $connection= DB::getInstance();
+        $sql = 
+        '
+            select 
+            b.price,a.title
+            from bought b 
+            left join products a on b.product = a.id;
+        ';
+        $result = $connection -> prepare($sql);
+        $result -> execute();
+        return $result -> fetchAll();
+
+    }
 
 }

@@ -17,9 +17,9 @@ class IndexController extends Controller
         $Categories = $categoriesClass -> selectAll();
         $ProductsClass = new Products;
         $displayCategory=null;
-
+        
         //Ako je postavljena stranice postavi limit
-        if(!empty($_GET['page'])){
+        if(!empty($_GET['page']) && $_GET['page'] >0){
             $offset = ($limit * $_GET['page']) - $limit;
             $page = $_GET['page'];
         }else{
@@ -71,6 +71,7 @@ class IndexController extends Controller
         $visible = $slideshowClass -> select('visible'); 
 
         $this -> view -> render($this->path.'index',[
+            'purchased' =>  $this -> buyedProducts(),
             'ProductsInCategory' => $ProductsInCategory,
             'categories' => $Categories,
             'products' => $Product,
@@ -89,8 +90,11 @@ class IndexController extends Controller
 
     public function productpage(array $parameters=[])
     {
-        if(!empty($_GET['page'])){
+        $limit = 6;
+        $offset = 0;
+        if(!empty($_GET['page']) && $_GET['page'] >0){
             $page = $_GET['page'];
+            $offset = ($limit * $_GET['page']) - $limit;
         }else{
             $page = 1;
         }
@@ -99,6 +103,12 @@ class IndexController extends Controller
         $commentsClass = count($commentsClass -> select('product'));
         $pathForPager = 'index/productpage/'.$parameters[0].'?page=';
 
+        if(isset($_GET['deleteComment']))
+        {
+            $this -> deleteComment();
+            Request::redirect(App::config('url').'index/productpage/'.$parameters[0]);
+        }
+        
         if(isset($_POST['submit']))
         {
             $this->insertComment($parameters[0]);
@@ -114,8 +124,28 @@ class IndexController extends Controller
             Request::redirect(App::config('url'));
             return;
         }
+        if(isset($_SESSION['User']->id)){
+            $commentClass = New Comments;
+            $myComments = $commentClass -> innerSelectLimit(
+                [
+                    'comments' => 'id'
+                ],
+                'comments',
+                [
+                    'comments-user'
+                ],
+                [
+                    'comments.user' => $_SESSION['User'] -> id
+                ],999,0
+            );
+            for ($i=0; $i < count($myComments) ; $i++) { 
+                $myComments[$i] = $myComments[$i]->id; 
+            }
+        }
 
         $this -> view -> render($this->path.'productpage',[
+            'myComments' => $myComments,
+            'purchased' =>  $this -> buyedProducts(),
             'checkrating' => $this-> checkRating($parameters[0]),
             'countrating' => $this-> countRating($parameters[0]),
             'rating' => $this-> getRating($parameters[0]),
@@ -199,9 +229,23 @@ class IndexController extends Controller
         $commentsClass -> user = trim($_SESSION['User'] -> id);
         $commentsClass -> product = trim($parameters);
         $commentsClass -> comment = trim($_POST['content']);
-        $commentsClass -> comment_date= date("d-m-y"); 
+        $commentsClass -> comment_date= date("Ymd"); 
         $commentsClass -> approved = 1;
         $commentsClass -> create();
+        Request::redirect(App::config('url').'index/productpage/'.$parameters);
+        }
+    }
+
+    public function deleteComment()
+    {
+        if(!empty($_SESSION['User'])){
+            $search = userhelper::shortSelect('Comments','id',$_GET['deleteComment']);
+            if($search->user == $_SESSION['User']->id)
+            {
+                $commentsClass= new Comments;
+                $commentsClass -> where = $_GET['deleteComment'];
+                $commentsClass -> delete('id');
+            }
         }
     }
 
@@ -342,4 +386,28 @@ class IndexController extends Controller
         $this -> view -> render($this->path.'error');
     }
 
+    public function buyedProducts(array $parameters=[])
+    {
+        $purchased=[];
+        if(isset($_SESSION['User']->id)){
+            $ordersClass = New Orders;
+            $purchased = $ordersClass -> innerSelectLimit(
+                [
+                    'products' => 'id'
+                ],
+                'orders',
+                [
+                    'orders-bought',
+                    'bought-products'
+                ],
+                [
+                    'orders.user' => $_SESSION['User'] -> id
+                ],999,0
+            );
+            for ($i=0; $i < count($purchased) ; $i++) { 
+                $purchased[$i] = $purchased[$i]->id; 
+            }
+            return $purchased;
+    }
+}
 }

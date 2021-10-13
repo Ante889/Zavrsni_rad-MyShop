@@ -71,7 +71,12 @@
                                 <p class="card-text text-center"> Rating: <?=Util::stars($product->rating,'')?></p>
 
                             </div>
-                            <a href="<?=App::config('url')?>Index/productpage/<?= $product->id ?>" class="btn btn-primary btn-lg btn-block">Buy</a>
+                            <?php if(in_array($product->id,(array)$purchased)): ?>
+                              <a href="<?=App::config('url')?>Index/productpage/<?= $product->id ?>" class="btn btn-success btn-lg btn-block">Purchased</a>
+                              <?php else:?>
+                                <a href="<?=App::config('url')?>Index/productpage/<?= $product->id ?>" class="btn btn-primary btn-lg btn-block">Buy</a>
+                                <?php endif ?>
+                            
                         </div>
                     </div>
 

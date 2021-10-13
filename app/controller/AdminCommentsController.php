@@ -20,7 +20,7 @@ class AdminCommentsController extends Controller
         $offset = 0;
         $whereKey ='comments.approved';
 
-        if(!empty($_GET['page'])){
+        if(!empty($_GET['page'])&& $_GET['page'] >0){
             $offset = ($limit * $_GET['page']) - $limit;
             $page = $_GET['page'];
         }else{
