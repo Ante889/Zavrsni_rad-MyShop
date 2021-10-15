@@ -1,7 +1,7 @@
 <?php 
 
 
-class AdminOrdersController extends Controller
+class AdminOrdersController extends AuthorizationController
 {
     private $path = 'admin'. DIRECTORY_SEPARATOR . 'orders'. DIRECTORY_SEPARATOR ;
 

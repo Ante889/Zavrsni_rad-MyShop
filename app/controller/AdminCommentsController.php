@@ -1,7 +1,7 @@
 <?php 
 
 
-class AdminCommentsController extends Controller
+class AdminCommentsController extends AuthorizationController
 {
     private $path = 'admin'. DIRECTORY_SEPARATOR . 'comments'. DIRECTORY_SEPARATOR ;
 

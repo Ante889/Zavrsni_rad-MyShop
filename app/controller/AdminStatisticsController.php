@@ -1,6 +1,6 @@
 <?php
 
-class AdminStatisticsController extends Controller
+class AdminStatisticsController extends AuthorizationController
 {
     private $path = 'admin'. DIRECTORY_SEPARATOR ;
 
@@ -27,13 +27,16 @@ class AdminStatisticsController extends Controller
                     }
                     
             }
-            $productNames =explode(' ',$productNames);
-            for ($i=0; $i < count($productsPrice) ; $i++) { 
-                $productTotalprice[$i] = [
-                    'label' => $productNames[$i],
-                    'y' => $productsPrice[$productNames[$i]]
-                ];
+            if(!empty($productsPrice)){
+                $productNames =explode(' ',$productNames);
+                for ($i=0; $i < count($productsPrice) ; $i++) { 
+                    $productTotalprice[$i] = [
+                        'label' => $productNames[$i],
+                        'y' => $productsPrice[$productNames[$i]]
+                    ];
+                }
             }
+            
 
         $this -> view -> render($this->path.'statistics',[
             'productTotalprice' => $productTotalprice

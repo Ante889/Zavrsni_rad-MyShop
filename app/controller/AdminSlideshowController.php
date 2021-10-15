@@ -1,7 +1,7 @@
 <?php 
 
 
-class AdminSlideshowController extends Controller
+class AdminSlideshowController extends AuthorizationController
 {
     private $path = 'admin'. DIRECTORY_SEPARATOR . 'slideshow'. DIRECTORY_SEPARATOR ;
 
