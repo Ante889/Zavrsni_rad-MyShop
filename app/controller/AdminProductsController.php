@@ -29,7 +29,7 @@ class AdminProductsController extends AuthorizationController
             }
         }
 
-        if(!empty($_GET['page']) && $_GET['page'] >0 && is_int($_GET['page'])){
+        if(!empty($_GET['page']) && $_GET['page'] >0 && is_numeric($_GET['page'])){
             $offset = ($limit * $_GET['page']) - $limit;
             $page = $_GET['page'];
         }else{

@@ -18,7 +18,7 @@ class AdminOrdersController extends AuthorizationController
     {
         $limit = 10;
         $offset = 0;
-        if(!empty($_GET['page'])&& $_GET['page'] >0 && is_int($_GET['page']) ){
+        if(!empty($_GET['page'])&& $_GET['page'] >0 && is_numeric($_GET['page']) ){
             $offset = ($limit * $_GET['page']) - $limit;
             $page = $_GET['page'];
         }else{
@@ -68,7 +68,7 @@ class AdminOrdersController extends AuthorizationController
                 'status' => 'success',
                 'amount' => $amount,
                 'transaction_id' => '16519814196896',
-                'order_date' => date('d.m.y'),
+                'order_date' => date("Ymd"),
                 'user' => $_SESSION['User']->id
             ]) 
         ){

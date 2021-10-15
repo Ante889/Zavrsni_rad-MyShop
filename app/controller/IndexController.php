@@ -19,7 +19,7 @@ class IndexController extends Controller
         $displayCategory=null;
         
         //Ako je postavljena stranice postavi limit
-        if(!empty($_GET['page']) && $_GET['page'] >0 && is_int($_GET['page'])){
+        if(!empty($_GET['page']) && $_GET['page'] >0 && is_numeric($_GET['page'])){
             $offset = ($limit * $_GET['page']) - $limit;
             $page = $_GET['page'];
         }else{
@@ -92,7 +92,7 @@ class IndexController extends Controller
     {
         $limit = 6;
         $offset = 0;
-        if(!empty($_GET['page']) && $_GET['page'] >0 && is_int($_GET['page'])){
+        if(!empty($_GET['page']) && $_GET['page'] >0 && is_numeric($_GET['page'])){
             $page = $_GET['page'];
             $offset = ($limit * $_GET['page']) - $limit;
         }else{
@@ -141,6 +141,9 @@ class IndexController extends Controller
             for ($i=0; $i < count($myComments) ; $i++) { 
                 $myComments[$i] = $myComments[$i]->id; 
             }
+        }else
+        {
+            $myComments=[];
         }
 
         $this -> view -> render($this->path.'productpage',[
@@ -253,7 +256,7 @@ class IndexController extends Controller
     {
         $limit = 10;
         $offset = 0;
-        if(!empty($_GET['page']) && $_GET['page'] >0 && is_int($_GET['page'])){
+        if(!empty($_GET['page']) && $_GET['page'] >0 && is_numeric($_GET['page'])){
             $page = $_GET['page'];
             $offset = ($limit * $_GET['page']) - $limit;
         }else{

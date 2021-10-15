@@ -19,7 +19,7 @@ class AdminUsersController extends AuthorizationController
         $limit =10;
         $offset = 0;
 
-        if(!empty($_GET['page']) && $_GET['page'] >0 && is_int($_GET['page'])){
+        if(!empty($_GET['page']) && $_GET['page'] >0 && is_numeric($_GET['page'])){
             $offset = ($limit * $_GET['page']) - $limit;
             $page = $_GET['page'];
         }else{
@@ -83,6 +83,7 @@ class AdminUsersController extends AuthorizationController
                 $UsersClass -> email = strtolower($email);
                 $UsersClass -> register_time = time();
                 $UsersClass -> role = $role;
+                $UsersClass -> confirm_email_token = 'confirmed';
                 $UsersClass -> Create();
                 $SuccessMsg= 'Account has been successfully created';
             }
@@ -160,12 +161,12 @@ class AdminUsersController extends AuthorizationController
 
     public function deleteUsers(array $parameters=[])
     {
-        $usersClass = New Comments;
-        $usersClass -> where = $parameters[0];
-        $usersClass -> delete('user');
-        $usersClass = New Ratings;
-        $usersClass -> where = $parameters[0];
-        $usersClass -> delete('user');
+        $commentClass = New Comments;
+        $commentClass -> where = $parameters[0];
+        $commentClass -> delete('user');
+        $ratingClass = New Ratings;
+        $ratingClass -> where = $parameters[0];
+        $ratingClass -> delete('user');
         $usersClass = New Users;
         $usersClass -> where = $parameters[0];
         $usersClass -> delete('id');

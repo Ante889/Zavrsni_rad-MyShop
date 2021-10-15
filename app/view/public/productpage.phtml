@@ -64,9 +64,10 @@
         <?php endforeach ?>
         <?=Util::Pagination($pagination)?>
         <br>
-        
+        <?php if(request::isLogin()):?>
         <li class="clearfix">
             <div class="post-comments">
+            
                 <form action="<?=App::config('url')?>Index/productpage/<?= $product->id ?>" method="POST">
                     <div class="form-group">
                         <input type="text" class="form-control" name="content">
@@ -76,8 +77,10 @@
                     </div>
                     <?php if(isset($commentError)): ?>
                       <h5 style='color:red'><?= $commentError?></h5>
-                    <?php endif ?>
+                    
                 </form>
+                <?php endif;?>
+                <?php endif ?>
             </div>
         </li>
 				</ul>

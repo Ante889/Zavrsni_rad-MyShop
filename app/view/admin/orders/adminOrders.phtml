@@ -21,7 +21,7 @@ include APP_PATH . 'view' . DIRECTORY_SEPARATOR . 'admin'. DIRECTORY_SEPARATOR .
                 <td><?= $key-> name ?></td>
                 <td><a href="<?= App::config('url')?>index/productpage/<?=$key->product ?>"><?= $key -> status ?></a></td>
                 <td><?= $key-> transaction_id ?></td>
-                <td><?= $key-> amount ?></td>
+                <td>$<?= $key-> amount ?></td>
                 <td><?= $key-> order_date ?></td>
                 <td><a class="btn btn-primary" href="<?= App::config('url')?>AdminOrders/details/<?=$key->id ?>">Details</a></td>
                 </tr>
