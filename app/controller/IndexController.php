@@ -19,7 +19,7 @@ class IndexController extends Controller
         $displayCategory=null;
         
         //Ako je postavljena stranice postavi limit
-        if(!empty($_GET['page']) && $_GET['page'] >0){
+        if(!empty($_GET['page']) && $_GET['page'] >0 && is_int($_GET['page'])){
             $offset = ($limit * $_GET['page']) - $limit;
             $page = $_GET['page'];
         }else{
@@ -92,7 +92,7 @@ class IndexController extends Controller
     {
         $limit = 6;
         $offset = 0;
-        if(!empty($_GET['page']) && $_GET['page'] >0){
+        if(!empty($_GET['page']) && $_GET['page'] >0 && is_int($_GET['page'])){
             $page = $_GET['page'];
             $offset = ($limit * $_GET['page']) - $limit;
         }else{
@@ -251,10 +251,13 @@ class IndexController extends Controller
 
     public function getComments($id)
     {
-        $limit= 10;
+        $limit = 10;
         $offset = 0;
-        if(!empty($_GET['page'])){
-            $offset = (10 * $_GET['page']) - 10;
+        if(!empty($_GET['page']) && $_GET['page'] >0 && is_int($_GET['page'])){
+            $page = $_GET['page'];
+            $offset = ($limit * $_GET['page']) - $limit;
+        }else{
+            $page = 1;
         }
         $commentsClass = new Comments;
         $commentsInner =  $commentsClass -> innerSelectLimit([

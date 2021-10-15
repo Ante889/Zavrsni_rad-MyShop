@@ -8,6 +8,9 @@
 <div class="container">
 <div style="height: 600px;" class="overflow-auto container-fluid">
     <div class="row">
+        <?php if(empty($products)):?>
+           <h4 class="text-center"><br><?='You currently have no books purchased';?></h4> 
+        <?php endif; ?>
         <?php foreach($products as $product): ?>
         <div class="col-md-4 mt-5">  
             <div class="card" style="width: 14rem;">

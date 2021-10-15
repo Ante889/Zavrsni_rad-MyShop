@@ -19,7 +19,7 @@ class AdminUsersController extends AuthorizationController
         $limit =10;
         $offset = 0;
 
-        if(!empty($_GET['page']) && $_GET['page'] >0){
+        if(!empty($_GET['page']) && $_GET['page'] >0 && is_int($_GET['page'])){
             $offset = ($limit * $_GET['page']) - $limit;
             $page = $_GET['page'];
         }else{
@@ -30,14 +30,14 @@ class AdminUsersController extends AuthorizationController
         if(isset($_POST['submit']) && !empty($_POST['email']))
         {
             $ProductsNumber = count($usersClass -> selectAllLike("%".trim($_POST['email'])."%",'email'));
-            $users= $usersClass -> selectAllLikeLimit("%".trim($_POST['email'])."%",'email',$limit,$offset);
+            $users= Users::readLikeLimit(trim($_POST['email']),$limit,$offset);
             $pathForPager = 'AdminUsers/search='. $_POST['email'].'?page=';
         }else
         {
             $ProductsNumber = count($usersClass -> selectAll());
-            $users = $usersClass -> selectAllLimit($limit,$offset);
+            $users = Users::readLimit($limit,$offset);
             $pathForPager = 'AdminUsers?page=';
-        }  
+        }
         $this -> view -> render($this->path.'adminUsers',[
             'users' => $users,
             'pagination' =>[
@@ -160,6 +160,12 @@ class AdminUsersController extends AuthorizationController
 
     public function deleteUsers(array $parameters=[])
     {
+        $usersClass = New Comments;
+        $usersClass -> where = $parameters[0];
+        $usersClass -> delete('user');
+        $usersClass = New Ratings;
+        $usersClass -> where = $parameters[0];
+        $usersClass -> delete('user');
         $usersClass = New Users;
         $usersClass -> where = $parameters[0];
         $usersClass -> delete('id');

@@ -28,7 +28,7 @@ create table users (
 	password char (60) not null,
 	role varchar(50) not null,
 	email varchar(100),
-	register_time varchar(50) NOT NULL,
+	register_time varchar(50) ,
 	confirm_email_token varchar(255),
 	reset_password_token varchar(255),
 	rememberme_token varchar(255)
@@ -94,18 +94,11 @@ alter table bought add foreign key (orders) references orders(id);
 alter table bought add foreign key (product) references products(id);
 
 alter table products add foreign key (category) references categories(id);
-alter table orders add foreign key (user) references users(id) ON DELETE SET DEFAULT;
+alter table orders add foreign key (user) references users(id);
 
 alter table comments add foreign key (product) references products(id);
 alter table comments add foreign key (user) references users(id) ON DELETE CASCADE;
 
 alter table rating add foreign key (product) references products(id);
-alter table rating add foreign key (user) references users(id) ON DELETE SET DEFAULT;
-
-select 
-b.price, a.title
-from bought b 
-left join products a on b.product = a.id;
-
-
+alter table rating add foreign key (user) references users(id) ON DELETE CASCADE;
 
