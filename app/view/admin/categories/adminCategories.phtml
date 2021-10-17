@@ -49,7 +49,7 @@ include APP_PATH . 'view' . DIRECTORY_SEPARATOR . 'admin'. DIRECTORY_SEPARATOR .
                 <?php foreach ($categories as $key): ?>
                 <tr>
                 <td><?php echo $key-> name ?></td>
-                <?php if($key -> products != 0 ):?>
+                <?php if(isset($key->products) && $key -> products != 0 ):?>
                 <td><i style="color:grey" title="This category has products" class="fas fa-2x fa-trash-alt"></i></td>
                 <?php else:?>
                     <td onclick="return confirm('Do you want to delete the category')"><a style="color:red"  href="<?= App::config('url');?>AdminCategories/deleteCategories/<?= $key->id ?>"><i title="delete" class="fas fa-2x fa-trash-alt"></i></a></td>

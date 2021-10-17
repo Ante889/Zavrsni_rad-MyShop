@@ -19,9 +19,9 @@ include APP_PATH . 'view' . DIRECTORY_SEPARATOR . 'admin'. DIRECTORY_SEPARATOR .
                 <?php foreach ($orderInner as $key):?>
                     <td>
                         <div class="product-item">
-                            <a class="product-thumb" href="#"><img src="<?= App::config('url');?>/public/images/<?=$key->image?>" alt="Product"></a>
+                            <a class="product-thumb" href="<?= App::config('url');?>index/productpage/<?=$key->id?>"><img src="<?= App::config('url');?>/public/images/<?=$key->image?>" alt="Product"></a>
                             <div class="product-info">
-                                <h4 class="product-title"><a href="<?= App::config('url');?>index/productpage/<?=$key->id ?>"><?= $key->title?></a></h4><span><em>Author:</em> <?= $key->author ?></span>
+                                <h4 class="product-title"><a href="<?= App::config('url');?>index/productpage/<?=$key->id?>"><?= $key->title?></a></h4><span><em>Author:</em> <?= $key->author ?></span>
                             </div>
                         </div>
                     </td>

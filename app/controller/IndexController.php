@@ -25,7 +25,12 @@ class IndexController extends Controller
         }else{
             $page = 1;
         }
-
+        $productCount= ceil(count($ProductsClass -> selectAll()) / $limit);
+        if(!empty($_GET['page']) && $_GET['page'] > $productCount)
+        {
+            $offset = $limit * $productCount - $limit;
+            $page = $productCount;
+        }
         // Prikaži kategorije
         foreach($Categories as $key){
             if(isset($parameters[0]) && $key -> id === $parameters[0]){
@@ -97,6 +102,12 @@ class IndexController extends Controller
             $offset = ($limit * $_GET['page']) - $limit;
         }else{
             $page = 1;
+        }
+        $CommentCount= ceil(count((array)userhelper::shortSelect('Comments','product',$parameters[0])) / $limit);
+        if(!empty($_GET['page']) && $_GET['page'] > $CommentCount)
+        {
+            $offset = $limit * $CommentCount - $limit;
+            $page = $CommentCount;
         }
         $commentsClass= new Comments;
         $commentsClass->where = $parameters[0];
@@ -256,11 +267,14 @@ class IndexController extends Controller
     {
         $limit = 10;
         $offset = 0;
+        
+        $CommentCount= ceil(count((array)userhelper::shortSelect('Comments','product',$id)) / $limit);
         if(!empty($_GET['page']) && $_GET['page'] >0 && is_numeric($_GET['page'])){
-            $page = $_GET['page'];
             $offset = ($limit * $_GET['page']) - $limit;
-        }else{
-            $page = 1;
+        }
+        if(!empty($_GET['page']) && $_GET['page'] > $CommentCount)
+        {
+            $offset = $limit * $CommentCount - $limit;
         }
         $commentsClass = new Comments;
         $commentsInner =  $commentsClass -> innerSelectLimit([
@@ -307,13 +321,21 @@ class IndexController extends Controller
 
     public function setRating($param=[])// prvi parametar product drugi rating
     {
-        if(isset($_SESSION['User']) && $this -> checkRating($param[0]) === true)
+
+        if($param[1] <= 0 || $param[1] >= 6)
         {
-            $ratingClass= new Ratings;
-            $ratingClass -> user = $_SESSION['User'] -> id;
-            $ratingClass -> product = $param[0];
-            $ratingClass -> rating = $param[1];
-            $ratingClass -> create();
+            Request::redirect(App::config('url').'index/error');
+            return;
+        }
+  
+        if(isset($_SESSION['User']) && $this -> checkRating($param[0]) == true)
+        {
+            
+                $ratingClass= new Ratings;
+                $ratingClass -> user = $_SESSION['User'] -> id;
+                $ratingClass -> product = (int)$param[0];
+                $ratingClass -> rating = (int)$param[1];
+                $ratingClass -> create();
         }
         Request::redirect(App::config('url').'index/productpage/'. $param[0]);
     }
@@ -331,7 +353,7 @@ class IndexController extends Controller
                     return $key -> rating;
                 }
             }
-        }
+        } 
         return true;
     }
 
@@ -350,21 +372,29 @@ class IndexController extends Controller
             $msg = $_SESSION['contactMsg'];
             unset($_SESSION['contactMsg']);
         }
+        $error=[];
         if($_POST)
         {
-            if(mailerhelper::sendMail('Ante.filipovic72@gmail.com',$_POST['email'],$_POST['name'],$_POST['message']))
+            $error['name'] = producthelper::emailError(trim($_POST['name']));
+            $error['message'] = producthelper::emailError(trim($_POST['message']));
+            $error['msg'] = producthelper::basicError(trim($_POST['message']));
+            if(empty($error))
             {
-                $msg=$_SESSION['contactMsg'] = 'Message sent';
-            }else
-            {
-                $msg=$_SESSION['contactMsg'] = 'The message cannot be sent';
+                if(mailerhelper::sendMail('Ante.filipovic72@gmail.com',$_POST['email'],$_POST['name'],$_POST['message']))
+                {
+                    $msg=$_SESSION['contactMsg'] = 'Message sent';
+                }else
+                {
+                    $msg=$_SESSION['contactMsg'] = 'The message cannot be sent';
+                }
+                Request::redirect(App::config('url').'index/contact');
             }
-            Request::redirect(App::config('url').'index/contact');
+            
             
         }
-
         $this -> view -> render($this->path.'contact',[
-            'msg' => $msg
+            'msg' => $msg,
+            'error' => $error
         ]);
     }
 

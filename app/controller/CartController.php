@@ -9,11 +9,21 @@ class CartController extends AuthorizationController
 
     public function index(array $parameters=[])
     {
+        if(!empty($_SESSION['Cart']))
+        {
         $this -> view -> render($this->path.'cart');
+        }else{
+            Request::redirect(App::config('url'));
+        }
     }
 
     public function addProductToCart(array $parameters=[])
     {
+        if($parameters[0] < 0 || !is_numeric($parameters[0]))
+        {
+            Request::redirect(App::config('url'));
+            exit;
+        }
         $productsClass = new Products;
         $productsClass -> where = $parameters[0];
         $product = $productsClass-> select('id')[0];

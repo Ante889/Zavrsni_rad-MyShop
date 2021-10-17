@@ -39,11 +39,15 @@ include APP_PATH . 'view' . DIRECTORY_SEPARATOR . 'admin'. DIRECTORY_SEPARATOR .
                 <?php if(isset($products)): ?>
                 <?php foreach ($products as $key): ?>
                 <tr>
-                <td><?= $key-> title ?></td>
+                <td><a href="<?= App::config('url');?>index/productpage/<?=$key->id?>"><?= $key-> title ?></td></a>
                 <td><?= $key-> author ?></td>
                 <td><img style ="max-width:80px" src="public/images/<?=$key->image ?>"></td>
                 <td><?= $key-> price ?></td>
+                <?php if($key-> discount != '%'):?>
+                <td><?= $key-> discount ?>%</td>
+                <?php else:?>
                 <td><?= $key-> discount ?></td>
+                <?php endif; ?>
                 <td><?= $key-> category ?></td>
                 <td>
                     <?php 

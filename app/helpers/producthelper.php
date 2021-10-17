@@ -12,6 +12,17 @@ class producthelper{
         return '';
     }
 
+    public static function emailError(string $string){
+        if(empty($string)){
+            return 'Field cannot be empty';
+        }else if(strlen($string) < 2 ){
+            return 'Field must contain at least 2 characters';
+        }else if(strlen($string) < 2 ){
+            return 'Max 50 characters';
+        }
+        return '';
+    }
+
     public static function discountError(string $string){
 
         if($string === '%'){
@@ -43,10 +54,24 @@ class producthelper{
         $int=(int)$string;
         if(empty($string)){
             return 'Field cannot be empty';
-        }else if(!preg_match('~[0-9]+~',$string)){
+        }else if(!is_numeric($string)){
             return  'Only numbers are allowed';
         }else if($int < 0){
             return  'You cannot enter negative numbers';
+        }
+        return '';
+    }
+
+    public static function priceError(string $string){
+        $int=(int)$string;
+        if(empty($string)){
+            return 'Field cannot be empty';
+        }else if(!is_numeric($string)){
+            return  'Only numbers are allowed';
+        }else if($int < 0){
+            return  'You cannot enter negative numbers';
+        }else if(strlen($int) > 5){
+            return  'Number is to big';
         }
         return '';
     }

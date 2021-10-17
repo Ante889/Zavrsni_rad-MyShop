@@ -34,7 +34,7 @@
         <?php if(in_array($product->id,(array)$purchased)): ?>
           <a class="btn btn-success btn-lg btn-block">Purchased </a>
             <?php else:?>
-              <a href="<?= App::config('url');?>Cart/addProductToCart/<?= $product-> id ?>" class="btn btn-primary btn-lg btn-block">Put into cart </a>
+              <a href="<?= App::config('url');?>Cart/addProductToCart/<?= $product-> id ?>" class="btn btn-primary btn-lg btn-block">Add to cart </a>
               <?php endif ?>
     </div>
   </div><br><br>

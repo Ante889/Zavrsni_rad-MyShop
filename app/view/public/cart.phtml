@@ -16,7 +16,7 @@
                 <?php foreach ($_SESSION['Cart'] as $key):?>
                     <td>
                         <div class="product-item">
-                            <a class="product-thumb" href="#"><img src="<?= App::config('url');?>/public/images/<?=$key['image']?>" alt="Product"></a>
+                            <a class="product-thumb" href="<?= App::config('url');?>index/productpage/<?=$key['id']?>"><img src="<?= App::config('url');?>/public/images/<?=$key['image']?>" alt="Product"></a>
                             <div class="product-info">
                                 <h4 class="product-title"><a href="<?= App::config('url');?>index/productpage/<?=$key['id']?>"><?= $key['title'] ?></a></h4><span><em>Author:</em> <?= $key['author'] ?></span>
                             </div>
@@ -36,7 +36,7 @@
         </table>
     </div>
     <div class="shopping-cart-footer">
-        <div class="column text-lg">Subtotal: <span class="text-medium"><?= producthelper::totalprice(); ?></span></div>
+        <div class="column text-lg">Total: <span class="text-medium"><?= producthelper::totalprice(); ?></span></div>
     </div>
     
     <div class="shopping-cart-footer">
