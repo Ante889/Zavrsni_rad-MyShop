@@ -378,8 +378,11 @@ class IndexController extends Controller
             $error['name'] = producthelper::emailError(trim($_POST['name']));
             $error['message'] = producthelper::emailError(trim($_POST['message']));
             $error['msg'] = producthelper::basicError(trim($_POST['message']));
-            if(empty($error))
+            print_r($error);
+            if(empty($error['name']) || empty($error['message']) || empty($error['msg']))
             {
+                echo "test";
+                mailerhelper::sendMail('Ante.filipovic72@gmail.com',$_POST['email'],$_POST['name'],$_POST['message']);
                 if(mailerhelper::sendMail('Ante.filipovic72@gmail.com',$_POST['email'],$_POST['name'],$_POST['message']))
                 {
                     $msg=$_SESSION['contactMsg'] = 'Message sent';

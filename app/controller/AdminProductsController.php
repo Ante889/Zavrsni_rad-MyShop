@@ -172,7 +172,7 @@ class AdminProductsController extends AuthorizationController
         $errors['title'] = producthelper::basicError(Request::issetTrim('title'));
         $errors['author'] = producthelper::basicError(Request::issetTrim('author'));
         $errors['image'] = producthelper::photoError($image);
-        $errors['price'] = producthelper::numbersError(Request::issetTrim('price'));
+        $errors['price'] = producthelper::priceError(Request::issetTrim('price'));
         $errors['category'] = producthelper::numbersError(Request::issetTrim('category'));
         $errors['content'] = producthelper::basicError(Request::issetTrim('content'));
         $errors['pdf'] = producthelper::pdfError($pdf);

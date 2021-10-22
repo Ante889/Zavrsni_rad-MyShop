@@ -23,12 +23,12 @@ class AdminStatisticsController extends AuthorizationController
                         $productsPrice[$key->title] = $key->price + $productsPrice[$key->title];
                     }else{
                         $productsPrice[$key->title] = $key->price;
-                        $productNames = $productNames. $key -> title. ' ';
+                        $productNames = $productNames. $key -> title. ',';
                     }
                     
             }
             if(!empty($productsPrice)){
-                $productNames =explode(' ',$productNames);
+                $productNames =explode(',',$productNames);
                 for ($i=0; $i < count($productsPrice) ; $i++) { 
                     $productTotalprice[$i] = [
                         'label' => $productNames[$i],
