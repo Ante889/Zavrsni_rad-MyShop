@@ -83,7 +83,7 @@ class AdminProductsController extends AuthorizationController
         $pdf = isset($_FILES['pdf']) ? $_FILES['pdf'] : '';
         $discount = Request::issetTrim('discount');
         if($image != ''){
-            $imageName = uniqid().basename($image['name']);
+            $imageName = str_replace(' ', '', uniqid().basename($image['name']));
         }else 
         {
             $imageName ='';
@@ -187,7 +187,7 @@ class AdminProductsController extends AuthorizationController
         if(empty($errors['title']) && empty($errors['author']) && empty($errors['image']) && empty($errors['price'])&& empty($errors['category'])&& empty($errors['content'])&& empty($errors['pdf']) && empty($errors['discount'])){
         
             if(!empty($image['name'])){
-                $imageName = uniqid().basename($image['name']);
+                $imageName = str_replace(' ', '', uniqid().basename($image['name']));
                 unlink(IMAGE_PATH . $Fields-> image);
                 move_uploaded_file($image['tmp_name'], IMAGE_PATH .$imageName);
             }else 
